@@ -1,16 +1,16 @@
-'use strict'
-
-class NoTimestamp {
-  register (Model) {
-    Object.defineProperties(Model, {
-      createdAtColumn: {
-        get: () => null,
-      },
-      updatedAtColumn: {
-        get: () => null,
-      }
-    })
-  }
+function register(Model) {
+  Object.defineProperties(Model, {
+    createdAtColumn: {
+      get: () => null,
+    },
+    updatedAtColumn: {
+      get: () => null,
+    },
+  });
 }
 
-module.exports = NoTimestamp
+const NoTimestamp = {
+  register,
+};
+
+module.exports = NoTimestamp;
