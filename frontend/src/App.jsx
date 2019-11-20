@@ -1,23 +1,29 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {BrowserRouter as Router} from 'react-router-dom';
-import NavBar from './components/NavBar/NavBar';
-import Menu from './components/Menu/Menu';
-import Overview from './components/Overview/Overview';
 
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+
+import Overview from './pages/Overview'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './App.css';
 function App() {
   return (
-   
+    <React.Suspense fallback="loading">
       <Router>
-         <div className="App">
-          <NavBar />
-          <Menu />
-          <Overview/>
+        <div className="App">
+          <Switch>
+            <Route path="/" exact component={Overview} />
+
+          </Switch>
         </div>
       </Router>
-  
+    </React.Suspense>
   );
 }
 
