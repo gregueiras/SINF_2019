@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "serve:dev": "nodemon -L --watch app --watch start --watch bootstrap --watch config --watch .env -x node server.js",
     "test": "node ace test",
     "lint": "./node_modules/eslint/bin/eslint.js app config database start --fix"
   },

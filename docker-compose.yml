@@ -1,0 +1,68 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:9.4
+    container_name: sinf_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - default
+
+  pgadmin:
+    image: thajeztah/pgadmin4
+    container_name: sinf_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_ENABLE_TLS: "False"
+    ports:
+      - "5051:5050"
+    networks:
+      - default
+    depends_on:
+      - postgres
+
+  frontend:
+    image: sinf_frontend:latest
+    container_name: sinf_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - "./frontend:/app"
+      - "/app/node_modules"
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+    networks:
+      - default
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    image: sinf_backend:latest
+    container_name: sinf_backend
+    environment:
+      - ENV=dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - "./backend:/app"
+      - "/app/node_modules"
+    ports:
+      - "3335:3335"
+    networks:
+      - default
+    depends_on:
+      - postgres
+
+#define network
+networks:
+  default:
+    driver: bridge
