@@ -61,6 +61,16 @@ services:
       - default
     depends_on:
       - postgres
+      - redis
+
+  redis:
+    image: redis:alpine
+    container_name: sinf_redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - default
 
 #define network
 networks:

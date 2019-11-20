@@ -9,7 +9,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 COPY package.json /app/package.json
-RUN npm install -g @adonisjs/cli nodemon 
-RUN npm install 
+RUN npm install
+RUN npm install --only=dev
+RUN npm audit fix
 
-CMD ["adonis", "serve", "--dev"]
+CMD ["npm", "run", "dev"]
