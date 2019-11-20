@@ -15,3 +15,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
+.reactTable {
+  background-color: white;
+  padding:0em !important;
+  margin-top: 2em;
+  margin-bottom: 5em;
+}
+
+.rt-resizable-header {
+  background: #2D3047 ;
+  color: white;
+}
+
+.company-selector{
+  background: #2D3047 ;
+  color: white;
+  outline: none;
+  padding: 0.3em;   
+}
+
+.company-selector-rt{  
+  float: right ;
+}
+
+.company-selector-lt{  
+  float: left ;
+}
+
+.plus-button {
+  background-color: #2D3047 !important ;
+  color: white;
+  outline: none !important;
+  padding: 0.3em !important; 
+  padding-left: 0.5em !important;
+  padding-right: 0.5em !important;
+  float: left;  
+  margin-bottom: 2em;
+}
+
+
+

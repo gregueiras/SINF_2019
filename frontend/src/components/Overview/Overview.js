@@ -3,7 +3,6 @@ import ReactTable from "react-table";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 import "react-table/react-table.css";
-import "./Overview.css";
 
 export class Overview extends Component {
   constructor() {
@@ -95,17 +94,14 @@ export class Overview extends Component {
               {
                 Header: "Process",
                 accessor: "process"
-                //maxWidth: 300
               },
               {
                 Header: "State",
                 accessor: "state"
-                //minWidth: 300
               },
               {
                 Header: "Timestamp",
                 accessor: "timestamp"
-                //minWidth: 300
               }
             ]}
             defaultPageSize={10}
