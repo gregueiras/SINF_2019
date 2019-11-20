@@ -10,6 +10,7 @@ import {
 import Overview from './pages/Overview'
 import Logs from './pages/Logs'
 import ViewProcess from './pages/ViewProcess'
+import NewProcess from './pages/NewProcess'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,6 +25,7 @@ function App() {
             <Route path="/overview" exact component={Overview} />
             <Route path="/logs" exact component={Logs} />
             <Route path="/view-process" exact component={ViewProcess} />
+            <Route path="/new-process" exact component={NewProcess} />
 
           </Switch>
         </div>
