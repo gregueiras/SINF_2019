@@ -1,0 +1,27 @@
+#appMenu {
+    margin: 2em 0 0 0;
+    height: 150%;
+  }
+  
+  a.nav-link {
+    padding-top: 1em;
+    font: 2em;
+    height: 4em;
+    border-radius: 0% !important;
+    background-color: rgb(209, 184, 131);
+    color: #2D3047 !important;
+    border-bottom: 2px solid !important;
+    border-color: #2D3047 !important;
+  }
+  
+  a.nav-link.active {
+    background-color: #FFD476 !important;
+    color: #2D3047 !important;
+    border-bottom: 2px solid !important;
+    border-color: white !important;
+  }
+
+  .menuText {
+    font-size: 1.2em;
+  }
+  

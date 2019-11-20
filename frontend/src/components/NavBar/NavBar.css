@@ -1,0 +1,25 @@
+.navbar {
+    box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.2);
+    background-color: #2D3047;
+    height: 5em;
+  }
+  
+  .logoText {
+    align-content: left;
+    font-size: 2em;
+    color: white;
+    text-align: left;
+    font-family: Vollkorn;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+.logoutLink{
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+#navbarLogout{
+  text-align: right;
+}
