@@ -14,8 +14,6 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
-import BullBoard from "bull-board";
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
-Route.get("/admin", BullBoard.UI);

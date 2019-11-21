@@ -1,11 +1,13 @@
 import Queue from "bull";
-import redisConfig from "../config/redis";
+//import { host, port, db } from "../config/redis";
 
 import * as jobs from "../jobs";
+
 
 const queues = Object.values(jobs).map(job => ({
   //bull: new Queue(job.key, redisConfig),
   bull: new Queue(job.key, "redis://sinf_redis:6379/0"),
+  //bull: new Queue(job.key, `redis://${host}:${port}/${db}`),
   name: job.key,
   handle: job.handle,
   options: job.options
