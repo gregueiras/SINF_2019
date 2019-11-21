@@ -11,5 +11,5 @@ const port = process.env.BULL_BOARD_PORT;
 
 app.use(url, BullBoard.UI);
 app.listen(port, function() {
-  console.log(`BullBoard running on http://0.0.0.0/${port}${url}`);
+  console.log(`BullBoard running on http://localhost:${port}${url}`);
 });
