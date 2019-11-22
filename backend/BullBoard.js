@@ -1,15 +1,16 @@
-require("dotenv").config();
-import BullBoard from "bull-board";
-import Queue from './lib/Queue'
-const app = require("express")();
+import BullBoard from 'bull-board';
+import Queue from './lib/Queue';
+
+require('dotenv').config();
+const app = require('express')();
 
 
-BullBoard.setQueues(Queue.queues.map(queue => queue.bull));
+BullBoard.setQueues(Queue.queues.map((queue) => queue.bull));
 
-const url = "/";
+const url = '/';
 const port = process.env.BULL_BOARD_PORT;
 
 app.use(url, BullBoard.UI);
-app.listen(port, function() {
+app.listen(port, () => {
   console.log(`BullBoard running on http://localhost:${port}${url}`);
 });
