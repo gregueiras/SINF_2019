@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import { Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function ViewProcess() {
   const [data] = useState([
@@ -54,11 +55,14 @@ function ViewProcess() {
               accessor: 'state',
             },
           ]}
-          defaultPageSize={20}
+          defaultPageSize={10}
           className="-striped -highlight"
         />
         <br />
       </div>
+      <Link className="blue-button  gen-button rel-text-white pos-rt w-20" size="sm" to="/">
+        {'<< Back'}
+      </Link>
     </Container>
   );
 }

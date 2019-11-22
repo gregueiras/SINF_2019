@@ -4,6 +4,8 @@ import ReactTable from 'react-table';
 import {
   Container, Form, Row, Col, Button,
 } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 
 import './NewProcess.css';
 
@@ -62,7 +64,7 @@ function NewProcess() {
       <Row>
         <Col md={4}>
           <select
-            className="selector process-selector selector-lt rel-text"
+            className="selector process-selector pos-lt rel-text-white"
             name="companyA"
           >
             {processType.map((e, key) => (
@@ -71,7 +73,7 @@ function NewProcess() {
               </option>
             ))}
           </select>
-          <Button className="blue-button plus-button-icon rel-text" size="sm">
+          <Button className="blue-button gen-button plus-button-icon rel-text-white" size="sm">
             +
           </Button>
         </Col>
@@ -79,7 +81,7 @@ function NewProcess() {
       <Row>
         <Col md={4}>
           <select
-            className="selector company-selector selector-lt rel-text"
+            className="selector company-selector pos-lt rel-text-white"
             name="companyA"
           >
             {companyAoptions.map((e, key) => (
@@ -91,7 +93,7 @@ function NewProcess() {
         </Col>
         <Col md={{ span: 4, offset: 4 }}>
           <select
-            className="selector company-selector selector-rt rel-text"
+            className="selector company-selector pos-rt rel-text-white"
             name="companyB"
           >
             {companyBoptions.map((e, key) => (
@@ -138,6 +140,15 @@ function NewProcess() {
         />
         <br />
       </div>
+
+      <Link className="blue-button  gen-button rel-text-white pos-rt w-20" size="sm" to="/">
+             V Confirm
+      </Link>
+      <Link className="gray-button gen-button rel-text-blue pos-rt mr-5 w-20" size="sm" to="/">
+            X Cancel
+      </Link>
+
+
     </Container>
   );
 }

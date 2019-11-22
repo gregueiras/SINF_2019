@@ -46,7 +46,7 @@ function Overview() {
       <Row>
         <Col md={4}>
           <Link
-            className="blue-button plus-button rel-text"
+            className="blue-button gen-button plus-button rel-text-white"
             size="sm"
             to="/new-process"
           >
@@ -57,7 +57,7 @@ function Overview() {
       <Row>
         <Col md={4}>
           <select
-            className="selector company-selector selector-lt rel-text"
+            className="selector company-selector pos-lt rel-text-white"
             name="companyA"
           >
             {companyAoptions.map((e, key) => (
@@ -69,7 +69,7 @@ function Overview() {
         </Col>
         <Col md={{ span: 4, offset: 4 }}>
           <select
-            className="selector company-selector selector-rt rel-text"
+            className="selector company-selector pos-rt rel-text-white"
             name="companyB"
           >
             {companyBoptions.map((e, key) => (
