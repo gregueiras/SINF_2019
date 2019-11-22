@@ -6,7 +6,7 @@ const app = require("express")();
 
 BullBoard.setQueues(Queue.queues.map(queue => queue.bull));
 
-const url = "/admin/queues";
+const url = "/";
 const port = process.env.BULL_BOARD_PORT;
 
 app.use(url, BullBoard.UI);

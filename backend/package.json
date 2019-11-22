@@ -7,9 +7,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "npm-run-all -p dev:*",
-    "dev:server": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env -x sucrase-node server.js",
-    "dev:queue": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env -x sucrase-node queue.js",
-    "dev:bull_board": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env -x sucrase-node BullBoard.js",
+    "dev:server": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env --watch server.js -x sucrase-node server.js",
+    "dev:queue": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env --watch queue.js -x sucrase-node queue.js",
+    "dev:bull_board": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env  --watch BullBoard.js -x sucrase-node BullBoard.js",
     "test": "node ace test",
     "lint": "./node_modules/eslint/bin/eslint.js app config database start --fix"
   },
