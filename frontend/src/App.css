@@ -70,3 +70,8 @@
 .rel-text {
   font-size: 1.2em;
 }
+
+.rel-text:hover {
+  text-decoration: none;
+  color: white;
+}

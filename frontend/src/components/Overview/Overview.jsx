@@ -49,7 +49,9 @@ function Overview() {
             className="blue-button plus-button rel-text"
             size="sm"
             to="/new-process"
-          />
+          >
+          + Process
+          </Link>
         </Col>
       </Row>
       <Row>
