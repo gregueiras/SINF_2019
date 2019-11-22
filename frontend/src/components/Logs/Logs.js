@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import ReactTable from "react-table";
 import { Container } from "react-bootstrap";
 
-import "react-table/react-table.css";
-
 function Logs() {
   const [data] = useState([
     {

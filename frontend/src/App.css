@@ -20,3 +20,53 @@
 .App-link {
   color: #09d3ac;
 }
+
+
+.reactTable {
+  background-color: white;
+  padding:0em !important;
+  margin-top: 2em;
+  margin-bottom: 5em;
+}
+
+.rt-resizable-header {
+  background: #2D3047 ;
+  color: white;
+  font-size: 1.2em;
+}
+
+.selector{
+  background: #2D3047 ;
+  color: white;
+  outline: none;
+  padding: 0.5em;   
+  padding-left: 1em !important;
+  padding-right: 1em !important;
+}
+
+.company-selector{
+  width: 100%;
+}
+
+.selector-rt{  
+  float: right ;
+}
+
+.selector-lt{  
+  float: left ;
+}
+
+.blue-button {
+  background-color: #2D3047 !important ;
+  color: white;
+  outline: none !important;
+  padding: 0.3em !important; 
+  padding-left: 0.5em !important;
+  padding-right: 0.5em !important;
+  margin-bottom: 2em;
+}
+
+
+.rel-text {
+  font-size: 1.2em;
+}

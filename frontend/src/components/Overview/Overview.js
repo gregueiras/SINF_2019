@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ReactTable from "react-table";
+import { Redirect} from 'react-router-dom';
 import { Container, Row, Col, Button } from "react-bootstrap";
 
-import "react-table/react-table.css";
+import "./Overview.css"
 
 function Overview() {
   const [data] = useState([
@@ -39,12 +40,18 @@ function Overview() {
     { value: "3", name: "option3" },
     { value: "4", name: "option4" }
   ]);
+  const [newProcess, setNewProcess] = useState(false);
+
+  if(newProcess)
+  return ( < Redirect to='/new-process' /> );
 
   return (
     <Container>
       <Row>
         <Col md={4}>
-          <Button className="plus-button" size="sm">
+  
+          <Button className="blue-button plus-button rel-text" size="sm"
+           onClick={() => setNewProcess(true)}>
             + Process
           </Button>
         </Col>
@@ -52,7 +59,7 @@ function Overview() {
       <Row>
         <Col md={4}>
           <select
-            className="company-selector company-selector-lt"
+            className="selector company-selector selector-lt rel-text"
             name="companyA"
           >
             {companyAoptions.map((e, key) => {
@@ -66,7 +73,7 @@ function Overview() {
         </Col>
         <Col md={{ span: 4, offset: 4 }}>
           <select
-            className="company-selector company-selector-rt"
+            className="selector company-selector selector-rt rel-text"
             name="companyB"
           >
             {companyBoptions.map((e, key) => {

@@ -12,7 +12,7 @@ import Logs from './pages/Logs'
 import ViewProcess from './pages/ViewProcess'
 import NewProcess from './pages/NewProcess'
 
-
+import "react-table/react-table.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
