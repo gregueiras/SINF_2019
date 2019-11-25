@@ -1,19 +1,29 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
+
 import {
   Container, Form, Row, Col,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-
 import './NewProcess.css';
+
+function selectItem(items, setItems, value, checked){
+  const id = value.original.id;
+  if(checked)
+    setItems([...items, { id }]);
+  else {
+    const result = items.filter(i => i.id !== id);
+    setItems(result);
+  }
+}
 
 function NewProcess() {
   const [data] = useState([
     {
       select: 'Purchase Rugs - PP781763',
-      id: 'IHA250526',
+      id: 'IHA250525',
       description: 'IRAN HAMADAN',
       assortment: 'RUGS',
       entity: '0001',
@@ -27,14 +37,14 @@ function NewProcess() {
     },
     {
       select: 'Purchase Rugs - PP781763',
-      id: 'IHA250526',
+      id: 'IHA250527',
       description: 'IRAN HAMADAN',
       assortment: 'RUGS',
       entity: '0001',
     },
     {
       select: 'Purchase Rugs - PP781763',
-      id: 'IHA250526',
+      id: 'IHA250528',
       description: 'IRAN HAMADAN',
       assortment: 'RUGS',
       entity: '0001',
@@ -59,50 +69,69 @@ function NewProcess() {
     { value: '4', name: 'process4' },
   ]);
 
+  const [items, setItems] = useState([]);
+
+  console.log(items);
+
   return (
     <Container>
       <Row>
-        <Col md={4}>
-          <select
-            className="selector process-selector pos-lt rel-text-white"
-            name="companyA"
-          >
-            {processType.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+        <Col>
+          <Form.Group>
+            <Form.Label className="gray-label">
+              Type of Process
+            </Form.Label>
+            <select
+              className="selector process-selector pos-lt rel-text-white w-20"
+              name="companyA"
+            >
+              {processType.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
 
-          <Link className="blue-button gen-button plus-button-icon rel-text-white" size="sm" to="/create-process-type">
+            <Link className="blue-button gen-button plus-button-icon rel-text-white w-5" size="sm" to="/create-process-type">
             +
-          </Link>
+            </Link>
+          </Form.Group>
         </Col>
       </Row>
       <Row>
         <Col md={4}>
-          <select
-            className="selector company-selector pos-lt rel-text-white"
-            name="companyA"
-          >
-            {companyAoptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company A
+            </Form.Label>
+            <select
+              className="selector company-selector pos-lt rel-text-white"
+              name="companyA"
+            >
+              {companyAoptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
         <Col md={{ span: 4, offset: 4 }}>
-          <select
-            className="selector company-selector pos-rt rel-text-white"
-            name="companyB"
-          >
-            {companyBoptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company B
+            </Form.Label>
+            <select
+              className="selector company-selector pos-rt rel-text-white"
+              name="companyB"
+            >
+              {companyBoptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
       </Row>
       <div className="reactTable">
@@ -111,10 +140,10 @@ function NewProcess() {
           columns={[
             {
               Header: 'Select',
-              Cell: () => (
+              Cell: ( value ) => (
                 <div>
                   <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" />
+                    <Form.Check type="checkbox" onChange={(e)=>selectItem(items, setItems, value, e.target.checked)}/>
                   </Form.Group>
                 </div>
               ),

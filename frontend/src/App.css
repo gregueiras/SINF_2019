@@ -102,6 +102,10 @@
   width: 20%;
 }
 
+.w-5{
+  width: 5%;
+}
+
 input[type=checkbox]
 {
   -ms-transform: scale(1.7); /* IE */

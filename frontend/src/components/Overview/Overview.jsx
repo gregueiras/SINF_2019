@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import { Link, withRouter } from 'react-router-dom';
-import { Container, Row, Col } from 'react-bootstrap';
+import {
+  Container, Row, Col, Form,
+} from 'react-bootstrap';
 
 import './Overview.css';
 
@@ -56,28 +58,38 @@ function Overview() {
       </Row>
       <Row>
         <Col md={4}>
-          <select
-            className="selector company-selector pos-lt rel-text-white"
-            name="companyA"
-          >
-            {companyAoptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company A
+            </Form.Label>
+            <select
+              className="selector company-selector pos-lt rel-text-white"
+              name="companyA"
+            >
+              {companyAoptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
         <Col md={{ span: 4, offset: 4 }}>
-          <select
-            className="selector company-selector pos-rt rel-text-white"
-            name="companyB"
-          >
-            {companyBoptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company B
+            </Form.Label>
+            <select
+              className="selector company-selector pos-rt rel-text-white"
+              name="companyB"
+            >
+              {companyBoptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
       </Row>
       <div className="reactTable">
