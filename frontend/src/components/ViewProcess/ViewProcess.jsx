@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
-import { Container } from 'react-bootstrap';
+import {
+  Container, Row, Col, Form,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function ViewProcess() {
@@ -28,8 +30,42 @@ function ViewProcess() {
     },
   ]);
 
+  const [typeOfProcess] = useState('Purchase');
+  const [companyA] = useState('MetroCarpetFactory');
+  const [companyB] = useState('MetroCarpetDistributor');
+
+
   return (
     <Container>
+      <Row>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label className="gray-label">
+              Type of Process
+            </Form.Label>
+            <span className="text-box company-selector pos-lt mb-4">{typeOfProcess}</span>
+          </Form.Group>
+        </Col>
+        <Col />
+      </Row>
+      <Row>
+        <Col md={4}>
+          <Form.Group>
+            <Form.Label className="gray-label">
+              Company A
+            </Form.Label>
+            <span className="text-box company-selector pos-lt">{companyA}</span>
+          </Form.Group>
+        </Col>
+        <Col md={{ span: 4, offset: 4 }}>
+          <Form.Group>
+            <Form.Label className="gray-label">
+              Company B
+            </Form.Label>
+            <span className="text-box company-selector pos-rt">{companyB}</span>
+          </Form.Group>
+        </Col>
+      </Row>
       <div className="reactTable">
         <ReactTable
           data={data}

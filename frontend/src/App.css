@@ -132,3 +132,15 @@ color: #828282;
 .mt-2{
   margin-top: 2em;
 }
+
+.mb-4{
+  margin-bottom: 4em;
+}
+.text-box{
+  background-color: #FFFAEF ;
+  color: #2D3047;
+  padding: 0.5em;   
+  padding-left: 1em !important;
+  padding-right: 1em !important;
+  border: 1.5px solid #2D3047 !important;
+}
