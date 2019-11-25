@@ -43,8 +43,10 @@
   padding-left: 1em !important;
   padding-right: 1em !important;
 }
-
-.company-selector{
+.selector:hover{
+  cursor: pointer;
+}
+.company-selector, .category-selector{
   width: 100%;
 }
 
