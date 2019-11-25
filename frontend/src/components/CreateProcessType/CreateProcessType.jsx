@@ -59,7 +59,10 @@ function ViewProcess() {
   const [action, setAction] = useState('1');
   const [actionCompany, setActionCompany] = useState('1');
 
-  console.log(actionCompany);
+  const [processName, setProcessName] = useState('');
+  const [companyAType, setCompanyAType] = useState('');
+  const [companyBType, setCompanyBType] = useState('');
+
 
   return (
     <Container>
@@ -69,7 +72,10 @@ function ViewProcess() {
             <Form.Label className="gray-label">
                 Process Name
             </Form.Label>
-            <Form.Control />
+            <Form.Control
+              onChange={(e) => setProcessName(e.target.value)}
+              placeholder="required"
+            />
           </Form.Group>
         </Col>
         <Col>
@@ -77,7 +83,10 @@ function ViewProcess() {
             <Form.Label className="gray-label">
                 Company A type
             </Form.Label>
-            <Form.Control />
+            <Form.Control
+              onChange={(e) => setCompanyAType(e.target.value)}
+              placeholder="required"
+            />
           </Form.Group>
         </Col>
         <Col>
@@ -85,7 +94,10 @@ function ViewProcess() {
             <Form.Label className="gray-label">
                 Company B type
             </Form.Label>
-            <Form.Control />
+            <Form.Control
+              onChange={(e) => setCompanyBType(e.target.value)}
+              placeholder="required"
+            />
           </Form.Group>
         </Col>
       </Row>
@@ -177,10 +189,8 @@ function ViewProcess() {
                 action: actionOptions.find((element) => element.value === action).name,
                 flow: 'A->B',
               };
-              console.log(newStep);
               setStepNr(stepNr + 1);
               setData([...data, newStep]);
-              console.log(data);
             }}
           >
             +
