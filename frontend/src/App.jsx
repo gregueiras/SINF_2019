@@ -11,6 +11,7 @@ import Overview from './pages/Overview';
 import Logs from './pages/Logs';
 import ViewProcess from './pages/ViewProcess';
 import NewProcess from './pages/NewProcess';
+import CreateProcessType from './pages/CreateProcessType';
 
 import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,7 +34,9 @@ const App = () => (
           <Route path="/new-process" exact>
             <NewProcess />
           </Route>
-
+          <Route path="/create-process-type" exact>
+            <CreateProcessType />
+          </Route>
         </Switch>
       </div>
     </Router>
