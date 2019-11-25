@@ -20,6 +20,12 @@
     font-size: 1.5em;
 }
 
+.logoTextLink:hover, .logoTextLink:active, .logoTextLink:focus, .logoTextLink:visited{
+  text-decoration: none;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 #navbarLogout{
   text-align: right;
 }

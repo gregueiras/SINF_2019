@@ -11,7 +11,7 @@ function NavBar() {
       <Row>
         <Navbar expand="lg" variant="light" fixed="top">
           <Col sm={8}>
-            <Link to="/">
+            <Link to="/" className="logoTextLink">
               <div className="logoText">
                         s i n t e r
               </div>
