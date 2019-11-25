@@ -109,3 +109,20 @@ input[type=checkbox]
   -webkit-transform: scale(1.7); /* Safari and Chrome */
   -o-transform: scale(1.7); /* Opera */
 }
+
+.gray-label {
+
+font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 15px !important;
+line-height: 21px;
+display: flex;
+align-items: flex-end;
+
+color: #828282; 
+}
+
+.mt-2{
+  margin-top: 2em;
+}

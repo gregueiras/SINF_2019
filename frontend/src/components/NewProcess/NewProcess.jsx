@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import {
-  Container, Form, Row, Col, Button,
+  Container, Form, Row, Col,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -73,9 +73,10 @@ function NewProcess() {
               </option>
             ))}
           </select>
-          <Button className="blue-button gen-button plus-button-icon rel-text-white" size="sm">
+
+          <Link className="blue-button gen-button plus-button-icon rel-text-white" size="sm" to="/create-process-type">
             +
-          </Button>
+          </Link>
         </Col>
       </Row>
       <Row>

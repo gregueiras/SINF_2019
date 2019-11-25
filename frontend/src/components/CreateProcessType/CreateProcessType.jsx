@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import {
-  Container, Row, Col, Button,
+  Container, Row, Col, Button, Form,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -65,64 +65,111 @@ function ViewProcess() {
     <Container>
       <Row>
         <Col>
-          <select
-            className="selector company-selector rel-text-white"
-            name="trigger"
-            onChange={(e) => setTrigger(e.target.value)}
-            value={trigger}
-          >
-            {triggerOptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Process Name
+            </Form.Label>
+            <Form.Control />
+          </Form.Group>
         </Col>
         <Col>
-          <select
-            className="selector company-selector rel-text-white"
-            name="triggerCompany"
-            onChange={(e) => setTriggerCompany(e.target.value)}
-            value={triggerCompany}
-          >
-            {triggerCompanyOptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company A type
+            </Form.Label>
+            <Form.Control />
+          </Form.Group>
         </Col>
         <Col>
-          <select
-            className="selector company-selector rel-text-white"
-            name="action"
-            onChange={(e) => setAction(e.target.value)}
-            value={action}
-          >
-            {actionOptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company B type
+            </Form.Label>
+            <Form.Control />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Group>
+            <Form.Label className="gray-label">
+               Trigger
+            </Form.Label>
+            <select
+              className="selector company-selector rel-text-white"
+              name="trigger"
+              onChange={(e) => setTrigger(e.target.value)}
+              value={trigger}
+            >
+              {triggerOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
         <Col>
-          <select
-            className="selector company-selector rel-text-white"
-            name="actionCompany"
-            onChange={(e) => setActionCompany(e.target.value)}
-            value={actionCompany}
-          >
-            {actionCompanyOptions.map((e, key) => (
-              <option key={key} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <Form.Group>
+            <Form.Label className="gray-label">
+               Trigger Company
+            </Form.Label>
+            <select
+              className="selector company-selector rel-text-white"
+              name="triggerCompany"
+              onChange={(e) => setTriggerCompany(e.target.value)}
+              value={triggerCompany}
+            >
+              {triggerCompanyOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
         </Col>
-        <Col sm={1} xs={1}>
+        <Col>
+          <Form.Group>
+            <Form.Label className="gray-label">
+               Action
+            </Form.Label>
+            <select
+              className="selector company-selector rel-text-white"
+              name="action"
+              onChange={(e) => setAction(e.target.value)}
+              value={action}
+            >
+              {actionOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group>
+            <Form.Label className="gray-label">
+               Action Company
+            </Form.Label>
+            <select
+              className="selector company-selector rel-text-white"
+              name="actionCompany"
+              onChange={(e) => setActionCompany(e.target.value)}
+              value={actionCompany}
+            >
+              {actionCompanyOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
+        </Col>
+        <Col className="d-flex align-items-center" sm={1} xs={1}>
+
           <Button
-            className="blue-button rel-text-white pos-rt w-75"
+            className="blue-button rel-text-white pos-rt w-75 mt-2"
             onClick={() => {
               const newStep = {
                 step: stepNr,
