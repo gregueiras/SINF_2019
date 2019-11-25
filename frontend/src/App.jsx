@@ -13,6 +13,7 @@ import ViewProcess from './pages/ViewProcess';
 import NewProcess from './pages/NewProcess';
 import CreateProcessType from './pages/CreateProcessType';
 import MasterData from './pages/MasterData';
+import Settings from './pages/Settings';
 
 import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -40,6 +41,9 @@ const App = () => (
           </Route>
           <Route path="/master-data" exact>
             <MasterData />
+          </Route>
+          <Route path="/settings" exact>
+            <Settings />
           </Route>
         </Switch>
       </div>
