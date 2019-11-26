@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   Container, Form, Row, Col,
 } from 'react-bootstrap';
@@ -91,7 +92,7 @@ function NewProcess() {
             </select>
 
             <Link className="blue-button gen-button plus-button-icon rel-text-white w-5" size="sm" to="/create-process-type">
-            +
+              <FontAwesomeIcon icon={faPlus} className="iconPlus" />
             </Link>
           </Form.Group>
         </Col>
@@ -168,15 +169,16 @@ function NewProcess() {
         />
         <br />
       </div>
-
-      <Link className="blue-button  gen-button rel-text-white pos-rt w-20" size="sm" to="/">
-             V Confirm
-      </Link>
-      <Link className="gray-button gen-button rel-text-blue pos-rt mr-5 w-20" size="sm" to="/">
-            X Cancel
-      </Link>
-
-
+      <div className="pos-rt mb-5">
+        <Link className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" to="/">
+          <FontAwesomeIcon icon={faTimes} className="iconCheck" />
+          Cancel
+        </Link>
+        <Link className="blue-button gen-button rel-text-white w-20" size="sm" to="/">
+          <FontAwesomeIcon icon={faCheck} className="iconCheck" />
+          Confirm
+        </Link>
+      </div>
     </Container>
   );
 }

@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import { Link, withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
@@ -53,7 +55,8 @@ function Overview() {
             size="sm"
             to="/new-process"
           >
-          + Process
+            <FontAwesomeIcon icon={faPlus} className="iconPlus mx-3" />
+            Process
           </Link>
         </Col>
       </Row>

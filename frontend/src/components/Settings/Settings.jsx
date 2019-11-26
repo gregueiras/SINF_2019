@@ -74,11 +74,11 @@ return(
   </Form.Group>
     <div className="settingsFormBtns">
         <Button className="blue-button" onClick={this.onAddOrganization}>
-            <FontAwesomeIcon icon={faPlus} id="iconPlus" /> 
+            <FontAwesomeIcon icon={faPlus} className="iconPlus" /> 
         </Button>
         <br/>
       <Link className="blue-button  gen-button rel-text-white w-20" size="sm" to="/#">
-        <FontAwesomeIcon icon={faCheck} id="iconCheck" /> 
+        <FontAwesomeIcon icon={faCheck} className="iconCheck" /> 
           Save Changes
       </Link>
     </div>

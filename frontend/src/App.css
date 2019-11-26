@@ -108,6 +108,10 @@
   width: 5%;
 }
 
+.h-2 {
+  height: 20% !important;
+}
+
 input[type=checkbox]
 {
   -ms-transform: scale(1.7); /* IE */
@@ -136,6 +140,11 @@ color: #828282;
 .mb-4{
   margin-bottom: 4em;
 }
+
+.mb-5{
+  margin-bottom: 5em;
+}
+
 .text-box{
   background-color: #FFFAEF ;
   color: #2D3047;

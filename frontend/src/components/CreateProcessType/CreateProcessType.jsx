@@ -5,7 +5,8 @@ import {
   Container, Row, Col, Button, Form,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function ViewProcess() {
   const [data, setData] = useState([
@@ -224,12 +225,16 @@ function ViewProcess() {
         />
         <br />
       </div>
-      <Link className="blue-button  gen-button rel-text-white pos-rt w-20" size="sm" to="/">
-             V Confirm
-      </Link>
-      <Link className="gray-button gen-button rel-text-blue pos-rt mr-5 w-20" size="sm" to="/">
-            X Cancel
-      </Link>
+      <div className="pos-rt mb-5">
+        <Link className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" to="/">
+          <FontAwesomeIcon icon={faTimes} className="iconCheck" />
+          Cancel
+        </Link>
+        <Link className="blue-button gen-button rel-text-white w-20" size="sm" to="/">
+          <FontAwesomeIcon icon={faCheck} className="iconCheck" />
+          Confirm
+        </Link>
+      </div>
     </Container>
   );
 }
