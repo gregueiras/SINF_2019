@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 import { Container } from 'react-bootstrap';
+import setIcon from '../../Utilities/SetIcon';
 
 function Logs() {
   const [data] = useState([
@@ -43,6 +44,8 @@ function Logs() {
             {
               Header: 'State',
               accessor: 'state',
+              Cell: (value) => setIcon(value, false),
+              width: 150,
             },
             {
               Header: 'Description',

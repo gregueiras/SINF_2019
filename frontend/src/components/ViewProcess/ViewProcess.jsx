@@ -4,6 +4,7 @@ import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import setIcon from '../../Utilities/SetIcon';
 
 function ViewProcess() {
   const [data] = useState([
@@ -12,21 +13,21 @@ function ViewProcess() {
       trigger: 'Create Purchase Order',
       action: 'Create Sales Order',
       flow: 'A->B',
-      state: 'completed',
+      state: 'Completed',
     },
     {
       step: 2,
       trigger: 'Create Purchase Order',
       action: 'Create Sales Order',
       flow: 'A->B',
-      state: 'completed',
+      state: 'Completed',
     },
     {
       step: 3,
       trigger: 'Create Purchase Order',
       action: 'Create Sales Order',
       flow: 'A->B',
-      state: 'completed',
+      state: 'Failed',
     },
   ]);
 
@@ -89,6 +90,8 @@ function ViewProcess() {
             {
               Header: 'State',
               accessor: 'state',
+              Cell: (value) => setIcon(value, true),
+              width: 100,
             },
           ]}
           defaultPageSize={10}

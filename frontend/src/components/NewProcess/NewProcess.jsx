@@ -9,12 +9,10 @@ import { Link } from 'react-router-dom';
 
 import './NewProcess.css';
 
-function selectItem(items, setItems, value, checked){
-  const id = value.original.id;
-  if(checked)
-    setItems([...items, { id }]);
-  else {
-    const result = items.filter(i => i.id !== id);
+function selectItem(items, setItems, value, checked) {
+  const { id } = value.original;
+  if (checked) { setItems([...items, { id }]); } else {
+    const result = items.filter((i) => i.id !== id);
     setItems(result);
   }
 }
@@ -140,10 +138,10 @@ function NewProcess() {
           columns={[
             {
               Header: 'Select',
-              Cell: ( value ) => (
+              Cell: (value) => (
                 <div>
                   <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" onChange={(e)=>selectItem(items, setItems, value, e.target.checked)}/>
+                    <Form.Check type="checkbox" onChange={(e) => selectItem(items, setItems, value, e.target.checked)} />
                   </Form.Group>
                 </div>
               ),

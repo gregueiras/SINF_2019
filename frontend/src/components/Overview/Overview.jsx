@@ -7,6 +7,7 @@ import {
 } from 'react-bootstrap';
 
 import './Overview.css';
+import setIcon from '../../Utilities/SetIcon';
 
 function Overview() {
   const [data] = useState([
@@ -103,6 +104,8 @@ function Overview() {
             {
               Header: 'State',
               accessor: 'state',
+              Cell: (value) => setIcon(value, false),
+              width: 150,
             },
             {
               Header: 'Timestamp',
