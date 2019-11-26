@@ -9,7 +9,6 @@ import {
 import { Row, Col } from 'react-bootstrap';
 
 function setIcon(value, iconOnly) {
-  console.log(iconOnly);
   if (value.original.state === 'Completed') {
     return (
       <Row>
@@ -19,7 +18,7 @@ function setIcon(value, iconOnly) {
             {value.original.state}
           </Col>
         ) }
-        <Col><FontAwesomeIcon icon={faCheckCircle} /></Col>
+        <Col><FontAwesomeIcon icon={faCheckCircle} className="completedIcon" /></Col>
       </Row>
     );
   }
@@ -32,7 +31,7 @@ function setIcon(value, iconOnly) {
             {value.original.state}
           </Col>
         ) }
-        <Col><FontAwesomeIcon icon={faTimesCircle} /></Col>
+        <Col><FontAwesomeIcon icon={faTimesCircle} className="failedIcon" /></Col>
       </Row>
     );
   }
@@ -45,7 +44,7 @@ function setIcon(value, iconOnly) {
             {value.original.state}
           </Col>
         ) }
-        <Col><FontAwesomeIcon icon={faPauseCircle} /></Col>
+        <Col><FontAwesomeIcon icon={faPauseCircle} className="pendingIcon" /></Col>
       </Row>
     );
   }
@@ -58,7 +57,7 @@ function setIcon(value, iconOnly) {
             {value.original.state}
           </Col>
         ) }
-        <Col><FontAwesomeIcon icon={faSpinner} /></Col>
+        <Col><FontAwesomeIcon icon={faSpinner} className="inProgressIcon" /></Col>
       </Row>
     );
   }

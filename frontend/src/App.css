@@ -144,3 +144,19 @@ color: #828282;
   padding-right: 1em !important;
   border: 1.5px solid #2D3047 !important;
 }
+
+.completedIcon {
+  color: green;
+}
+
+.pendingIcon {
+  color: orange;
+}
+
+.failedIcon {
+  color: red;
+}
+
+.inProgressIcon {
+  color: grey;
+}
