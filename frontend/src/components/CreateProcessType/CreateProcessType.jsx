@@ -41,8 +41,8 @@ function ViewProcess() {
   ]);
 
   const [companyBOptions] = useState([
-    { value: '1', name: 'MetroCarpetFactory' },
-    { value: '2', name: 'MetroCarpetDistributor' },
+    { value: '2', name: 'MetroCarpetFactory' },
+    { value: '1', name: 'MetroCarpetDistributor' },
     { value: '3', name: 'option3' },
     { value: '4', name: 'option4' },
   ]);
@@ -51,11 +51,12 @@ function ViewProcess() {
   const [triggerOptions] = useState([
     { value: '1', name: 'trigger1' },
     { value: '2', name: 'trigger2' },
+    { value: '3', name: '-' },
   ]);
 
   const [triggerCompanyOptions, setTriggerCompanyOptions] = useState([
-    { value: '1', name: 'MetroCarpetFactory' },
-    { value: '2', name: 'MetroCarpetDistributor' },
+    { value: '2', name: 'MetroCarpetFactory' },
+    { value: '1', name: 'MetroCarpetDistributor' },
   ]);
 
   const [actionOptions] = useState([
@@ -71,10 +72,9 @@ function ViewProcess() {
   const [trigger, setTrigger] = useState('1');
   const [triggerCompany, setTriggerCompany] = useState('1');
   const [action, setAction] = useState('1');
-  const [actionCompany, setActionCompany] = useState('1');
+  const [actionCompany, setActionCompany] = useState('2');
   const [companyA, setCompanyA] = useState('1');
-  const [companyB, setCompanyB] = useState('1');
-
+  const [companyB, setCompanyB] = useState('2');
 
   const [processName, setProcessName] = useState('');
   const [companyAType, setCompanyAType] = useState('');
@@ -82,12 +82,28 @@ function ViewProcess() {
 
 
   function setCompanyOptions(cA, cB) {
-    console.log(cA);
-    console.log(cB);
     const ca = companyAOptions.find((element) => element.value === cA);
     const cb = companyBOptions.find((element) => element.value === cB);
     setTriggerCompanyOptions([ca, cb]);
-    setActionCompanyOptions([ca, cb]);
+    setTriggerCompany(cA);
+    setActionCompanyOptions([cb, ca]);
+    setActionCompany(cB);
+  }
+
+  function getFlow(){
+    console.log("trigger company: " + triggerCompany)
+    console.log("action company: " + actionCompany)
+    console.log("a company: " + companyA)
+    console.log("b company: " + companyB)
+    if(triggerCompany === companyA){
+      if(actionCompany === companyB) return 'A->B';
+      if(actionCompany === companyA) return 'A'
+    }
+    if(triggerCompany === companyB){
+      if(actionCompany === companyA) return 'B->A';
+      if(actionCompany === companyB) return 'B'
+    }
+    return "";
   }
 
   return (
@@ -257,7 +273,7 @@ function ViewProcess() {
                 step: stepNr,
                 trigger: triggerOptions.find((element) => element.value === trigger).name,
                 action: actionOptions.find((element) => element.value === action).name,
-                flow: 'A->B',
+                flow: getFlow(),
               };
               setStepNr(stepNr + 1);
               setData([...data, newStep]);
