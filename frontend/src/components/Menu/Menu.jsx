@@ -13,7 +13,7 @@ function Menu({ active }) {
         fill
         defaultActiveKey={active}
       >
-        <Nav.Item className="navItem1">
+        <Nav.Item>
           <LinkContainer className="menuText" to="/">
             <Nav.Link eventKey="overview" className="navLink1" id="navText">
               Overview

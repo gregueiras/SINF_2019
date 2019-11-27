@@ -10,45 +10,8 @@ import { Link } from 'react-router-dom';
 
 import './NewProcess.css';
 
-function selectItem(items, setItems, value, checked) {
-  const { id } = value.original;
-  if (checked) { setItems([...items, { id }]); } else {
-    const result = items.filter((i) => i.id !== id);
-    setItems(result);
-  }
-}
 
 function NewProcess() {
-  const [data] = useState([
-    {
-      select: 'Purchase Rugs - PP781763',
-      id: 'IHA250525',
-      description: 'IRAN HAMADAN',
-      assortment: 'RUGS',
-      entity: '0001',
-    },
-    {
-      select: 'Purchase Rugs - PP781763',
-      id: 'IHA250526',
-      description: 'IRAN HAMADAN',
-      assortment: 'RUGS',
-      entity: '0001',
-    },
-    {
-      select: 'Purchase Rugs - PP781763',
-      id: 'IHA250527',
-      description: 'IRAN HAMADAN',
-      assortment: 'RUGS',
-      entity: '0001',
-    },
-    {
-      select: 'Purchase Rugs - PP781763',
-      id: 'IHA250528',
-      description: 'IRAN HAMADAN',
-      assortment: 'RUGS',
-      entity: '0001',
-    },
-  ]);
   const [companyAoptions] = useState([
     { value: '1', name: 'MetroCarpetDistributor' },
     { value: '2', name: 'MetroCarpetFactory' },
@@ -68,9 +31,6 @@ function NewProcess() {
     { value: '4', name: 'process4' },
   ]);
 
-  const [items, setItems] = useState([]);
-
-  console.log(items);
 
   return (
     <Container>
@@ -133,43 +93,8 @@ function NewProcess() {
           </Form.Group>
         </Col>
       </Row>
-      <div className="reactTable">
-        <ReactTable
-          data={data}
-          columns={[
-            {
-              Header: 'Select',
-              Cell: (value) => (
-                <div>
-                  <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" onChange={(e) => selectItem(items, setItems, value, e.target.checked)} />
-                  </Form.Group>
-                </div>
-              ),
-            },
-            {
-              Header: 'ID',
-              accessor: 'id',
-            },
-            {
-              Header: 'Description',
-              accessor: 'description',
-            },
-            {
-              Header: 'Assortment',
-              accessor: 'assortment',
-            },
-            {
-              Header: 'Entity',
-              accessor: 'entity',
-            },
-          ]}
-          defaultPageSize={10}
-          className="-striped -highlight"
-        />
-        <br />
-      </div>
-      <div className="pos-rt mb-5">
+
+      <div className="mt-5 mb-5">
         <Link className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" to="/">
           <FontAwesomeIcon icon={faTimes} className="iconCheck" />
           Cancel

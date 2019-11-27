@@ -6,7 +6,8 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 function ViewProcess() {
   const [data, setData] = useState([
@@ -32,38 +33,62 @@ function ViewProcess() {
 
   const [stepNr, setStepNr] = useState(4);
 
+  const [companyAOptions] = useState([
+    { value: '1', name: 'MetroCarpetDistributor' },
+    { value: '2', name: 'MetroCarpetFactory' },
+    { value: '3', name: 'option3' },
+    { value: '4', name: 'option4' },
+  ]);
+
+  const [companyBOptions] = useState([
+    { value: '1', name: 'MetroCarpetFactory' },
+    { value: '2', name: 'MetroCarpetDistributor' },
+    { value: '3', name: 'option3' },
+    { value: '4', name: 'option4' },
+  ]);
+
+
   const [triggerOptions] = useState([
     { value: '1', name: 'trigger1' },
     { value: '2', name: 'trigger2' },
   ]);
 
-  const [triggerCompanyOptions] = useState([
+  const [triggerCompanyOptions, setTriggerCompanyOptions] = useState([
     { value: '1', name: 'MetroCarpetFactory' },
     { value: '2', name: 'MetroCarpetDistributor' },
-    { value: '3', name: 'option3' },
-    { value: '4', name: 'option4' },
   ]);
 
   const [actionOptions] = useState([
     { value: '1', name: 'action1' },
     { value: '2', name: 'action2' },
   ]);
-  const [actionCompanyOptions] = useState([
-    { value: '1', name: 'MetroCarpetFactory' },
-    { value: '2', name: 'MetroCarpetDistributor' },
-    { value: '3', name: 'option3' },
-    { value: '4', name: 'option4' },
+
+  const [actionCompanyOptions, setActionCompanyOptions] = useState([
+    { value: '1', name: 'MetroCarpetDistributor' },
+    { value: '2', name: 'MetroCarpetFactory' },
   ]);
 
   const [trigger, setTrigger] = useState('1');
   const [triggerCompany, setTriggerCompany] = useState('1');
   const [action, setAction] = useState('1');
   const [actionCompany, setActionCompany] = useState('1');
+  const [companyA, setCompanyA] = useState('1');
+  const [companyB, setCompanyB] = useState('1');
+
 
   const [processName, setProcessName] = useState('');
   const [companyAType, setCompanyAType] = useState('');
   const [companyBType, setCompanyBType] = useState('');
 
+
+  function setCompanyOptions(cA, cB) {
+    console.log(cA);
+    console.log(cB);
+    const ca = companyAOptions.find((element) => element.value === cA);
+    const cb = companyBOptions.find((element) => element.value === cB);
+    setTriggerCompanyOptions([ca, cb]);
+    setActionCompanyOptions([ca, cb]);
+  }
 
   return (
     <Container>
@@ -99,6 +124,50 @@ function ViewProcess() {
               onChange={(e) => setCompanyBType(e.target.value)}
               placeholder="required"
             />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={4} className="mb-4">
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company A
+            </Form.Label>
+            <select
+              className="selector company-selector pos-lt rel-text-white"
+              name="companyA"
+              onChange={(e) => {
+                setCompanyA(e.target.value);
+                setCompanyOptions(e.target.value, companyB);
+              }}
+            >
+              {companyAOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
+          </Form.Group>
+        </Col>
+        <Col md={{ span: 4, offset: 4 }}>
+          <Form.Group>
+            <Form.Label className="gray-label">
+                Company B
+            </Form.Label>
+            <select
+              className="selector company-selector pos-rt rel-text-white"
+              name="companyB"
+              onChange={(e) => {
+                setCompanyB(e.target.value);
+                setCompanyOptions(companyA, e.target.value);
+              }}
+            >
+              {companyBOptions.map((e, key) => (
+                <option key={key} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </select>
           </Form.Group>
         </Col>
       </Row>
@@ -194,7 +263,8 @@ function ViewProcess() {
               setData([...data, newStep]);
             }}
           >
-            +
+            <FontAwesomeIcon icon={faPlus} className="iconPlus" />
+
           </Button>
         </Col>
       </Row>
