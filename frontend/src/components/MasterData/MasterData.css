@@ -1,3 +1,6 @@
 #companySelectorsRow{
     margin-top: 2em;
 }
+button {
+    all: unset;
+}
