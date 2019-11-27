@@ -91,10 +91,6 @@ function ViewProcess() {
   }
 
   function getFlow(){
-    console.log("trigger company: " + triggerCompany)
-    console.log("action company: " + actionCompany)
-    console.log("a company: " + companyA)
-    console.log("b company: " + companyB)
     if(triggerCompany === companyA){
       if(actionCompany === companyB) return 'A->B';
       if(actionCompany === companyA) return 'A'
