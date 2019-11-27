@@ -1,7 +1,7 @@
 import Queue from 'bull';
 // import { host, port, db } from "../config/redis";
 
-import * as jobs from '../jobs';
+import jobs from '../jobs';
 
 
 const queues = Object.values(jobs).map((job) => ({

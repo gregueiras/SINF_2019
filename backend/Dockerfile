@@ -10,8 +10,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 RUN npm install
-RUN npm install --only=dev
-RUN npm audit fix
 
 COPY . /app
 
