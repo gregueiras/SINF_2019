@@ -13,8 +13,8 @@ function Menu({ active }) {
         fill
         defaultActiveKey={active}
       >
-        <Nav.Item>
-          <LinkContainer className="menuText" to="/">
+        <Nav.Item className="navItem1">
+          <LinkContainer className="menuText" to="/"exact={true}>
             <Nav.Link eventKey="overview" className="navLink1" id="navText">
               Overview
             </Nav.Link>
