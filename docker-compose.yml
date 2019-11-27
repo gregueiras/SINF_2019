@@ -57,7 +57,7 @@ services:
       - "/app/node_modules"
     ports:
       - "3335:3335"
-      - "2999:2999"
+      - "3002:3002"
     networks:
       - default
     depends_on:
