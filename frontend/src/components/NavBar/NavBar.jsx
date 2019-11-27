@@ -19,12 +19,12 @@ function NavBar() {
               </Link>
             </Navbar.Brand>
           </Col>
-          <Col xs={6} md={4} xs={4}id="navbarLogout">
+          <Col xs={6} md={4} xs={4} id="navbarLogout">
             <Navbar.Brand>
               <Link to="#logout" className="logoutLink">
                       Logout
               </Link>
-             </Navbar.Brand>
+            </Navbar.Brand>
           </Col>
         </Navbar>
       </Row>
