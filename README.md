@@ -2,6 +2,7 @@
 
 Repository for the 2019 SINF class in FEUP
 
+
 Just run `docker-compose up` in the root of the project and all 4 containers should build and start.
 
 Backend: http://0.0.0.0/3335
