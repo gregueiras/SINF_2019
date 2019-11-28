@@ -45,9 +45,9 @@ const getToken = async () => {
       }
     }
   );
-  const { access_token: token } = data;
+  const { access_token } = data;
 
-  return token;
+  return access_token;
 };
 
 const makeRequest = async ({ token, endPoint, method, data, query }) => {
