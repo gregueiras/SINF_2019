@@ -1,0 +1,35 @@
+.settingsContainer{
+    margin-top: 2em;
+    padding: 3em;
+    padding-left: 5em !important;
+    padding-right: 5em !important;
+    border-radius: 5px;
+    background-color: #FFD476;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 4px 4px 2px rgba(0, 0, 0, 0.1); 
+    max-width: 1000px !important;
+    border-color: transparent;
+}
+
+.organizations{
+    margin-top: 2em;
+}
+
+.settingsFormBtns{
+    text-align: right;
+}
+
+.iconCheck{
+    margin-right: 0.6em;
+    margin-top: 1em;
+}
+
+.iconDelete {
+   text-align: right;
+}
+
+@media (max-width: 574px) {
+    .iconDelete  {
+      margin-top:1em;
+    }
+  }

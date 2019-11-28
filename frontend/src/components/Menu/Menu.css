@@ -1,6 +1,7 @@
 #appMenu {
     margin: 2em 0 0 0;
     height: 150%;
+    margin-bottom: 5em;
   }
   
   a.nav-link {
@@ -23,5 +24,7 @@
 
   .menuText {
     font-size: 1.2em;
+    text-decoration: none;
+    color: inherit;
   }
   
