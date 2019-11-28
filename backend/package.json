@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "adonis": "sucrase-node ace",
     "dev": "npm-run-all -p dev:*",
     "dev:server": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env --watch server.js -x sucrase-node server.js",
     "dev:queue": "nodemon -L --watch app --watch config --watch jobs --watch lib --watch start --watch .env --watch queue.js -x sucrase-node queue.js",
