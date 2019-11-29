@@ -1,6 +1,9 @@
 import { RETURN_TYPES } from "./index";
 import getSeries from "../services/jasmin/getSeries";
 import createSeries from "../services/jasmin/createSeries";
+import createSalesOrder from "../services/jasmin/createSalesOrder";
+
+import getPurchasesOrders from "../services/jasmin/getPurchasesOrders";
 
 export default {
   key: "PO_SO",
@@ -25,8 +28,19 @@ export default {
       await createSeries(serieName, description);
     }
 
+    // get serie's purchase order
+    const purchasesOrders = (await getPurchasesOrders()).data;
+    const purchaseOrder = purchasesOrders.find(po => po.serie === serieName);
+    
+    console.log(purchaseOrder);
+
+    // TODO check if purchase order was already replicated (save this information in db)
+
     // create sales order
     // IF SERIES ERROR; MUST HAVE ICx SERIES IN DOCUMENT TYPE EVF
+
+    //await createSalesOrder(purchaseOrder);
+  
 
   }
 };
