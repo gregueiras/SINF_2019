@@ -14,7 +14,9 @@ const constants = {
 export const endPoints = {
   salesOrders: "sales/orders",
   purchasesOrders: "purchases/orders",
-  series: "businesscore/series"
+  series: "businesscore/series",
+  items: "businesscore/items"
+
 };
 
 const makeUrl = (endPoint, query) => {
