@@ -8,9 +8,9 @@ const Hash = use('Hash');
 class Process extends Model {
 
 
-    logs(){
+    logs() {
         return this.hasMany('App/Model/Log');
-      }
+    }
 
 }
 

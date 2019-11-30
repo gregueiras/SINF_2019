@@ -3,8 +3,9 @@ const Database = use('Database')
 
 class UserSeeder {
   async run () {
-    const users = await Database.table('users')
-    console.log(users)
+   await Factory.model('App/Models/User').createMany(4);
+  
+  
   }
 }
 

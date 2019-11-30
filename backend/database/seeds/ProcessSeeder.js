@@ -8,4 +8,4 @@ class ProcessSeeder {
   }
 }
 
-module.exports = CompanySeeder
+module.exports = ProcessSeeder
