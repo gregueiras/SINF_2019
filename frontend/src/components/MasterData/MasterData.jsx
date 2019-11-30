@@ -50,6 +50,8 @@ class MasterData extends Component {
         { value: '4', name: 'Items4' },
       ],
 
+      loadingCompanyA: true,
+
     };
     this.CompanyService = new CompanyService();
   }
@@ -59,7 +61,7 @@ class MasterData extends Component {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyA = data.data.map((item) => ({ id: item.itemKey, description: item.description }));
-        this.setState({ dataCompanyA });
+        this.setState({ dataCompanyA, loadingCompanyA: false });
       }
     });
   }
@@ -115,7 +117,7 @@ class MasterData extends Component {
   render() {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions,
+      companyAoptions, companyBoptions, categoryOptions, loadingCompanyA,
     } = this.state;
     return (
       <Container>
@@ -168,6 +170,7 @@ class MasterData extends Component {
               <div className="gray-label"> Company A Products </div>
               <ReactTable
                 data={dataCompanyA}
+                loading={loadingCompanyA}
                 columns={[
                   {
                     Header: 'ID',
