@@ -4,29 +4,17 @@ import ReactTable from 'react-table';
 import { withRouter } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import '../Overview/Overview.css';
 import './MasterData.css';
+import CompanyService from '../../services/CompanyService';
 
 class MasterData extends Component {
-
   constructor() {
     super();
 
-
     this.state = {
-      dataCompanyA: [{
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      },
-      {
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      },
-      {
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      },
-      ], dataCompanyB: [{
+      dataCompanyA: [
+      ],
+      dataCompanyB: [{
         id: 'IHA250526',
         description: 'IRAN HAMADAN',
       },
@@ -60,57 +48,75 @@ class MasterData extends Component {
         { value: '2', name: 'Items2' },
         { value: '3', name: 'Items3' },
         { value: '4', name: 'Items4' },
-      ]
+      ],
 
-    }
-  };
+    };
+    this.CompanyService = new CompanyService();
+  }
+
+  componentDidMount() {
+    this.CompanyService.getItems((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const dataCompanyA = data.data.map((item) => ({ id: item.itemKey, description: item.description }));
+        this.setState({ dataCompanyA });
+      }
+    });
+  }
 
   addIdToDataCorrespondenceA(e, id) {
     e.preventDefault();
     let position = -1;
-    this.state.dataCorrespondence.map((data, sidx) => {
+    const {
+      dataCorrespondence, dataCompanyA, dataCompanyB,
+      companyAoptions, companyBoptions, categoryOptions,
+    } = this.state;
+    dataCorrespondence.map((data, sidx) => {
       if (data.idA === null && position === -1) {
         position = sidx;
       }
     });
-    if (position === -1)
-      this.state.dataCorrespondence.push({ idA: id, idB: null });
-    else this.state.dataCorrespondence[position].idA = id;
+    if (position === -1) { dataCorrespondence.push({ idA: id, idB: null }); } else dataCorrespondence[position].idA = id;
 
     this.setState({
-      dataCompanyA: this.state.dataCompanyA, dataCompanyB: this.state.dataCompanyB,
-      dataCorrespondence: this.state.dataCorrespondence, companyAoptions: this.state.companyAoptions,
-      companyBoptions: this.state.companyBoptions, categoryOptions: this.state.categoryOptions
+      dataCompanyA,
+      dataCompanyB,
+      dataCorrespondence,
+      companyAoptions,
+      companyBoptions,
+      categoryOptions,
     });
-
-
-
   }
 
   addIdToDataCorrespondenceB(e, id) {
     e.preventDefault();
     let position = -1;
-    this.state.dataCorrespondence.map((data, sidx) => {
+    const {
+      dataCorrespondence, dataCompanyA, dataCompanyB,
+      companyAoptions, companyBoptions, categoryOptions,
+    } = this.state;
+    dataCorrespondence.map((data, sidx) => {
       if (data.idB === null && position === -1) {
         position = sidx;
-
       }
     });
-    if (position === -1)
-      this.state.dataCorrespondence.push({ idA: null, idB: id });
-    else this.state.dataCorrespondence[position].idB = id;
+    if (position === -1) { dataCorrespondence.push({ idA: null, idB: id }); } else dataCorrespondence[position].idB = id;
 
     this.setState({
-      dataCompanyA: this.state.dataCompanyA, dataCompanyB: this.state.dataCompanyB,
-      dataCorrespondence: this.state.dataCorrespondence, companyAoptions: this.state.companyAoptions,
-      companyBoptions: this.state.companyBoptions, categoryOptions: this.state.categoryOptions
+      dataCompanyA,
+      dataCompanyB,
+      dataCorrespondence,
+      companyAoptions,
+      companyBoptions,
+      categoryOptions,
     });
-
-
-
-
   }
+
   render() {
+    const {
+      dataCorrespondence, dataCompanyA, dataCompanyB,
+      companyAoptions, companyBoptions, categoryOptions,
+    } = this.state;
     return (
       <Container>
         <Row>
@@ -120,7 +126,7 @@ class MasterData extends Component {
               className="selector category-selector pos-lt rel-text-white"
               name="category"
             >
-              {this.state.categoryOptions.map((e, key) => (
+              {categoryOptions.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.name}
                 </option>
@@ -135,7 +141,7 @@ class MasterData extends Component {
               className="selector company-selector pos-lt rel-text-white"
               name="companyA"
             >
-              {this.state.companyAoptions.map((e, key) => (
+              {companyAoptions.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.name}
                 </option>
@@ -148,7 +154,7 @@ class MasterData extends Component {
               className="selector company-selector pos-rt rel-text-white"
               name="companyB"
             >
-              {this.state.companyBoptions.map((e, key) => (
+              {companyBoptions.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.name}
                 </option>
@@ -161,22 +167,21 @@ class MasterData extends Component {
             <div className="reactTable">
               <div className="gray-label"> Company A Products </div>
               <ReactTable
-                data={this.state.dataCompanyA
-                }
+                data={dataCompanyA}
                 columns={[
                   {
                     Header: 'ID',
                     accessor: 'id',
                     Cell: ({ row }) => (
-                      <button onClick={e => this.addIdToDataCorrespondenceA(e, row.id)}>
+                      <button onClick={(e) => this.addIdToDataCorrespondenceA(e, row.id)}>
                         {row.id}
                       </button>
-                    )
+                    ),
                   },
                   {
                     Header: 'Description',
                     accessor: 'description',
-                  }
+                  },
                 ]}
                 defaultPageSize={10}
                 className="-striped -highlight"
@@ -188,7 +193,7 @@ class MasterData extends Component {
             <div className="reactTable">
               <div className="gray-label"> ID Correspondence </div>
               <ReactTable
-                data={this.state.dataCorrespondence}
+                data={dataCorrespondence}
                 columns={[
                   {
                     Header: 'ID - A',
@@ -197,7 +202,7 @@ class MasterData extends Component {
                   {
                     Header: 'ID - B',
                     accessor: 'idB',
-                  }
+                  },
                 ]}
                 defaultPageSize={10}
                 className="-striped -highlight"
@@ -209,21 +214,21 @@ class MasterData extends Component {
             <div className="reactTable">
               <div className="gray-label"> Company B Products </div>
               <ReactTable
-                data={this.state.dataCompanyB}
+                data={dataCompanyB}
                 columns={[
                   {
                     Header: 'ID',
                     accessor: 'id',
                     Cell: ({ row }) => (
-                      <button onClick ={e => this.addIdToDataCorrespondenceB(e, row.id)}>
+                      <button onClick={(e) => this.addIdToDataCorrespondenceB(e, row.id)}>
                         {row.id}
                       </button>
-                    )
+                    ),
                   },
                   {
                     Header: 'Description',
                     accessor: 'description',
-                  }
+                  },
                 ]}
                 defaultPageSize={10}
                 className="-striped -highlight"
@@ -235,7 +240,6 @@ class MasterData extends Component {
 
       </Container>
     );
-
   }
 }
 

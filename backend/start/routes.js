@@ -17,3 +17,5 @@ const Route = use('Route');
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
+Route.get('/master-data', 'MasterDataController.getAll')
+
