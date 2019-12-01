@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
@@ -10,7 +11,6 @@ import CompanyService from '../../services/CompanyService';
 class MasterData extends Component {
   constructor() {
     super();
-
     this.state = {
       dataCompanyA: [],
       dataCompanyB: [],
@@ -38,18 +38,21 @@ class MasterData extends Component {
       companyB: 'ritaNorinho',
       loadingCompanyA: true,
       loadingCompanyB: true,
+
+      pageSize: 10,
     };
     this.CompanyService = new CompanyService();
   }
 
   componentDidMount() {
-    this.onFetchDataCompanyA(0, 10);
-    this.onFetchDataCompanyB(0, 10);
+    const { pageIndexA, pageIndexB } = this.state;
+    this.onFetchDataCompanyA(pageIndexA);
+    this.onFetchDataCompanyB(pageIndexB);
   }
 
 
-  onFetchDataCompanyA(page, pageSize, value = null) {
-    const { companyA } = this.state;
+  onFetchDataCompanyA(page, value = null) {
+    const { companyA, pageSize } = this.state;
     let cA = companyA;
     if (value !== null && value !== companyA) { cA = value; }
     this.setState({ loadingCompanyA: true });
@@ -64,8 +67,8 @@ class MasterData extends Component {
     });
   }
 
-  onFetchDataCompanyB(page, pageSize, value = null) {
-    const { companyB } = this.state;
+  onFetchDataCompanyB(page, value = null) {
+    const { companyB, pageSize } = this.state;
     let cB = companyB;
     if (value !== null && value !== companyB) { cB = value; }
     this.setState({ loadingCompanyB: true });
@@ -93,7 +96,9 @@ class MasterData extends Component {
         position = sidx;
       }
     });
-    if (position === -1) { dataCorrespondence.push({ idA: id, idB: null }); } else dataCorrespondence[position].idA = id;
+    if (position === -1) {
+      dataCorrespondence.push({ idA: id, idB: null });
+    } else dataCorrespondence[position].idA = id;
 
     this.setState({
       dataCompanyA,
@@ -134,7 +139,9 @@ class MasterData extends Component {
   render() {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions, loadingCompanyA, loadingCompanyB,
+      companyAoptions, companyBoptions, categoryOptions,
+      loadingCompanyA, loadingCompanyB,
+      pageIndexA, pageIndexB, pageSize,
     } = this.state;
     return (
       <Container>
@@ -160,7 +167,7 @@ class MasterData extends Component {
               className="selector company-selector pos-lt rel-text-white"
               name="companyA"
               onChange={(e) => {
-                this.onFetchDataCompanyA(0, 10, e.target.value);
+                this.onFetchDataCompanyA(pageIndexA, e.target.value);
                 this.setState({ companyA: e.target.value });
               }}
 
@@ -178,7 +185,7 @@ class MasterData extends Component {
               className="selector company-selector pos-rt rel-text-white"
               name="companyB"
               onChange={(e) => {
-                this.onFetchDataCompanyB(0, 10, e.target.value);
+                this.onFetchDataCompanyB(pageIndexB, e.target.value);
                 this.setState({ companyB: e.target.value });
               }}
             >
@@ -199,7 +206,8 @@ class MasterData extends Component {
                 loading={loadingCompanyA}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
-                  this.onFetchDataCompanyA(pageIndex, 10);
+                  this.setState({ pageIndexA: pageIndex });
+                  this.onFetchDataCompanyA(pageIndex);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
@@ -218,7 +226,7 @@ class MasterData extends Component {
                     accessor: 'description',
                   },
                 ]}
-                defaultPageSize={10}
+                defaultPageSize={pageSize}
                 className="-striped -highlight"
               />
               <br />
@@ -241,7 +249,7 @@ class MasterData extends Component {
                     accessor: 'idB',
                   },
                 ]}
-                defaultPageSize={10}
+                defaultPageSize={pageSize}
                 className="-striped -highlight"
               />
               <br />
@@ -255,8 +263,8 @@ class MasterData extends Component {
                 loading={loadingCompanyB}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
-                  // console.log(pageIndex);
-                  this.onFetchDataCompanyB(pageIndex, 10);
+                  this.setState({ pageIndexB: pageIndex });
+                  this.onFetchDataCompanyB(pageIndex);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
@@ -275,7 +283,7 @@ class MasterData extends Component {
                     accessor: 'description',
                   },
                 ]}
-                defaultPageSize={10}
+                defaultPageSize={pageSize}
                 className="-striped -highlight"
               />
               <br />
