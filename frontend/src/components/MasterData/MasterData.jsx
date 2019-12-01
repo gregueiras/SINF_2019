@@ -12,26 +12,19 @@ class MasterData extends Component {
     super();
 
     this.state = {
-      dataCompanyA: [
-      ],
-      dataCompanyB: [
-      ],
-
-      dataCorrespondence: [
-      ],
+      dataCompanyA: [],
+      dataCompanyB: [],
+      dataCorrespondence: [],
 
       companyAoptions: [
-        { value: '1', name: 'MetroCarpetDistributor' },
-        { value: '2', name: 'MetroCarpetFactory' },
-        { value: '3', name: 'option3' },
-        { value: '4', name: 'option4' },
-
+        { value: 'intercompany', name: 'intercompany' },
+        { value: 'feup', name: 'feup' },
+        { value: 'ritaNorinho', name: 'ritaNorinho' },
       ],
       companyBoptions: [
-        { value: '1', name: 'MetroCarpetFactory' },
-        { value: '2', name: 'MetroCarpetDistributor' },
-        { value: '3', name: 'option3' },
-        { value: '4', name: 'option4' },
+        { value: 'ritaNorinho', name: 'ritaNorinho' },
+        { value: 'intercompany', name: 'intercompany' },
+        { value: 'feup', name: 'feup' },
       ],
       categoryOptions: [
         { value: '1', name: 'Items' },
@@ -39,7 +32,8 @@ class MasterData extends Component {
         { value: '3', name: 'Items3' },
         { value: '4', name: 'Items4' },
       ],
-
+      pageIndexA: 0,
+      pageIndexB: 0,
       companyA: 'intercompany',
       companyB: 'ritaNorinho',
       loadingCompanyA: true,
@@ -54,10 +48,12 @@ class MasterData extends Component {
   }
 
 
-  onFetchDataCompanyA(page, pageSize) {
+  onFetchDataCompanyA(page, pageSize, value = null) {
     const { companyA } = this.state;
+    let cA = companyA;
+    if (value !== null && value !== companyA) { cA = value; }
     this.setState({ loadingCompanyA: true });
-    this.CompanyService.getItems(page, pageSize, companyA, (response) => {
+    this.CompanyService.getItems(page, pageSize, cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyA = data.data.map((item) => (
@@ -68,10 +64,12 @@ class MasterData extends Component {
     });
   }
 
-  onFetchDataCompanyB(page, pageSize) {
+  onFetchDataCompanyB(page, pageSize, value = null) {
     const { companyB } = this.state;
+    let cB = companyB;
+    if (value !== null && value !== companyB) { cB = value; }
     this.setState({ loadingCompanyB: true });
-    this.CompanyService.getItems(page, pageSize, companyB, (response) => {
+    this.CompanyService.getItems(page, pageSize, cB, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyB = data.data.map((item) => (
@@ -161,6 +159,11 @@ class MasterData extends Component {
             <select
               className="selector company-selector pos-lt rel-text-white"
               name="companyA"
+              onChange={(e) => {
+                this.onFetchDataCompanyA(0, 10, e.target.value);
+                this.setState({ companyA: e.target.value });
+              }}
+
             >
               {companyAoptions.map((e, key) => (
                 <option key={key} value={e.value}>
@@ -174,6 +177,10 @@ class MasterData extends Component {
             <select
               className="selector company-selector pos-rt rel-text-white"
               name="companyB"
+              onChange={(e) => {
+                this.onFetchDataCompanyB(0, 10, e.target.value);
+                this.setState({ companyB: e.target.value });
+              }}
             >
               {companyBoptions.map((e, key) => (
                 <option key={key} value={e.value}>
@@ -192,7 +199,7 @@ class MasterData extends Component {
                 loading={loadingCompanyA}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
-                  this.onFetchDataComapnyA(pageIndex, 10);
+                  this.onFetchDataCompanyA(pageIndex, 10);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
@@ -248,6 +255,7 @@ class MasterData extends Component {
                 loading={loadingCompanyB}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
+                  // console.log(pageIndex);
                   this.onFetchDataCompanyB(pageIndex, 10);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
