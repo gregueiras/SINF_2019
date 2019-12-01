@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
-import ReactTable from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {

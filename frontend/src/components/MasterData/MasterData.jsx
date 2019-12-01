@@ -22,10 +22,7 @@ class MasterData extends Component {
         id: 'IHA250526',
         description: 'IRAN HAMADAN',
       },
-      {
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      }],
+      ],
 
       dataCorrespondence: [
       ],
@@ -51,20 +48,29 @@ class MasterData extends Component {
       ],
 
       loadingCompanyA: true,
+      pageIndex: 1,
 
     };
     this.CompanyService = new CompanyService();
   }
 
   componentDidMount() {
-    this.CompanyService.getItems((response) => {
+    this.onFetchData(0, 10);
+  }
+
+  onFetchData(page, pageSize) {
+    this.setState({ loadingCompanyA: true });
+    this.CompanyService.getItems(page, pageSize, (response) => {
       if (response.status === 200) {
         const { data } = response;
-        const dataCompanyA = data.data.map((item) => ({ id: item.itemKey, description: item.description }));
+        const dataCompanyA = data.data.map((item) => (
+          { id: item.itemKey, description: item.description }
+        ));
         this.setState({ dataCompanyA, loadingCompanyA: false });
       }
     });
   }
+
 
   addIdToDataCorrespondenceA(e, id) {
     e.preventDefault();
@@ -102,7 +108,9 @@ class MasterData extends Component {
         position = sidx;
       }
     });
-    if (position === -1) { dataCorrespondence.push({ idA: null, idB: id }); } else dataCorrespondence[position].idB = id;
+    if (position === -1) {
+      dataCorrespondence.push({ idA: null, idB: id });
+    } else { dataCorrespondence[position].idB = id; }
 
     this.setState({
       dataCompanyA,
@@ -171,6 +179,12 @@ class MasterData extends Component {
               <ReactTable
                 data={dataCompanyA}
                 loading={loadingCompanyA}
+                showPageSizeOptions={false}
+                onPageChange={(pageIndex) => {
+                  this.onFetchData(pageIndex, 10);
+                }}
+                pages={20} // TODO CHECK NR OF PAGES
+                manual
                 columns={[
                   {
                     Header: 'ID',
@@ -197,6 +211,8 @@ class MasterData extends Component {
               <div className="gray-label"> ID Correspondence </div>
               <ReactTable
                 data={dataCorrespondence}
+                showPageSizeOptions={false}
+                pagination
                 columns={[
                   {
                     Header: 'ID - A',
@@ -218,6 +234,7 @@ class MasterData extends Component {
               <div className="gray-label"> Company B Products </div>
               <ReactTable
                 data={dataCompanyB}
+                showPageSizeOptions={false}
                 columns={[
                   {
                     Header: 'ID',

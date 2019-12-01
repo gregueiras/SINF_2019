@@ -5,9 +5,9 @@ export default class ItemsService {
     this.basePath = 'http://localhost:3335/master-data';
   }
 
-  getItems(callback) {
+  getItems(size, pageSize, callback) {
     axios
-      .get(this.basePath)
+      .get(`${this.basePath}/${size + 1}/${pageSize}`)
       .then((response) => {
         callback(response);
       })
