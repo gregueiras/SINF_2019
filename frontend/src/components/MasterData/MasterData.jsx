@@ -14,14 +14,7 @@ class MasterData extends Component {
     this.state = {
       dataCompanyA: [
       ],
-      dataCompanyB: [{
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      },
-      {
-        id: 'IHA250526',
-        description: 'IRAN HAMADAN',
-      },
+      dataCompanyB: [
       ],
 
       dataCorrespondence: [
@@ -47,26 +40,44 @@ class MasterData extends Component {
         { value: '4', name: 'Items4' },
       ],
 
+      companyA: 'intercompany',
+      companyB: 'ritaNorinho',
       loadingCompanyA: true,
-      pageIndex: 1,
-
+      loadingCompanyB: true,
     };
     this.CompanyService = new CompanyService();
   }
 
   componentDidMount() {
-    this.onFetchData(0, 10);
+    this.onFetchDataCompanyA(0, 10);
+    this.onFetchDataCompanyB(0, 10);
   }
 
-  onFetchData(page, pageSize) {
+
+  onFetchDataCompanyA(page, pageSize) {
+    const { companyA } = this.state;
     this.setState({ loadingCompanyA: true });
-    this.CompanyService.getItems(page, pageSize, (response) => {
+    this.CompanyService.getItems(page, pageSize, companyA, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyA = data.data.map((item) => (
           { id: item.itemKey, description: item.description }
         ));
         this.setState({ dataCompanyA, loadingCompanyA: false });
+      }
+    });
+  }
+
+  onFetchDataCompanyB(page, pageSize) {
+    const { companyB } = this.state;
+    this.setState({ loadingCompanyB: true });
+    this.CompanyService.getItems(page, pageSize, companyB, (response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const dataCompanyB = data.data.map((item) => (
+          { id: item.itemKey, description: item.description }
+        ));
+        this.setState({ dataCompanyB, loadingCompanyB: false });
       }
     });
   }
@@ -125,7 +136,7 @@ class MasterData extends Component {
   render() {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions, loadingCompanyA,
+      companyAoptions, companyBoptions, categoryOptions, loadingCompanyA, loadingCompanyB,
     } = this.state;
     return (
       <Container>
@@ -181,7 +192,7 @@ class MasterData extends Component {
                 loading={loadingCompanyA}
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
-                  this.onFetchData(pageIndex, 10);
+                  this.onFetchDataComapnyA(pageIndex, 10);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
@@ -234,7 +245,13 @@ class MasterData extends Component {
               <div className="gray-label"> Company B Products </div>
               <ReactTable
                 data={dataCompanyB}
+                loading={loadingCompanyB}
                 showPageSizeOptions={false}
+                onPageChange={(pageIndex) => {
+                  this.onFetchDataCompanyB(pageIndex, 10);
+                }}
+                pages={20} // TODO CHECK NR OF PAGES
+                manual
                 columns={[
                   {
                     Header: 'ID',

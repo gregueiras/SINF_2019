@@ -1,4 +1,4 @@
-import makeRequest, { endPoints } from './constants';
+import makeRequest, { endPoints, constants } from './constants';
 
 const createMinSalesOrder = ({company, buyerCustomerParty, deliveryTerm, documentLines}) =>
   makeRequest({
@@ -9,7 +9,8 @@ const createMinSalesOrder = ({company, buyerCustomerParty, deliveryTerm, documen
         buyerCustomerParty,
         deliveryTerm,
         documentLines,
-    }
+    },
+    company: constants.intercompany,
   });
 
 export default createMinSalesOrder;

@@ -1,4 +1,4 @@
-import makeRequest, { endPoints } from './constants';
+import makeRequest, { endPoints, constants } from './constants';
 
 const createSalesOrder = ({ 
     documentType,
@@ -21,6 +21,7 @@ const createSalesOrder = ({
   makeRequest({
     method:  "POST" ,
     endPoint: endPoints.salesOrders,
+    company: constants.intercompany,
     data: {
         documentType,
         serie,

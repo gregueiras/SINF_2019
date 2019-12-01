@@ -1,13 +1,27 @@
 import axios from "axios";
 import FormData from "form-data";
 
-const constants = {
+export const constants = {
   url: "https://my.jasminsoftware.com",
-  tenant: "224900",
-  organization: "224900-0001",
+  intercompany: {
+    tenant: "224900",
+    organization: "224900-0001",
+    clientId: "FEUP-SINF",
+    clientSecret: "92f0a4da-64ee-4449-99e4-f93df1038980",
+  },
+  feup: {
+    tenant: "226890",
+    organization: "226890-0001",
+    clientId: "FEUP-SINF-2",
+    clientSecret: "fb3887ba-6189-43dc-8e97-0ea104c575ec",
+  },
+  ritaNorinho: {
+    tenant: "226459",
+    organization: "226459-0001",
+    clientId: "FEUP-SINF",
+    clientSecret: "92f0a4da-64ee-4449-99e4-f93df1038980",
+  },
   grantType: "client_credentials",
-  clientId: "FEUP-SINF",
-  clientSecret: "92f0a4da-64ee-4449-99e4-f93df1038980",
   scope: "application"
 };
 
@@ -19,8 +33,8 @@ export const endPoints = {
 
 };
 
-const makeUrl = (endPoint, query) => {
-  let url = `${constants.url}/api/${constants.tenant}/${constants.organization}/${endPoint}?`;
+const makeUrl = (endPoint, query, company) => {
+  let url = `${constants.url}/api/${company.tenant}/${company.organization}/${endPoint}?`;
 
   if (query) {
     Object.keys(query).forEach(key => {
@@ -31,11 +45,11 @@ const makeUrl = (endPoint, query) => {
   return url;
 };
 
-const getToken = async () => {
+const getToken = async (company) => {
   const formData = new FormData();
   formData.append("grant_type", constants.grantType);
-  formData.append("client_id", constants.clientId);
-  formData.append("client_secret", constants.clientSecret);
+  formData.append("client_id", company.clientId);
+  formData.append("client_secret", company.clientSecret);
   formData.append("scope", constants.scope);
 
   const { data } = await axios.post(
@@ -52,13 +66,13 @@ const getToken = async () => {
   return access_token;
 };
 
-const makeRequest = async ({ token, endPoint, method, data, query }) => {
+const makeRequest = async ({ token, endPoint, method, data, query, company }) => {
   let myToken = token;
   if (!token) {
-    myToken = await getToken();
+    myToken = await getToken(company);
   }
 
-  const url = makeUrl(endPoint, query);
+  const url = makeUrl(endPoint, query, company);
 
   return axios({
     method,

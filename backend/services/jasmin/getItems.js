@@ -1,12 +1,25 @@
-import makeRequest, { endPoints } from './constants';
+import makeRequest, { endPoints, constants } from './constants';
 
-const getItems = (page, pageSize) => makeRequest({
-  method: 'GET',
-  endPoint: endPoints.items,
-  query: {
-    page,
-    pageSize,
-  },
-});
+function getCompany(companyId) {
+  if(companyId === 'intercompany')
+    return constants.intercompany;
+  if(companyId === 'feup')
+    return constants.feup;
+  if(companyId === 'ritaNorinho')
+    return constants.ritaNorinho;
+  return constants.intercompany;
+}
+
+const getItems = (page, pageSize, companyId) => 
+   makeRequest({
+    method: 'GET',
+    endPoint: endPoints.items,
+    company: getCompany(companyId),
+    query: {
+      page,
+      pageSize,
+    },
+  });
+
 
 export default getItems;
