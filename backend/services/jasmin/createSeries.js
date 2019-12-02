@@ -1,10 +1,10 @@
 import makeRequest, { endPoints, constants } from './constants';
 
-const createSeries = (serieKey, description) =>
+const createSeries = ({ company, serieKey, description }) =>
   makeRequest({
     method: "POST",
     endPoint: endPoints.series,
-    company: constants.intercompany,
+    company,
     data: {
       serieKey,
       description,

@@ -1,7 +1,6 @@
 import makeRequest, { endPoints, constants } from './constants';
 
 const createSalesOrder = ({ 
-    documentType,
     serie,
     buyerCustomerParty,
     documentDate,
@@ -21,9 +20,9 @@ const createSalesOrder = ({
   makeRequest({
     method:  "POST" ,
     endPoint: endPoints.salesOrders,
-    company: constants.intercompany,
+    company,
     data: {
-        documentType,
+        documentType: "ECL",
         serie,
         buyerCustomerParty,
         documentDate,
