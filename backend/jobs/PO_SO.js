@@ -1,9 +1,6 @@
 import { RETURN_TYPES } from "./index";
-import getSeries from "../services/jasmin/getSeries";
-import createSeries from "../services/jasmin/createSeries";
-import createSalesOrder from "../services/jasmin/createSalesOrder";
-
-import getPurchasesOrders from "../services/jasmin/getPurchasesOrders";
+import { getSeries, createSeries, createSalesOrder, getPurchasesOrders } from "../services/jasmin";
+import { getUsers } from "../services/db"
 
 export default {
   key: "PO_SO",
@@ -13,6 +10,9 @@ export default {
     // }
   },
   async handle({ data }) {
+    const users = await getUsers()
+
+    console.log(users.data);
     const { companyA, companyB } = data;
 
     // Check if 'INTERCOMPANY_COMPANYA_COMPANYB' series exist
@@ -32,7 +32,7 @@ export default {
     const purchasesOrders = (await getPurchasesOrders()).data;
     const purchaseOrder = purchasesOrders.find(po => po.serie === serieName);
     
-    console.log(purchaseOrder);
+    //console.log(purchaseOrder);
 
     // TODO check if purchase order was already replicated (save this information in db)
 

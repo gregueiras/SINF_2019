@@ -19,3 +19,4 @@ Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll')
 
+Route.get('/user', 'UserController.index');
