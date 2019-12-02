@@ -20,3 +20,4 @@ Route.get('/test', 'TestController.index');
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll')
 
 Route.get('/user', 'UserController.index');
+Route.get('/user/:id', 'UserController.get');
