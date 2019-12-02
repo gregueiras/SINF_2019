@@ -21,3 +21,8 @@ Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAl
 
 Route.get('/user', 'UserController.index');
 Route.get('/user/:id', 'UserController.get');
+
+Route.get('/product', 'ProductController.index');
+
+
+Route.get('/company', 'CompanyController.index');

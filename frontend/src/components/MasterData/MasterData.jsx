@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
@@ -26,12 +27,7 @@ class MasterData extends Component {
         { value: 'intercompany', name: 'intercompany' },
         { value: 'feup', name: 'feup' },
       ],
-      categoryOptions: [
-        { value: '1', name: 'Items' },
-        { value: '2', name: 'Items2' },
-        { value: '3', name: 'Items3' },
-        { value: '4', name: 'Items4' },
-      ],
+
       pageIndexA: 0,
       pageIndexB: 0,
       companyA: 'intercompany',
@@ -145,21 +141,6 @@ class MasterData extends Component {
     } = this.state;
     return (
       <Container>
-        <Row>
-          <Col md={4}>
-            <div className="gray-label"> Category </div>
-            <select
-              className="selector category-selector pos-lt rel-text-white"
-              name="category"
-            >
-              {categoryOptions.map((e, key) => (
-                <option key={key} value={e.value}>
-                  {e.name}
-                </option>
-              ))}
-            </select>
-          </Col>
-        </Row>
         <Row id="companySelectorsRow">
           <Col md={4}>
             <div className="gray-label"> Company A </div>
