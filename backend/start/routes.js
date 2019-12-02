@@ -22,6 +22,9 @@ Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAl
 Route.get('/user', 'UserController.index');
 Route.get('/user/:id', 'UserController.get');
 
+Route.get("/processedFile", "ProcessedFileController.get");
+Route.post("/processedFile", "ProcessedFileController.store");
+
 Route.get('/product', 'ProductController.index');
 Route.get('/product/:companyA/:companyB', 'ProductController.getCorrespondence');
 
