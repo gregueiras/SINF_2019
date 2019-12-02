@@ -17,21 +17,13 @@ class MasterData extends Component {
       dataCompanyB: [],
       dataCorrespondence: [],
 
-      companyAoptions: [
-        { value: 'intercompany', name: 'intercompany' },
-        { value: 'feup', name: 'feup' },
-        { value: 'ritaNorinho', name: 'ritaNorinho' },
-      ],
-      companyBoptions: [
-        { value: 'ritaNorinho', name: 'ritaNorinho' },
-        { value: 'intercompany', name: 'intercompany' },
-        { value: 'feup', name: 'feup' },
-      ],
+      companyAoptions: [],
+      companyBoptions: [],
 
       pageIndexA: 0,
       pageIndexB: 0,
-      companyA: 'intercompany',
-      companyB: 'ritaNorinho',
+      companyA: '',
+      companyB: '',
       loadingCompanyA: true,
       loadingCompanyB: true,
 
@@ -44,6 +36,15 @@ class MasterData extends Component {
     const { pageIndexA, pageIndexB } = this.state;
     this.onFetchDataCompanyA(pageIndexA);
     this.onFetchDataCompanyB(pageIndexB);
+    this.CompanyService.getCompanies((response) => {
+      const reverse = response.data.slice().reverse();
+      this.setState({
+        companyAoptions: response.data,
+        companyBoptions: reverse,
+        companyB: reverse[0],
+        companyA: response.data[0],
+      });
+    });
   }
 
 
@@ -84,8 +85,7 @@ class MasterData extends Component {
     e.preventDefault();
     let position = -1;
     const {
-      dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions,
+      dataCorrespondence,
     } = this.state;
     dataCorrespondence.map((data, sidx) => {
       if (data.idA === null && position === -1) {
@@ -97,12 +97,7 @@ class MasterData extends Component {
     } else dataCorrespondence[position].idA = id;
 
     this.setState({
-      dataCompanyA,
-      dataCompanyB,
       dataCorrespondence,
-      companyAoptions,
-      companyBoptions,
-      categoryOptions,
     });
   }
 
@@ -135,7 +130,7 @@ class MasterData extends Component {
   render() {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions,
+      companyAoptions, companyBoptions,
       loadingCompanyA, loadingCompanyB,
       pageIndexA, pageIndexB, pageSize,
     } = this.state;
@@ -154,7 +149,7 @@ class MasterData extends Component {
 
             >
               {companyAoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id}>
                   {e.name}
                 </option>
               ))}
@@ -171,7 +166,7 @@ class MasterData extends Component {
               }}
             >
               {companyBoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id}>
                   {e.name}
                 </option>
               ))}
