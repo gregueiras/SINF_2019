@@ -34,15 +34,15 @@ class MasterData extends Component {
 
   componentDidMount() {
     const { pageIndexA, pageIndexB } = this.state;
-    this.onFetchDataCompanyA(pageIndexA);
-    this.onFetchDataCompanyB(pageIndexB);
     this.CompanyService.getCompanies((response) => {
       const reverse = response.data.slice().reverse();
+      this.onFetchDataCompanyA(pageIndexA, response.data[0].id);
+      this.onFetchDataCompanyB(pageIndexB, reverse[0].id);
       this.setState({
         companyAoptions: response.data,
         companyBoptions: reverse,
-        companyB: reverse[0],
-        companyA: response.data[0],
+        companyB: reverse[0].id,
+        companyA: response.data[0].id,
       });
     });
   }
@@ -134,6 +134,8 @@ class MasterData extends Component {
       loadingCompanyA, loadingCompanyB,
       pageIndexA, pageIndexB, pageSize,
     } = this.state;
+
+
     return (
       <Container>
         <Row id="companySelectorsRow">
