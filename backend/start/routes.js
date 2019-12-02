@@ -23,6 +23,6 @@ Route.get('/user', 'UserController.index');
 Route.get('/user/:id', 'UserController.get');
 
 Route.get('/product', 'ProductController.index');
-
+Route.get('/product/:companyA/:companyB', 'ProductController.getCorrespondence');
 
 Route.get('/company', 'CompanyController.index');

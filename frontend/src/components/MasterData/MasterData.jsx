@@ -26,6 +26,7 @@ class MasterData extends Component {
       companyB: '',
       loadingCompanyA: true,
       loadingCompanyB: true,
+      loadingDataCorrespondence: true,
 
       pageSize: 10,
     };
@@ -44,7 +45,18 @@ class MasterData extends Component {
         companyB: reverse[0].id,
         companyA: response.data[0].id,
       });
+      this.onFetchDataCorrespondance(response.data[0].id, reverse[0].id);
     });
+  }
+
+  onFetchDataCorrespondance(companyAId, companyBId) {
+    this.CompanyService.getCorrespondence(companyAId, companyBId,
+      (response) => {
+        const dataCorrespondence = response.data.map((item) => (
+          { idA: item.id_company_a, idB: item.id_company_b }
+        ));
+        this.setState({ dataCorrespondence, loadingDataCorrespondence: false });
+      });
   }
 
 
@@ -131,8 +143,9 @@ class MasterData extends Component {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
       companyAoptions, companyBoptions,
-      loadingCompanyA, loadingCompanyB,
+      loadingCompanyA, loadingCompanyB, loadingDataCorrespondence,
       pageIndexA, pageIndexB, pageSize,
+      companyB, companyA,
     } = this.state;
 
 
@@ -146,6 +159,7 @@ class MasterData extends Component {
               name="companyA"
               onChange={(e) => {
                 this.onFetchDataCompanyA(pageIndexA, e.target.value);
+                this.onFetchDataCorrespondance(e.target.value, companyB);
                 this.setState({ companyA: e.target.value });
               }}
 
@@ -164,6 +178,7 @@ class MasterData extends Component {
               name="companyB"
               onChange={(e) => {
                 this.onFetchDataCompanyB(pageIndexB, e.target.value);
+                this.onFetchDataCorrespondance(companyA, e.target.value);
                 this.setState({ companyB: e.target.value });
               }}
             >
@@ -215,6 +230,7 @@ class MasterData extends Component {
               <div className="gray-label"> ID Correspondence </div>
               <ReactTable
                 data={dataCorrespondence}
+                loading={loadingDataCorrespondence}
                 showPageSizeOptions={false}
                 pagination
                 columns={[
