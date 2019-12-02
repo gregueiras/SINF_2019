@@ -21,9 +21,9 @@ Factory.blueprint('App/Models/User', (faker) => {
    }
  })
 
- Factory.blueprint('App/Models/Company', (faker) => {
+ Factory.blueprint('App/Models/Company', (faker, i, data) => {
     return {
-      name: faker.username()
+      name: data.name
     }
   })
 

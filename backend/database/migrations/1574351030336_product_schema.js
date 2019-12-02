@@ -11,6 +11,10 @@ class ProductSchema extends Schema {
       table.foreign('user').references('id').inTable('users')
       table.bigInteger('id_company_a')
       table.bigInteger('id_company_b')
+      table.bigInteger('company_a')
+      table.foreign('company_a').references('id').inTable('companies')
+      table.bigInteger('company_b')
+      table.foreign('company_b').references('id').inTable('companies')
       table.timestamps()
     })
   }

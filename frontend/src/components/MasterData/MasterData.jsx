@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
@@ -16,26 +17,13 @@ class MasterData extends Component {
       dataCompanyB: [],
       dataCorrespondence: [],
 
-      companyAoptions: [
-        { value: 'intercompany', name: 'intercompany' },
-        { value: 'feup', name: 'feup' },
-        { value: 'ritaNorinho', name: 'ritaNorinho' },
-      ],
-      companyBoptions: [
-        { value: 'ritaNorinho', name: 'ritaNorinho' },
-        { value: 'intercompany', name: 'intercompany' },
-        { value: 'feup', name: 'feup' },
-      ],
-      categoryOptions: [
-        { value: '1', name: 'Items' },
-        { value: '2', name: 'Items2' },
-        { value: '3', name: 'Items3' },
-        { value: '4', name: 'Items4' },
-      ],
+      companyAoptions: [],
+      companyBoptions: [],
+
       pageIndexA: 0,
       pageIndexB: 0,
-      companyA: 'intercompany',
-      companyB: 'ritaNorinho',
+      companyA: '',
+      companyB: '',
       loadingCompanyA: true,
       loadingCompanyB: true,
 
@@ -46,8 +34,17 @@ class MasterData extends Component {
 
   componentDidMount() {
     const { pageIndexA, pageIndexB } = this.state;
-    this.onFetchDataCompanyA(pageIndexA);
-    this.onFetchDataCompanyB(pageIndexB);
+    this.CompanyService.getCompanies((response) => {
+      const reverse = response.data.slice().reverse();
+      this.onFetchDataCompanyA(pageIndexA, response.data[0].id);
+      this.onFetchDataCompanyB(pageIndexB, reverse[0].id);
+      this.setState({
+        companyAoptions: response.data,
+        companyBoptions: reverse,
+        companyB: reverse[0].id,
+        companyA: response.data[0].id,
+      });
+    });
   }
 
 
@@ -88,8 +85,7 @@ class MasterData extends Component {
     e.preventDefault();
     let position = -1;
     const {
-      dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions,
+      dataCorrespondence,
     } = this.state;
     dataCorrespondence.map((data, sidx) => {
       if (data.idA === null && position === -1) {
@@ -101,12 +97,7 @@ class MasterData extends Component {
     } else dataCorrespondence[position].idA = id;
 
     this.setState({
-      dataCompanyA,
-      dataCompanyB,
       dataCorrespondence,
-      companyAoptions,
-      companyBoptions,
-      categoryOptions,
     });
   }
 
@@ -139,27 +130,14 @@ class MasterData extends Component {
   render() {
     const {
       dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions, categoryOptions,
+      companyAoptions, companyBoptions,
       loadingCompanyA, loadingCompanyB,
       pageIndexA, pageIndexB, pageSize,
     } = this.state;
+
+
     return (
       <Container>
-        <Row>
-          <Col md={4}>
-            <div className="gray-label"> Category </div>
-            <select
-              className="selector category-selector pos-lt rel-text-white"
-              name="category"
-            >
-              {categoryOptions.map((e, key) => (
-                <option key={key} value={e.value}>
-                  {e.name}
-                </option>
-              ))}
-            </select>
-          </Col>
-        </Row>
         <Row id="companySelectorsRow">
           <Col md={4}>
             <div className="gray-label"> Company A </div>
@@ -173,7 +151,7 @@ class MasterData extends Component {
 
             >
               {companyAoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id}>
                   {e.name}
                 </option>
               ))}
@@ -190,7 +168,7 @@ class MasterData extends Component {
               }}
             >
               {companyBoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id}>
                   {e.name}
                 </option>
               ))}

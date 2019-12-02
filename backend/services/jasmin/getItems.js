@@ -1,11 +1,11 @@
 import makeRequest, { endPoints, constants } from './constants';
 
 function getCompany(companyId) {
-  if(companyId === 'intercompany')
+  if(companyId === '1')
     return constants.intercompany;
-  if(companyId === 'feup')
+  if(companyId === '2')
     return constants.feup;
-  if(companyId === 'ritaNorinho')
+  if(companyId === '3')
     return constants.ritaNorinho;
   return constants.intercompany;
 }

@@ -3,7 +3,9 @@ const Database = use('Database')
 
 class CompanySeeder {
   async run () {
-    await Factory.model('App/Models/Company').createMany(2);
+    await Factory.model('App/Models/Company').create({name: 'intercompany'});
+    await Factory.model('App/Models/Company').create({name: 'feup'});
+    await Factory.model('App/Models/Company').create({name: 'ritaNorinho'});
   }
 }
 

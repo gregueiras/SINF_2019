@@ -24,3 +24,6 @@ Route.get('/user/:id', 'UserController.get');
 
 Route.get("/processedFile", "ProcessedFileController.get");
 Route.post("/processedFile", "ProcessedFileController.store");
+
+Route.get('/product', 'ProductController.index');
+Route.get('/company', 'CompanyController.index');
