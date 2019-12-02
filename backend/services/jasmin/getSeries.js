@@ -1,10 +1,10 @@
 import makeRequest, { endPoints, constants } from './constants';
 
-const getSeries = () =>
+const getSeries = ({company}) =>
   makeRequest({
     method: "GET",
     endPoint: endPoints.series,
-    company: constants.intercompany,
+    company,
   });
 
 export default getSeries;

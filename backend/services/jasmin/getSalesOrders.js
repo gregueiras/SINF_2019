@@ -1,9 +1,9 @@
 import makeRequest, { endPoints, constants } from './constants';
 
-const getSalesOrders = (page, pageSize) => makeRequest({
+const getSalesOrders = ({company, page, pageSize}) => makeRequest({
   method: 'GET',
   endPoint: endPoints.salesOrders,
-  company: constants.intercompany,
+  company,
   query: {
     page,
     pageSize,

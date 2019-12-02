@@ -1,17 +1,23 @@
 import Queue from "../../../lib/Queue";
-import { getSeries } from "../../../services/jasmin";
-
+import {
+  getSeries,
+  getSalesOrders,
+  getPurchasesOrders
+} from "../../../services/jasmin";
+import { constants } from "../../../services/jasmin/constants";
 
 const TestController = {
   // eslint-disable-next-line no-unused-vars
   async index({ request, response, view }) {
     //await Queue.add("Test", { data: "payload" });
-    await Queue.add("PO_SO", { 
-      companyA: "FEUP",
-      companyB: "SINF",
+    await Queue.add("PO_SO", {
+      companyA: "intercompany",
+      companyB: "feup",
     });
 
-    const sO = await getSeries();
+    const company = constants.intercompany;
+
+    const sO = await getPurchasesOrders({ company });
     return sO.data;
   }
 };

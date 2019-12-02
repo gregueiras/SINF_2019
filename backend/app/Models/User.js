@@ -38,7 +38,10 @@ class User extends Model {
     return this.hasMany('App/Models/Product');
   }
   processes(){
-    return this.hasMany('App/Model/Process');
+    return this.hasMany('App/Models/Process');
+  }
+  processedFiles() {
+    return this.hasMany('App/Models/ProcessedFile');
   }
 }
 

@@ -1,5 +1,6 @@
 import makeRequest, { endPoints, constants } from './constants';
 
+//TODO GET FROM DB
 function getCompany(companyId) {
   if(companyId === '1')
     return constants.intercompany;
