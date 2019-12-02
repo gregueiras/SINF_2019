@@ -6,16 +6,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 import './Settings.css';
+import CompanyService from '../../services/CompanyService';
 
 export class Settings extends Component {
 constructor(){
 super();
 
 this.state={
-  organizations:[{name: "Organization 1"}, {name: "Organization 2"}],
+  organizations:[],
 };
 
+this.CompanyService = new CompanyService();
 
+}
+
+componentDidMount() {
+  this.CompanyService.getCompanies((response) => {
+    const reverse = response.data.slice().reverse();
+    const companies = reverse.map((data) => (
+      {name: data.name}
+
+    ));
+    this.state.organizations = companies;
+    this.setState(this.state);
+  });
 }
 
 onAddOrganization = () => {
@@ -38,6 +52,7 @@ onDeleteOrganization = idx => () => {
 };
 
 render() {
+  
 
 return(
 <Container className="settingsContainer">
