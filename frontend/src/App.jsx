@@ -15,6 +15,7 @@ import CreateProcessType from './pages/CreateProcessType';
 import MasterData from './pages/MasterData';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 import 'react-table/react-table.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -48,6 +49,9 @@ const App = () => (
           </Route>
           <Route path="/login" exact>
             <Login />
+          </Route>
+          <Route path="/register" exact>
+            <Register />
           </Route>
         </Switch>
       </div>
