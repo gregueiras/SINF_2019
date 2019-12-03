@@ -1,6 +1,6 @@
 
 
-.login-container,.register-container{
+.loginContainer{
     margin-top: 12em;
     margin-bottom: 12em; 
     padding: 2em 5em 1em 5em !important;
@@ -13,22 +13,22 @@
 }
 
 
-.login-button,.register-button {
+.login-button {
     padding-left: 5em !important;
     padding-right: 5em !important;
     margin-top: 1em;
 }
 
-.login-title, .register-title {
+.login-title {
     color:   #2D3047;
 }
 
-.signup-link, .signup-link:hover, .signin-link, .signin-link:hover {
+.signup-link, .signup-link:hover {
     text-decoration: none !important;
     color: #2D3047 !important;
 }
 
-.signup-label,.signin-label {
+.signup-label {
 font-style: normal;
 font-weight: normal;
 font-size: 15px !important;

@@ -19,7 +19,7 @@ class Login extends Component {
     render() {
 
         return (
-            <Container className="loginContainer">
+            <Container className="login-container">
 
                 <Form id="loginForm">
                     <h3 className="login-title">Welcome back!</h3>
