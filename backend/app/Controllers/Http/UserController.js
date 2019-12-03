@@ -12,6 +12,11 @@ class UserController {
     console.log(id)
     return User.find(id);
   }
+  async login({request,auth}){
+    const {username, password} = request.all();
+    await auth.attempt(username, password);
+    return "Logged in successfully";
+  }
 }
 
 module.exports = UserController

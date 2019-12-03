@@ -12,6 +12,23 @@ class Login extends Component {
             username: '',
             password: ''
         }
+        this.onChangeUsername = this.onChangeUsername.bind(this);
+        this.onChangePassword = this.onChangePassword.bind(this);
+    }
+
+    onChangeUsername(event){
+        const newUsername = event.target.value;
+        this.setState({username: newUsername});
+
+
+    }
+
+    onChangePassword(event){
+        const newPassword = event.target.value;
+        this.setState({password: newPassword});
+
+
+
     }
 
 
@@ -25,11 +42,11 @@ class Login extends Component {
                     <h3 className="login-title">Welcome back!</h3>
                     <Form.Group>
                         <Form.Label className="gray-label">Username</Form.Label>
-                        <Form.Control type="text" placeholder="Username" />
+                        <Form.Control type="text" placeholder="Username" onChange= {this.onChangeUsername} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Password</Form.Label>
-                        <Form.Control type="text" placeholder="Password" />
+                        <Form.Control type="text" placeholder="Password" onChange = {this.onChangePassword} />
                     </Form.Group>
 
                     <Button className="blue-button login-button" variant="primary" type="submit">
