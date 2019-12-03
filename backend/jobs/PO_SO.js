@@ -10,7 +10,7 @@ import {
   getSellerPartyKey,
   createSellerParty
 } from "../services/jasmin";
-import { getUsers, isProcessed } from "../services/db";
+import { getUsers, isProcessed, addProcessed } from "../services/db";
 import { constants } from "../services/jasmin/constants";
 
 export default {
@@ -24,6 +24,8 @@ export default {
     const { companyA, companyB } = data;
     const cA = constants[companyA];
     const cB = constants[companyB];
+
+    const userID = 1;
 
     console.log(cA);
     console.log(cB);
@@ -66,7 +68,7 @@ export default {
 
       // TODO check if purchase order was already replicated (save this information in db)
       const replicated = await isProcessed({
-        userID: 1,
+        userID,
         fileID: purchaseOrder.id
       });
       console.log(replicated);
@@ -92,7 +94,6 @@ export default {
             const {
               quantity,
               unitPrice,
-              deliveryDate,
               grossValue,
               taxTotal,
               lineExtensionAmount
@@ -124,7 +125,13 @@ export default {
             sellerCompany: partyB,
             documentLines
           });
-          console.log(res.status);
+          
+          const { status } = res;
+          console.log(status);
+          if (status === 201) {
+            await addProcessed({ userID, fileID: purchaseOrder.id });
+          }
+
         } catch (e) {
           if (e.response)
             console.error(e.response.data);
