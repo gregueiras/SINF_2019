@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import './MasterData.css';
-import { element } from 'prop-types';
 import CompanyService from '../../services/CompanyService';
 
 class MasterData extends Component {
@@ -59,10 +58,11 @@ class MasterData extends Component {
   }
 
   onCancel(e) {
+    e.preventDefault();
     const { companyA, companyB } = this.state;
     this.setState({ loadingDataCorrespondence: true });
-    e.preventDefault();
     this.onFetchDataCorrespondance(companyA, companyB);
+    this.setState({ deletedCorrespondences: [], addedCorrespondences: [] });
   }
 
   onFetchDataCorrespondance(companyAId, companyBId) {
@@ -134,11 +134,14 @@ class MasterData extends Component {
     });
     if (position === -1) {
       dataCorrespondence.push({ idA: id, idB: null });
+    } else {
+      dataCorrespondence[position].idA = id;
+    }
+    if (pos === -1) {
       addedCorrespondences.push({
         idA: id, idB: null, companyA, companyB,
       });
     } else {
-      dataCorrespondence[position].idA = id;
       addedCorrespondences[pos].idA = id;
     }
 
@@ -173,17 +176,89 @@ class MasterData extends Component {
     });
     if (position === -1) {
       dataCorrespondence.push({ idA: null, idB: id });
+    } else {
+      dataCorrespondence[position].idB = id;
+    }
+    if (pos === -1) {
       addedCorrespondences.push({
         idA: null, idB: id, companyA, companyB,
       });
     } else {
-      dataCorrespondence[position].idB = id;
       addedCorrespondences[pos].idB = id;
     }
-
     this.setState({
       dataCorrespondence,
       addedCorrespondences,
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  removeFromCorrespondence(col, id, correspondence) {
+    const c = correspondence;
+    let position = -1;
+    correspondence.map((data, sidx) => {
+      if (col === 1 && data.idA === id && position === -1) {
+        position = sidx;
+      }
+      if (col === 2 && data.idB === id && position === -1) {
+        position = sidx;
+      }
+    });
+    if (col === 1 && position !== -1) { c[position].idA = null; }
+    if (col === 2 && position !== -1) { c[position].idB = null; }
+    return c;
+  }
+
+  addToDeletedCorrespondences(col, id) {
+    const {
+      addedCorrespondences,
+      dataCorrespondence,
+      deletedCorrespondences,
+      companyA, companyB,
+    } = this.state;
+    let position = -1;
+
+    dataCorrespondence.map((data, sidx) => {
+      if (col === 1 && data.idA === id && position === -1) {
+        position = sidx;
+      }
+      if (col === 2 && data.idB === id && position === -1) {
+        position = sidx;
+      }
+    });
+
+    const correspondence = dataCorrespondence[position];
+    const { idA, idB } = correspondence;
+
+    position = -1;
+    addedCorrespondences.map((data, sidx) => {
+      if (data.idA === idA && data.idB === idB && position === -1) {
+        position = sidx;
+      }
+    });
+
+    if (position !== -1 || idA === null || idB === null) { return; }
+
+    deletedCorrespondences.push({
+      companyA, companyB, idA, idB,
+    });
+    this.setState({ deletedCorrespondences });
+  }
+
+
+  removeFromDataCorrespondence(e, col, id) {
+    e.preventDefault();
+    const {
+      dataCorrespondence,
+      addedCorrespondences,
+    } = this.state;
+
+    this.addToDeletedCorrespondences(col, id);
+    this.setState({
+      dataCorrespondence:
+      this.removeFromCorrespondence(col, id, dataCorrespondence),
+      addedCorrespondences:
+      this.removeFromCorrespondence(col, id, addedCorrespondences),
     });
   }
 
@@ -285,7 +360,7 @@ class MasterData extends Component {
                     Header: 'ID - A',
                     accessor: 'idA',
                     Cell: ({ row }) => (
-                      <button onClick={(e) => console.log(1)}>
+                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 1, row.idA)}>
                         {row.idA}
                       </button>
                     ),
@@ -294,7 +369,7 @@ class MasterData extends Component {
                     Header: 'ID - B',
                     accessor: 'idB',
                     Cell: ({ row }) => (
-                      <button onClick={(e) => console.log(2)}>
+                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 2, row.idB)}>
                         {row.idB}
                       </button>
                     ),
