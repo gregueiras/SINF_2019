@@ -3,8 +3,7 @@ const Database = use('Database')
 
 class ProcessTypeSeeder {
   async run () {
-    const process_types = await Database.table('process_types')
-    console.log(process_types)
+   await Factory.model('App/Models/ProcessType').createMany(2);
   }
 }
 
