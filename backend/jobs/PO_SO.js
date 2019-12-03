@@ -2,33 +2,37 @@ import { RETURN_TYPES } from "./index";
 import {
   getSeries,
   createSeries,
-  createSalesOrder,
   getPurchasesOrders,
   createMinSalesOrder,
   getCompanyName,
-  isSellerParty,
   getSellerPartyKey,
   createSellerParty
 } from "../services/jasmin";
-import { getUsers, isProcessed, addProcessed } from "../services/db";
+import { isProcessed, addProcessed } from "../services/db";
 import { constants } from "../services/jasmin/constants";
+
+const options = {
+  repeat: {
+    every: 60 * 1000
+  }
+};
 
 export default {
   key: "PO_SO",
-  options: {
-    //    repeat: {
-    //     every: 10 * 1000
-    // }
-  },
-  async handle({ data }) {
+  options,
+  async handle({ data }, done) {
     const { companyA, companyB } = data;
     const cA = constants[companyA];
     const cB = constants[companyB];
 
     const userID = 1;
 
-    console.log(cA);
-    console.log(cB);
+    const info = {
+      userID,
+      processID: 1,
+      companyA,
+      companyB
+    };
 
     let series;
     try {
@@ -59,23 +63,31 @@ export default {
     } catch (e) {
       console.error(e.response.data);
     }
+
     const purchaseOrders = purchasesOrdersData.filter(
       po => po.serie === serieKey && po.isActive && !po.isDeleted
     );
 
-    purchaseOrders.map(async purchaseOrder => {
-      console.log(purchaseOrder.id);
+    if (!purchaseOrders) {
+      done(null, {
+        value: RETURN_TYPES.END_TRIGGER_FAIL,
+        msg: `No purchases orders found with series ${serieKey}. Please check if you have defined it correctly.`,
+        ...info,
+        options
+      });
+    }
+    let isNewDocuments = false;
 
+    for (const purchaseOrder of purchaseOrders) {
+      console.log("PO")
       // TODO check if purchase order was already replicated (save this information in db)
       const replicated = await isProcessed({
         userID,
         fileID: purchaseOrder.id
       });
-      console.log(replicated);
-      if (replicated) {
-        console.log("ALREADY PROCESSED");
-      } else {
-        console.log("GOOD TO GO");
+      if (!replicated) {
+        console.log("NEW PO")
+        isNewDocuments = true;
         // create sales order
         // IF SERIES ERROR; MUST HAVE ICx SERIES IN DOCUMENT TYPE EVF
 
@@ -125,20 +137,50 @@ export default {
             sellerCompany: partyB,
             documentLines
           });
-          
+
           const { status } = res;
           console.log(status);
+          console.log(status === 201);
           if (status === 201) {
             await addProcessed({ userID, fileID: purchaseOrder.id });
+            console.log("SUCCESS");
+            //done(null, { value: RETURN_TYPES.END_SUCCESS, ...info, options });
           }
-
         } catch (e) {
-          if (e.response)
+          if (e.response) {
             console.error(e.response.data);
-          else
-            console.error(e)
+            done(null, {
+              value: RETURN_TYPES.END_ACTION_FAIL,
+              data: e.response.data,
+              ...info,
+              options
+            });
+          } else {
+            console.error(e);
+            done(null, {
+              value: RETURN_TYPES.END_ACTION_FAIL,
+              ...info,
+              data: e,
+              options
+            });
+          }
         }
       }
-    });
+    };
+
+    if (!isNewDocuments) {
+      console.log("NO NEW RES");
+      done(null, {
+        result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
+        ...info,
+        options
+      });
+    } else {
+      done(null, {
+        value: RETURN_TYPES.END_SUCCESS,
+        ...info,
+        options
+      });
+    }
   }
 };
