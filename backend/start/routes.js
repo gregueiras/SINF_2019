@@ -1,4 +1,3 @@
-
 /*
 |--------------------------------------------------------------------------
 | Routes
@@ -13,19 +12,31 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route');
+const Route = use("Route");
 
-Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
-Route.get('/test', 'TestController.index');
-Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll')
+Route.get("/", () => ({ greeting: "Hello world in JSON" }));
+Route.get("/test", "TestController.index");
+Route.get(
+  "/master-data/:companyId/:page/:pageSize",
+  "MasterDataController.getAll"
+);
 
-Route.get('/user', 'UserController.index');
-Route.get('/user/:id', 'UserController.get');
+Route.get("/user", "UserController.index");
+Route.get("/user/:id", "UserController.get");
 
 Route.get("/processedFile", "ProcessedFileController.get");
 Route.post("/processedFile", "ProcessedFileController.store");
 
-Route.get('/product', 'ProductController.index');
-Route.get('/product/:companyA/:companyB', 'ProductController.getCorrespondence');
+Route.get("/product", "ProductController.index");
+Route.get(
+  "/product/:companyA/:companyB",
+  "ProductController.getCorrespondence"
+);
 
-Route.get('/company', 'CompanyController.index');
+Route.get("/company", "CompanyController.index");
+
+Route.get("/process", "ProcessController.get");
+Route.post("/process", "ProcessController.store");
+
+Route.get("/log", "LogController.get");
+Route.post("/log", "LogController.store");
