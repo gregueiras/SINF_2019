@@ -70,6 +70,7 @@
 .blue-button {
   background-color: #2D3047 !important ;
   color: white;
+  border-color: transparent;
 }
 
 .gray-button {
@@ -94,6 +95,7 @@
   text-decoration: none;
   color: white;
 }
+
 
 .rel-text-blue:hover {
   text-decoration: none;
