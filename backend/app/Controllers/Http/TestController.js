@@ -1,7 +1,5 @@
 import Queue from "../../../lib/Queue";
 import {
-  getSeries,
-  getSalesOrders,
   getPurchasesOrders
 } from "../../../services/jasmin";
 import { constants } from "../../../services/jasmin/constants";
@@ -11,8 +9,8 @@ const TestController = {
   async index({ request, response, view }) {
     await Queue.add("PO_SO", {
       companyA: 1, // intercompany
-      //companyB: 2, // feup
-      companyB: 3, // ritaNorinho
+      companyB: 2, // feup
+      //companyB: 3, // ritaNorinho
     });
 
     const company = constants.intercompany;

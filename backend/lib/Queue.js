@@ -17,9 +17,6 @@ export default {
   queues,
   add(name, data) {
     const queue = this.queues.find(q => q.name === name);
-
-    console.log("ADD\t", data);
-
     return queue.bull.add(data, queue.options);
   },
   process() {

@@ -3,17 +3,17 @@ import {
   getSeries,
   createSeries,
   getPurchasesOrders,
-  createMinSalesOrder,
   getCompanyName,
   getSellerPartyKey,
   createSellerParty
 } from "../services/jasmin";
 import {
   isProcessed,
-  addProcessed,
   getCompany,
   getCorrespondence
 } from "../services/db";
+import Queue from "../lib/Queue";
+
 
 const options = {
   /*
@@ -146,21 +146,14 @@ export default {
             documentLines
           });
 
-          const res = await createMinSalesOrder({
-            ...purchaseOrder,
+          Queue.add("create_SO", {
+            purchaseOrder,
             company: cB,
             buyerCustomerParty: key,
             sellerCompany: partyB,
-            documentLines
+            documentLines,
+            userID
           });
-
-          const { status } = res;
-          console.log(status);
-          console.log(status === 201);
-          if (status === 201) {
-            await addProcessed({ userID, fileID: purchaseOrder.id });
-            console.log("SUCCESS");
-          }
         } catch (e) {
           if (e.response) {
             console.error(e.response.data);
