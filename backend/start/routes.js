@@ -33,6 +33,10 @@ Route.get("/product", "ProductController.index");
 Route.put("/product", "ProductController.updateCorrespondence");
 Route.get(
   "/product/:companyA/:companyB",
+  "ProductController.getAllCorrespondences"
+);
+Route.get(
+  "/product/:companyA/:companyB/:idCompanyA",
   "ProductController.getCorrespondence"
 );
 

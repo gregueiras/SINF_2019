@@ -10,8 +10,9 @@ const TestController = {
   // eslint-disable-next-line no-unused-vars
   async index({ request, response, view }) {
     await Queue.add("PO_SO", {
-      companyA: 1,
-      companyB: 2,
+      companyA: 1, // intercompany
+      //companyB: 2, // feup
+      companyB: 3, // ritaNorinho
     });
 
     const company = constants.intercompany;
