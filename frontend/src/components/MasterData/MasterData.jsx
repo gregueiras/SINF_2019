@@ -1,21 +1,21 @@
+/* eslint-disable react/no-unused-state */
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable array-callback-return */
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import ReactTable from 'react-table';
 import { withRouter } from 'react-router-dom';
+
+
 import {
-  Container, Row, Col, Button,
+  Container, Col,
 } from 'react-bootstrap';
+import MasterDataTable from '../MasterDataTable/MasterDataTable';
 
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import AlertDismissible from '../Alert/Alert';
 
 import './MasterData.css';
 import CompanyService from '../../services/CompanyService';
+import ProductService from '../../services/ProductService';
+
 
 class MasterData extends Component {
   constructor() {
@@ -44,8 +44,24 @@ class MasterData extends Component {
       show: false,
       showVariant: '',
       showText: '',
+
+      category: 'items',
     };
+
     this.CompanyService = new CompanyService();
+    this.ProductService = new ProductService();
+
+
+    this.onCancel = this.onCancel.bind(this);
+    this.onConfirm = this.onConfirm.bind(this);
+    this.addIdToDataCorrespondenceB = this.addIdToDataCorrespondenceB.bind(this);
+    this.addIdToDataCorrespondenceA = this.addIdToDataCorrespondenceA.bind(this);
+    this.removeFromDataCorrespondence = this.removeFromDataCorrespondence.bind(this);
+    this.setShow = this.setShow.bind(this);
+    this.onPageChangeA = this.onPageChangeA.bind(this);
+    this.onPageChangeB = this.onPageChangeB.bind(this);
+    this.onChangeCompanyA = this.onChangeCompanyA.bind(this);
+    this.onChangeCompanyB = this.onChangeCompanyB.bind(this);
   }
 
   componentDidMount() {
@@ -82,19 +98,21 @@ class MasterData extends Component {
       this.setState({ show: true, showVariant: 'danger', showText: 'All new correspondences must have an id in company A and an id in company B' });
       return;
     }
+    const { company_a, company_b } = this.state;
 
-    this.CompanyService.updateCorrespondence(
+    this.ProductService.updateCorrespondence(
       filtered,
       deletedCorrespondences,
       (response) => {
-        console.log(response);
         this.setState({ show: true, showVariant: 'success', showText: 'All updates were succesfully made!' });
+        this.onFetchDataCorrespondance(company_a, company_b);
+        this.setState({ deletedCorrespondences: [], addedCorrespondences: [] });
       },
     );
   }
 
   onFetchDataCorrespondance(companyAId, companyBId) {
-    this.CompanyService.getCorrespondence(companyAId, companyBId,
+    this.ProductService.getCorrespondence(companyAId, companyBId,
       (response) => {
         const dataCorrespondence = response.data.map((item) => (
           { id: item.id, id_company_a: item.id_company_a, id_company_b: item.id_company_b }
@@ -109,7 +127,7 @@ class MasterData extends Component {
     let cA = company_a;
     if (value !== null && value !== company_a) { cA = value; }
     this.setState({ loadingCompanyA: true });
-    this.CompanyService.getItems(page, pageSize, cA, (response) => {
+    this.ProductService.getItems(page, pageSize, cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyA = data.data.map((item) => (
@@ -125,7 +143,7 @@ class MasterData extends Component {
     let cB = company_b;
     if (value !== null && value !== company_b) { cB = value; }
     this.setState({ loadingCompanyB: true });
-    this.CompanyService.getItems(page, pageSize, cB, (response) => {
+    this.ProductService.getItems(page, pageSize, cB, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyB = data.data.map((item) => (
@@ -137,6 +155,7 @@ class MasterData extends Component {
   }
 
 
+  // eslint-disable-next-line react/sort-comp
   addIdToDataCorrespondenceA(e, id) {
     e.preventDefault();
     let position = -1;
@@ -290,175 +309,67 @@ class MasterData extends Component {
     });
   }
 
-  render() {
-    const {
-      dataCorrespondence, dataCompanyA, dataCompanyB,
-      companyAoptions, companyBoptions,
-      loadingCompanyA, loadingCompanyB, loadingDataCorrespondence,
-      pageIndexA, pageIndexB, pageSize,
-      company_b, company_a, show, showVariant, showText,
-    } = this.state;
 
+  onPageChangeA(pageIndex) {
+    this.setState({ pageIndexA: pageIndex });
+    this.onFetchDataCompanyA(pageIndex);
+  }
+
+  onPageChangeB(pageIndex) {
+    this.setState({ pageIndexB: pageIndex });
+    this.onFetchDataCompanyB(pageIndex);
+  }
+
+  onChangeCompanyA(e) {
+    const { pageIndexA, company_b } = this.state;
+    this.onFetchDataCompanyA(pageIndexA, e.target.value);
+    this.onFetchDataCorrespondance(e.target.value, company_b);
+    this.setState({ company_a: e.target.value });
+  }
+
+  onChangeCompanyB(e) {
+    const { pageIndexB, company_a } = this.state;
+    this.onFetchDataCompanyB(pageIndexB, e.target.value);
+    this.onFetchDataCorrespondance(company_a, e.target.value);
+    this.setState({ company_b: e.target.value });
+  }
+
+  setShow() {
+    this.setState({ show: false });
+  }
+
+  render() {
     return (
       <Container>
-        <AlertDismissible variant={showVariant} show={show} setShow={() => { this.setState({ show: false }); }} text={showText} />
-        <Row id="companySelectorsRow">
-          <Col md={4}>
-            <div className="gray-label"> Company A </div>
-            <select
-              className="selector company-selector pos-lt rel-text-white"
-              name="company_a"
-              onChange={(e) => {
-                this.onFetchDataCompanyA(pageIndexA, e.target.value);
-                this.onFetchDataCorrespondance(e.target.value, company_b);
-                this.setState({ company_a: e.target.value });
-              }}
-
-            >
-              {companyAoptions.map((e, key) => (
-                <option key={key} value={e.id}>
-                  {e.name}
-                </option>
-              ))}
-            </select>
-          </Col>
-          <Col md={{ span: 4, offset: 4 }}>
-            <div className="gray-label"> Company B </div>
-            <select
-              className="selector company-selector pos-rt rel-text-white"
-              name="company_b"
-              onChange={(e) => {
-                this.onFetchDataCompanyB(pageIndexB, e.target.value);
-                this.onFetchDataCorrespondance(company_a, e.target.value);
-                this.setState({ company_b: e.target.value });
-              }}
-            >
-              {companyBoptions.map((e, key) => (
-                <option key={key} value={e.id}>
-                  {e.name}
-                </option>
-              ))}
-            </select>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="reactTable">
-              <div className="gray-label"> Company A Products </div>
-              <ReactTable
-                data={dataCompanyA}
-                loading={loadingCompanyA}
-                showPageSizeOptions={false}
-                onPageChange={(pageIndex) => {
-                  this.setState({ pageIndexA: pageIndex });
-                  this.onFetchDataCompanyA(pageIndex);
-                }}
-                pages={20} // TODO CHECK NR OF PAGES
-                manual
-                columns={[
-                  {
-                    Header: 'ID',
-                    accessor: 'id',
-                    Cell: ({ row }) => (
-                      <button onClick={(e) => this.addIdToDataCorrespondenceA(e, row.id)}>
-                        {row.id}
-                      </button>
-                    ),
-                  },
-                  {
-                    Header: 'Description',
-                    accessor: 'description',
-                  },
-                ]}
-                defaultPageSize={pageSize}
-                className="-striped -highlight"
-              />
-              <br />
-            </div>
-          </Col>
-          <Col>
-            <div className="reactTable">
-              <div className="gray-label"> ID Correspondence </div>
-              <ReactTable
-                data={dataCorrespondence}
-                loading={loadingDataCorrespondence}
-                showPageSizeOptions={false}
-                pagination
-                columns={[
-                  {
-                    Header: 'ID - A',
-                    accessor: 'id_company_a',
-                    Cell: ({ row }) => (
-                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 1, row.id_company_a)}>
-                        {row.id_company_a}
-                      </button>
-                    ),
-                  },
-                  {
-                    Header: 'ID - B',
-                    accessor: 'id_company_b',
-                    Cell: ({ row }) => (
-                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 2, row.id_company_b)}>
-                        {row.id_company_b}
-                      </button>
-                    ),
-                  },
-                ]}
-                defaultPageSize={pageSize}
-                className="-striped -highlight"
-              />
-              <br />
-            </div>
-          </Col>
-          <Col>
-            <div className="reactTable">
-              <div className="gray-label"> Company B Products </div>
-              <ReactTable
-                data={dataCompanyB}
-                loading={loadingCompanyB}
-                showPageSizeOptions={false}
-                onPageChange={(pageIndex) => {
-                  this.setState({ pageIndexB: pageIndex });
-                  this.onFetchDataCompanyB(pageIndex);
-                }}
-                pages={20} // TODO CHECK NR OF PAGES
-                manual
-                columns={[
-                  {
-                    Header: 'ID',
-                    accessor: 'id',
-                    Cell: ({ row }) => (
-                      <button onClick={(e) => this.addIdToDataCorrespondenceB(e, row.id)}>
-                        {row.id}
-                      </button>
-                    ),
-                  },
-                  {
-                    Header: 'Description',
-                    accessor: 'description',
-                  },
-                ]}
-                defaultPageSize={pageSize}
-                className="-striped -highlight"
-              />
-              <br />
-            </div>
-          </Col>
-        </Row>
-        <div className="pos-rt mb-5">
-          <Button
-            className="gray-button gen-button rel-text-blue mr-5"
-            size="sm"
-            onClick={(e) => this.onCancel(e)}
+        <Col md={4} className="mb-6">
+          <div className="gray-label"> Category </div>
+          <select
+            className="selector company-selector pos-lt rel-text-white"
+            name="company_a"
+            onChange={(e) => {
+              e.preventDefault();
+              this.setState({ category: e.target.value });
+            }}
           >
-            <FontAwesomeIcon icon={faTimes} className="mr-3" />
-          Cancel
-          </Button>
-          <Button className="blue-button gen-button rel-text-white" size="sm" onClick={(e) => this.onConfirm(e)}>
-            <FontAwesomeIcon icon={faCheck} className="mr-3" />
-          Confirm
-          </Button>
-        </div>
+            <option value="items">items</option>
+            <option value="entities">entities</option>
+          </select>
+        </Col>
+
+        <MasterDataTable
+          data={this.state}
+          onCancel={this.onCancel}
+          onConfirm={this.onConfirm}
+          addIdToDataCorrespondenceB={this.addIdToDataCorrespondenceB}
+          addIdToDataCorrespondenceA={this.addIdToDataCorrespondenceA}
+          removeFromDataCorrespondence={this.removeFromDataCorrespondence}
+          setShow={this.setShow}
+          onPageChangeA={this.onPageChangeA}
+          onPageChangeB={this.onPageChangeB}
+          onChangeCompanyA={this.onChangeCompanyA}
+          onChangeCompanyB={this.onChangeCompanyB}
+        />
+
 
       </Container>
     );

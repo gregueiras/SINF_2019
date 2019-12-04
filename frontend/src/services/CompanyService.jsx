@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class ItemsService {
+export default class CompanyService {
   constructor() {
     this.masterDataBasePath = 'http://localhost:3335/master-data';
     this.companyBasePath = 'http://localhost:3335/company';
@@ -14,44 +14,6 @@ export default class ItemsService {
         callback(response);
       })
       .catch((error) => {
-        callback(error);
-      });
-  }
-
-  getItems(size, pageSize, companyId, callback) {
-    axios
-      .get(`${this.masterDataBasePath}/${companyId}/${size + 1}/${pageSize}`)
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        callback(error);
-      });
-  }
-
-  getCorrespondence(companyA, companyB, callback) {
-    axios
-      .get(`${this.productBasePath}/${companyA}/${companyB}`)
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        callback(error);
-      });
-  }
-
-  updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
-    console.log(deletedCorrespondences);
-    axios
-      .put(`${this.productBasePath}`, {
-        addedCorrespondences,
-        deletedCorrespondences,
-      })
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        console.log(error.response);
         callback(error);
       });
   }
