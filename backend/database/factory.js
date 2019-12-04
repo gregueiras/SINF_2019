@@ -28,7 +28,6 @@ Factory.blueprint('App/Models/User', (faker) => {
 
   Factory.blueprint('App/Models/Product', (faker, i, data) => {
     return {
-      user: '1',
       id_company_a : data.idCompanyA,
       id_company_b: data.idCompanyB,
       company_a: data.companyA,

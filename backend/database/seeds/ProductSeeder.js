@@ -6,14 +6,14 @@ class ProductSeeder {
    await Factory.model('App/Models/Product').create({
     companyA: 1, // intercompany
     companyB: 3, //ritaNorinho
-    idCompanyA: '250526',
-    idCompanyB: '213445',
+    idCompanyA: 'IHA250526',
+    idCompanyB: 'ZAMIOCULCA',
    });
    await Factory.model('App/Models/Product').create({
     companyA: 1, // intercompany
     companyB: 2, //feup
-    idCompanyA: '250526',
-    idCompanyB: '125675',
+    idCompanyA: 'PORTES',
+    idCompanyB: 'PORTES',
    });
   
   }
