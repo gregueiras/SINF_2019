@@ -31,7 +31,7 @@ export const endPoints = {
   series: "businesscore/series",
   items: "businesscore/items",
   sellerParties: "salesCore/customerParties",
-  purchaserParties: "purchasesCore/customerParties",
+  purchaserParties: "purchasesCore/supplierParties",
   companies: "corepatterns/companies"
 };
 
