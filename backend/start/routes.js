@@ -51,3 +51,5 @@ Route.post('/log/update', 'LogController.updateState');
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");
+
+Route.put('/settings', 'CompanyController.editCompany');

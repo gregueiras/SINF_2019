@@ -18,8 +18,8 @@ export default class UserService {
         }).catch(error=>{
                 callback(error);
 
-        });*/
+        });
 
-    }
+    }*/
 
 }

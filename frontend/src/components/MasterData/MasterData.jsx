@@ -9,8 +9,10 @@ import {
   Container, Row, Col, Button,
 } from 'react-bootstrap';
 
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import AlertDismissible from '../Alert/Alert';
 
 import './MasterData.css';
 import CompanyService from '../../services/CompanyService';
@@ -38,6 +40,10 @@ class MasterData extends Component {
 
       deletedCorrespondences: [],
       addedCorrespondences: [],
+
+      show: false,
+      showVariant: '',
+      showText: '',
     };
     this.CompanyService = new CompanyService();
   }
@@ -71,11 +77,18 @@ class MasterData extends Component {
     e.preventDefault();
     const { addedCorrespondences, deletedCorrespondences } = this.state;
     const filtered = addedCorrespondences.filter((correspondence) => correspondence.id_company_a != null && correspondence.id_company_b != null);
+
+    if (filtered.length !== addedCorrespondences.length) {
+      this.setState({ show: true, showVariant: 'danger', showText: 'All new correspondences must have an id in company A and an id in company B' });
+      return;
+    }
+
     this.CompanyService.updateCorrespondence(
       filtered,
       deletedCorrespondences,
       (response) => {
         console.log(response);
+        this.setState({ show: true, showVariant: 'success', showText: 'All updates were succesfully made!' });
       },
     );
   }
@@ -84,7 +97,7 @@ class MasterData extends Component {
     this.CompanyService.getCorrespondence(companyAId, companyBId,
       (response) => {
         const dataCorrespondence = response.data.map((item) => (
-          { id_company_a: item.id_company_a, id_company_b: item.id_company_b }
+          { id: item.id, id_company_a: item.id_company_a, id_company_b: item.id_company_b }
         ));
         this.setState({ dataCorrespondence, loadingDataCorrespondence: false });
       });
@@ -244,7 +257,7 @@ class MasterData extends Component {
 
     const correspondence = dataCorrespondence[position];
     const { id_company_a, id_company_b } = correspondence;
-
+    const idc = correspondence.id;
     position = -1;
     addedCorrespondences.map((data, sidx) => {
       if (data.id_company_a === id_company_a && data.id_company_b === id_company_b && position === -1) {
@@ -255,7 +268,7 @@ class MasterData extends Component {
     if (position !== -1 || id_company_a === null || id_company_b === null) { return; }
 
     deletedCorrespondences.push({
-      company_a, company_b, id_company_a, id_company_b,
+      id: idc, company_a, company_b, id_company_a, id_company_b,
     });
     this.setState({ deletedCorrespondences });
   }
@@ -283,11 +296,12 @@ class MasterData extends Component {
       companyAoptions, companyBoptions,
       loadingCompanyA, loadingCompanyB, loadingDataCorrespondence,
       pageIndexA, pageIndexB, pageSize,
-      company_b, company_a,
+      company_b, company_a, show, showVariant, showText,
     } = this.state;
 
     return (
       <Container>
+        <AlertDismissible variant={showVariant} show={show} setShow={() => { this.setState({ show: false }); }} text={showText} />
         <Row id="companySelectorsRow">
           <Col md={4}>
             <div className="gray-label"> Company A </div>

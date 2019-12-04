@@ -5,6 +5,7 @@ export default class ItemsService {
     this.masterDataBasePath = 'http://localhost:3335/master-data';
     this.companyBasePath = 'http://localhost:3335/company';
     this.productBasePath = 'http://localhost:3335/product';
+    this.settingsBasePath = 'http://localhost:3335/settings';
   }
 
   getCompanies(callback) {
@@ -14,6 +15,7 @@ export default class ItemsService {
         callback(response);
       })
       .catch((error) => {
+        console.log(error);
         callback(error);
       });
   }
@@ -39,8 +41,35 @@ export default class ItemsService {
         callback(error);
       });
   }
+  /*editCompany(data, callback) {
+    const {
+      name,
+      organization,
+      tenant,
+      clientId,
+      clientSecret
+    } = data;
+    axios
+      .put(`${this.settingsBasePath}`, {
+        name,
+        organization,
+        tenant,
+        clientId,
+        clientSecret,
+
+      })
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        //callback(error);
+      });
+  }*/
+
 
   updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
+    console.log(deletedCorrespondences);
     axios
       .put(`${this.productBasePath}`, {
         addedCorrespondences,
