@@ -30,3 +30,4 @@ Route.put('/product', 'ProductController.updateCorrespondence');
 Route.get('/product/:companyA/:companyB', 'ProductController.getCorrespondence');
 
 Route.get('/company', 'CompanyController.index');
+Route.put('/settings', 'CompanyController.editCompany');
