@@ -3,34 +3,22 @@ const Company = use("App/Models/Company");
 
 class CompanyController {
   async index() {
+
     return Company.all();
   }
 
-  /*async editCompany(req, res) {
-    const {
-      name,
-      organization,
-      tenant,
-      clientId,
-      clientSecret,
-    } = data;
+  async editCompany({request}, response) {
+  
 
-    const newData = {
-      name,
-      organization,
-      tenant,
-      clientId,
-      clientSecret,
+    const body = request.post();
 
-    };
-    const {body} = req;
-    const {id,name,organization, clientId,clientSecret,tenant} = body;
+    const {organization, tenant, clientId,clientSecret} = body.data;
 
-    const  company = await Company.find(id);
-    company = {...company, name,organization,tenant,clientId,clientSecret};
-    company.save();
-
-  }*/
+    let  company = await Company.findBy('name',body.data.name);
+    console.log("company "+company);
+    company = {...company,organization,tenant,clientId,clientSecret};
+    return await company.save(); 
+  }
 }
 
 module.exports = CompanyController
