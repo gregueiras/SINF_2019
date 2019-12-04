@@ -25,6 +25,7 @@ export class Settings extends Component {
       const reverse = response.data.slice().reverse();
       const companies = reverse.map((data) => (
         {
+          id: data.id,
           name: data.name,
           organization: data.organization,
           tenant: data.tenant,
@@ -108,6 +109,7 @@ export class Settings extends Component {
       company = organization;
 
     })
+    console.log(" before "+JSON.stringify(company));
 
    
     this.CompanyService.editCompany(company, (response) => {
