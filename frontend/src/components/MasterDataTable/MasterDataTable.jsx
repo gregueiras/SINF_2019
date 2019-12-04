@@ -302,7 +302,7 @@ class MasterDataTable extends Component {
               className="selector company-selector pos-lt rel-text-white"
               name="company_a"
               onChange={(e) => {
-                this.onFetchDataCompanyA(pageIndexA, this.onFetchDataCompanyACallback, e.target.value);
+                onFetchDataCompanyA(pageIndexA, this.onFetchDataCompanyACallback, e.target.value);
                 onFetchDataCorrespondance(e.target.value, company_b, this.onFetchDataCorrespondanceCallback);
                 this.setState({ company_a: e.target.value });
               }}
@@ -321,7 +321,7 @@ class MasterDataTable extends Component {
               className="selector company-selector pos-rt rel-text-white"
               name="company_b"
               onChange={(e) => {
-                this.onFetchDataCompanyB(pageIndexB, this.onFetchDataCompanyBCallback, e.target.value);
+                onFetchDataCompanyB(pageIndexB, this.onFetchDataCompanyBCallback, e.target.value);
                 onFetchDataCorrespondance(company_a, e.target.value, this.onFetchDataCorrespondanceCallback);
                 this.setState({ company_b: e.target.value });
               }}
@@ -344,7 +344,7 @@ class MasterDataTable extends Component {
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
                   this.setState({ pageIndexA: pageIndex });
-                  onFetchDataCompanyA(pageIndex, this.onFetchDataCompanyACallback);
+                  onFetchDataCompanyA(pageIndex, this.onFetchDataCompanyACallback, company_a);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
@@ -412,7 +412,7 @@ class MasterDataTable extends Component {
                 showPageSizeOptions={false}
                 onPageChange={(pageIndex) => {
                   this.setState({ pageIndexB: pageIndex });
-                  onFetchDataCompanyB(pageIndex, this.onFetchDataCompanyBCallback);
+                  onFetchDataCompanyB(pageIndex, this.onFetchDataCompanyBCallback, company_b);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
                 manual
