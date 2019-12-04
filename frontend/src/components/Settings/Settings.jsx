@@ -100,6 +100,19 @@ export class Settings extends Component {
     });
   };
 
+  onUpdateCompany = idx => () => {
+    let company;
+    this.state.organizations.map((organization, sidx) => {
+        
+      if (idx === sidx)
+      company = organization;
+
+    })
+
+   
+    this.CompanyService.editCompany(company, (response) => {
+      console.log(" response "+JSON.stringify(response));})
+  };
 
   render() {
 
@@ -128,7 +141,7 @@ export class Settings extends Component {
                     <Form.Label className="gray-label">{`Organization ID `}</Form.Label>
                     <Form.Control type="text"
                       placeholder={`Organization id ${idx + 1}`}
-                      onChange={this.onChangeOrganizationName(idx)}
+                      onChange={this.onChangeOrganization(idx)}
                       value={organization.organization} />
                   </Col>
                   <Col sm={6}>
@@ -154,7 +167,7 @@ export class Settings extends Component {
                   </Col>
                   <Col >
                     <div className="iconDelete" >
-                    <Button className="save-button blue-button">
+                    <Button className="save-button blue-button"  onClick={this.onUpdateCompany(idx)}>
                       <FontAwesomeIcon icon={faCheck} /> Save Changes
                     </Button>
                     <Button className="blue-button" onClick={this.onDeleteOrganization(idx)}>

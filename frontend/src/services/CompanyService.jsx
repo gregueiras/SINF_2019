@@ -41,31 +41,21 @@ export default class ItemsService {
         callback(error);
       });
   }
-  /*editCompany(data, callback) {
-    const {
-      name,
-      organization,
-      tenant,
-      clientId,
-      clientSecret
-    } = data;
-    axios
-      .put(`${this.settingsBasePath}`, {
-        name,
-        organization,
-        tenant,
-        clientId,
-        clientSecret,
+  editCompany(data, callback) {
 
-      })
+    console.log(data);
+    axios
+      .put(`${this.settingsBasePath}`,{data})
       .then((response) => {
+       
         callback(response);
+        console.log("company "+JSON.stringify(response));
       })
       .catch((error) => {
         console.log(error.response);
-        //callback(error);
+        callback(error);
       });
-  }*/
+  }
 
 
   updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
