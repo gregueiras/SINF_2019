@@ -17,7 +17,10 @@ const Route = use('Route');
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
-Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll')
+Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll');
+
+Route.get('/proc-type/:name', 'ProcTypeController.getByName');
+Route.get('/proc-type', 'ProcTypeController.index');
 
 Route.get('/user', 'UserController.index');
 Route.get('/user/:id', 'UserController.get');
@@ -29,3 +32,12 @@ Route.get('/product', 'ProductController.index');
 Route.get('/product/:companyA/:companyB', 'ProductController.getCorrespondence');
 
 Route.get('/company', 'CompanyController.index');
+
+Route.get('/log', 'LogController.index');
+Route.get('/log/byId/:id', 'LogController.getById');
+Route.get('/log/byState/:state', 'LogController.getByState');
+Route.get('/log/byProcId/:process_id', 'LogController.getByProcId');
+Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
+Route.post('/log', 'LogController.createLog');
+Route.post('/log/update', 'LogController.updateState');
+
