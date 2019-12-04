@@ -27,8 +27,8 @@ componentDidMount() {
       {name: data.name}
 
     ));
-    this.state.organizations = companies;
-    this.setState(this.state);
+    const newState = {organizations: companies};
+    this.setState(newState);
   });
 }
 

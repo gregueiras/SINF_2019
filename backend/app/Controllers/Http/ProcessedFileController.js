@@ -6,8 +6,6 @@ class ProcessedFileController {
     const body = request.post();
     const { fileID, userID } = body;
 
-    console.log(body);
-
     const user = await User.find(userID);
 
     return await user.processedFiles().create({
