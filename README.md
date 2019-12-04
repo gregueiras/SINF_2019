@@ -17,3 +17,12 @@ Frontend: http://0.0.0.0/3001
 Redis DB: http://0.0.0.0/6379
 Postgres DB: http://0.0.0.0/5433
 PG admin: http://0.0.0.0/5051
+
+
+# How to
+
+## Do a Purchase Order to Sales Order
+
+Customer must create a purchase order with series ICX (where X stands for an ID)
+Add Supplier (Supplier/Customer relationship must be defined in Master Data)
+Add Products (Purchase Items/ Sales Items must be defined in Master Data)

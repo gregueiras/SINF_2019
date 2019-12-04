@@ -8,13 +8,19 @@ import {
   getSellerPartyKey,
   createSellerParty
 } from "../services/jasmin";
-import { isProcessed, addProcessed } from "../services/db";
-import { constants } from "../services/jasmin/constants";
+import {
+  isProcessed,
+  addProcessed,
+  getCompany,
+  getCorrespondence
+} from "../services/db";
 
 const options = {
+  /*
   repeat: {
     every: 60 * 1000
   }
+  */
 };
 
 export default {
@@ -22,8 +28,8 @@ export default {
   options,
   async handle({ data }, done) {
     const { companyA, companyB } = data;
-    const cA = constants[companyA];
-    const cB = constants[companyB];
+    const cA = await getCompany(companyA);
+    const cB = await getCompany(companyB);
 
     const userID = 1;
 
@@ -76,18 +82,18 @@ export default {
         options
       });
     }
-    let isNewDocuments = false;
+    let areNewDocuments = false;
 
     for (const purchaseOrder of purchaseOrders) {
-      console.log("PO")
-      // TODO check if purchase order was already replicated (save this information in db)
+      console.log("PO");
+
       const replicated = await isProcessed({
         userID,
         fileID: purchaseOrder.id
       });
       if (!replicated) {
-        console.log("NEW PO")
-        isNewDocuments = true;
+        console.log("NEW PO");
+        areNewDocuments = true;
         // create sales order
         // IF SERIES ERROR; MUST HAVE ICx SERIES IN DOCUMENT TYPE EVF
 
@@ -100,18 +106,26 @@ export default {
             key = await createSellerParty({ company: cB, name: party });
           }
 
-          const documentLines = purchaseOrder.documentLines.map(line => {
-            // GET CORRESPONDING ID from line.purchasesItem
-            const salesItem = "prodPaVender";
+          const documentLines = []
+          for (const line of purchaseOrder.documentLines) {
             const {
               quantity,
               unitPrice,
               grossValue,
               taxTotal,
-              lineExtensionAmount
+              lineExtensionAmount,
+              purchasesItem
             } = line;
 
-            return {
+            console.log(companyA, companyB, purchasesItem)
+
+            const salesItem = await getCorrespondence({
+              companyA,
+              companyB,
+              product: purchasesItem
+            });
+
+            documentLines.push({
               quantity,
               unitPrice,
               deliveryDate: "2019-12-30T00:00:00",
@@ -119,10 +133,12 @@ export default {
               taxTotal,
               lineExtensionAmount,
               salesItem
-            };
-          });
+            });
+          };
 
-          const partyB = await getCompanyName({ company: cB });
+
+          // TODO: Get correspondence from DB
+          const partyB = await getCompanyName({ company: cB }); 
           console.dir({
             company: partyB,
             buyerCustomerParty: key,
@@ -144,7 +160,6 @@ export default {
           if (status === 201) {
             await addProcessed({ userID, fileID: purchaseOrder.id });
             console.log("SUCCESS");
-            //done(null, { value: RETURN_TYPES.END_SUCCESS, ...info, options });
           }
         } catch (e) {
           if (e.response) {
@@ -166,9 +181,9 @@ export default {
           }
         }
       }
-    };
+    }
 
-    if (!isNewDocuments) {
+    if (!areNewDocuments) {
       console.log("NO NEW RES");
       done(null, {
         result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,

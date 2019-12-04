@@ -55,5 +55,8 @@ export default {
         //console.log((await queue.bull.getRepeatableJobs()).map( ({key}) => key));
       });
     });
+  },
+  removeAll() {
+    return this.queues.map(({bull}) => bull.empty())
   }
 };
