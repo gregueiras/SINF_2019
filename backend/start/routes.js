@@ -28,6 +28,7 @@ Route.get("/processedFile", "ProcessedFileController.get");
 Route.post("/processedFile", "ProcessedFileController.store");
 
 Route.get("/product", "ProductController.index");
+Route.put("/product", "ProductController.updateCorrespondence");
 Route.get(
   "/product/:companyA/:companyB",
   "ProductController.getCorrespondence"

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+npm run adonis seed -- --files='UserSeeder.js, CompanySeeder.js, ActionSeeder.js, TriggerSeeder.js' && npm run adonis seed -- --files='ProcessTypeSeeder.js, StepSeeder.js, ProductSeeder.js' && npm run adonis seed -- --files='ProcessSeeder.js' && npm run adonis seed -- --files='LogSeeder.js, ProcessProductSeeder.js, ProcessStepSeeder.js, ProcessedFileSeeder.js'

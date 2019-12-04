@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable array-callback-return */
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/no-array-index-key */
@@ -12,7 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import './MasterData.css';
-import { element } from 'prop-types';
 import CompanyService from '../../services/CompanyService';
 
 class MasterData extends Component {
@@ -28,8 +28,8 @@ class MasterData extends Component {
 
       pageIndexA: 0,
       pageIndexB: 0,
-      companyA: '',
-      companyB: '',
+      company_a: '',
+      company_b: '',
       loadingCompanyA: true,
       loadingCompanyB: true,
       loadingDataCorrespondence: true,
@@ -51,25 +51,40 @@ class MasterData extends Component {
       this.setState({
         companyAoptions: response.data,
         companyBoptions: reverse,
-        companyB: reverse[0].id,
-        companyA: response.data[0].id,
+        company_b: reverse[0].id,
+        company_a: response.data[0].id,
       });
       this.onFetchDataCorrespondance(response.data[0].id, reverse[0].id);
     });
   }
 
   onCancel(e) {
-    const { companyA, companyB } = this.state;
-    this.setState({ loadingDataCorrespondence: true });
     e.preventDefault();
-    this.onFetchDataCorrespondance(companyA, companyB);
+    const { company_a, company_b } = this.state;
+    this.setState({ loadingDataCorrespondence: true });
+    this.onFetchDataCorrespondance(company_a, company_b);
+    this.setState({ deletedCorrespondences: [], addedCorrespondences: [] });
+  }
+
+
+  onConfirm(e) {
+    e.preventDefault();
+    const { addedCorrespondences, deletedCorrespondences } = this.state;
+    const filtered = addedCorrespondences.filter((correspondence) => correspondence.id_company_a != null && correspondence.id_company_b != null);
+    this.CompanyService.updateCorrespondence(
+      filtered,
+      deletedCorrespondences,
+      (response) => {
+        console.log(response);
+      },
+    );
   }
 
   onFetchDataCorrespondance(companyAId, companyBId) {
     this.CompanyService.getCorrespondence(companyAId, companyBId,
       (response) => {
         const dataCorrespondence = response.data.map((item) => (
-          { idA: item.id_company_a, idB: item.id_company_b }
+          { id_company_a: item.id_company_a, id_company_b: item.id_company_b }
         ));
         this.setState({ dataCorrespondence, loadingDataCorrespondence: false });
       });
@@ -77,9 +92,9 @@ class MasterData extends Component {
 
 
   onFetchDataCompanyA(page, value = null) {
-    const { companyA, pageSize } = this.state;
-    let cA = companyA;
-    if (value !== null && value !== companyA) { cA = value; }
+    const { company_a, pageSize } = this.state;
+    let cA = company_a;
+    if (value !== null && value !== company_a) { cA = value; }
     this.setState({ loadingCompanyA: true });
     this.CompanyService.getItems(page, pageSize, cA, (response) => {
       if (response.status === 200) {
@@ -93,9 +108,9 @@ class MasterData extends Component {
   }
 
   onFetchDataCompanyB(page, value = null) {
-    const { companyB, pageSize } = this.state;
-    let cB = companyB;
-    if (value !== null && value !== companyB) { cB = value; }
+    const { company_b, pageSize } = this.state;
+    let cB = company_b;
+    if (value !== null && value !== company_b) { cB = value; }
     this.setState({ loadingCompanyB: true });
     this.CompanyService.getItems(page, pageSize, cB, (response) => {
       if (response.status === 200) {
@@ -116,30 +131,33 @@ class MasterData extends Component {
     const {
       dataCorrespondence,
       addedCorrespondences,
-      companyA, companyB,
+      company_a, company_b,
     } = this.state;
 
-    const found = dataCorrespondence.some((el) => el.idA === id);
+    const found = dataCorrespondence.some((el) => el.id_company_a === id);
     if (found) return;
 
     dataCorrespondence.map((data, sidx) => {
-      if (data.idA === null && position === -1) {
+      if (data.id_company_a === null && position === -1) {
         position = sidx;
       }
     });
     addedCorrespondences.map((data, sidx) => {
-      if (data.idA === null && pos === -1) {
+      if (data.id_company_a === null && pos === -1) {
         pos = sidx;
       }
     });
     if (position === -1) {
-      dataCorrespondence.push({ idA: id, idB: null });
+      dataCorrespondence.push({ id_company_a: id, id_company_b: null });
+    } else {
+      dataCorrespondence[position].id_company_a = id;
+    }
+    if (pos === -1) {
       addedCorrespondences.push({
-        idA: id, idB: null, companyA, companyB,
+        id_company_a: id, id_company_b: null, company_a, company_b,
       });
     } else {
-      dataCorrespondence[position].idA = id;
-      addedCorrespondences[pos].idA = id;
+      addedCorrespondences[pos].id_company_a = id;
     }
 
     this.setState({
@@ -155,35 +173,107 @@ class MasterData extends Component {
     const {
       dataCorrespondence,
       addedCorrespondences,
-      companyA, companyB,
+      company_a, company_b,
     } = this.state;
 
-    const found = dataCorrespondence.some((el) => el.idB === id);
+    const found = dataCorrespondence.some((el) => el.id_company_b === id);
     if (found) return;
 
     dataCorrespondence.map((data, sidx) => {
-      if (data.idB === null && position === -1) {
+      if (data.id_company_b === null && position === -1) {
         position = sidx;
       }
     });
     addedCorrespondences.map((data, sidx) => {
-      if (data.idB === null && pos === -1) {
+      if (data.id_company_b === null && pos === -1) {
         pos = sidx;
       }
     });
     if (position === -1) {
-      dataCorrespondence.push({ idA: null, idB: id });
+      dataCorrespondence.push({ id_company_a: null, id_company_b: id });
+    } else {
+      dataCorrespondence[position].id_company_b = id;
+    }
+    if (pos === -1) {
       addedCorrespondences.push({
-        idA: null, idB: id, companyA, companyB,
+        id_company_a: null, id_company_b: id, company_a, company_b,
       });
     } else {
-      dataCorrespondence[position].idB = id;
-      addedCorrespondences[pos].idB = id;
+      addedCorrespondences[pos].id_company_b = id;
     }
-
     this.setState({
       dataCorrespondence,
       addedCorrespondences,
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  removeFromCorrespondence(col, id, correspondence) {
+    const c = correspondence;
+    let position = -1;
+    correspondence.map((data, sidx) => {
+      if (col === 1 && data.id_company_a === id && position === -1) {
+        position = sidx;
+      }
+      if (col === 2 && data.id_company_b === id && position === -1) {
+        position = sidx;
+      }
+    });
+    if (col === 1 && position !== -1) { c[position].id_company_a = null; }
+    if (col === 2 && position !== -1) { c[position].id_company_b = null; }
+    return c;
+  }
+
+  addToDeletedCorrespondences(col, id) {
+    const {
+      addedCorrespondences,
+      dataCorrespondence,
+      deletedCorrespondences,
+      company_a, company_b,
+    } = this.state;
+    let position = -1;
+
+    dataCorrespondence.map((data, sidx) => {
+      if (col === 1 && data.id_company_a === id && position === -1) {
+        position = sidx;
+      }
+      if (col === 2 && data.id_company_b === id && position === -1) {
+        position = sidx;
+      }
+    });
+
+    const correspondence = dataCorrespondence[position];
+    const { id_company_a, id_company_b } = correspondence;
+
+    position = -1;
+    addedCorrespondences.map((data, sidx) => {
+      if (data.id_company_a === id_company_a && data.id_company_b === id_company_b && position === -1) {
+        position = sidx;
+      }
+    });
+
+    if (position !== -1 || id_company_a === null || id_company_b === null) { return; }
+
+    deletedCorrespondences.push({
+      company_a, company_b, id_company_a, id_company_b,
+    });
+    this.setState({ deletedCorrespondences });
+  }
+
+
+  removeFromDataCorrespondence(e, col, id) {
+    e.preventDefault();
+    const {
+      dataCorrespondence,
+      addedCorrespondences,
+    } = this.state;
+
+    this.addToDeletedCorrespondences(col, id);
+    this.setState({
+      dataCorrespondence:
+      this.removeFromCorrespondence(col, id, dataCorrespondence),
+      addedCorrespondences:
+      this.removeFromCorrespondence(col, id, addedCorrespondences),
     });
   }
 
@@ -193,7 +283,7 @@ class MasterData extends Component {
       companyAoptions, companyBoptions,
       loadingCompanyA, loadingCompanyB, loadingDataCorrespondence,
       pageIndexA, pageIndexB, pageSize,
-      companyB, companyA,
+      company_b, company_a,
     } = this.state;
 
     return (
@@ -203,11 +293,11 @@ class MasterData extends Component {
             <div className="gray-label"> Company A </div>
             <select
               className="selector company-selector pos-lt rel-text-white"
-              name="companyA"
+              name="company_a"
               onChange={(e) => {
                 this.onFetchDataCompanyA(pageIndexA, e.target.value);
-                this.onFetchDataCorrespondance(e.target.value, companyB);
-                this.setState({ companyA: e.target.value });
+                this.onFetchDataCorrespondance(e.target.value, company_b);
+                this.setState({ company_a: e.target.value });
               }}
 
             >
@@ -222,11 +312,11 @@ class MasterData extends Component {
             <div className="gray-label"> Company B </div>
             <select
               className="selector company-selector pos-rt rel-text-white"
-              name="companyB"
+              name="company_b"
               onChange={(e) => {
                 this.onFetchDataCompanyB(pageIndexB, e.target.value);
-                this.onFetchDataCorrespondance(companyA, e.target.value);
-                this.setState({ companyB: e.target.value });
+                this.onFetchDataCorrespondance(company_a, e.target.value);
+                this.setState({ company_b: e.target.value });
               }}
             >
               {companyBoptions.map((e, key) => (
@@ -283,19 +373,19 @@ class MasterData extends Component {
                 columns={[
                   {
                     Header: 'ID - A',
-                    accessor: 'idA',
+                    accessor: 'id_company_a',
                     Cell: ({ row }) => (
-                      <button onClick={(e) => console.log(1)}>
-                        {row.idA}
+                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 1, row.id_company_a)}>
+                        {row.id_company_a}
                       </button>
                     ),
                   },
                   {
                     Header: 'ID - B',
-                    accessor: 'idB',
+                    accessor: 'id_company_b',
                     Cell: ({ row }) => (
-                      <button onClick={(e) => console.log(2)}>
-                        {row.idB}
+                      <button onClick={(e) => this.removeFromDataCorrespondence(e, 2, row.id_company_b)}>
+                        {row.id_company_b}
                       </button>
                     ),
                   },
@@ -350,7 +440,7 @@ class MasterData extends Component {
             <FontAwesomeIcon icon={faTimes} className="mr-3" />
           Cancel
           </Button>
-          <Button className="blue-button gen-button rel-text-white" size="sm">
+          <Button className="blue-button gen-button rel-text-white" size="sm" onClick={(e) => this.onConfirm(e)}>
             <FontAwesomeIcon icon={faCheck} className="mr-3" />
           Confirm
           </Button>

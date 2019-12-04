@@ -7,6 +7,8 @@ class ProcessTypeSchema extends Schema {
   up () {
     this.create('process_types', (table) => {
       table.increments()
+      table.bigInteger('user').notNullable();
+      table.foreign('user').references('id').inTable('users');
       table.string('type',256)
       table.timestamps()
     })
