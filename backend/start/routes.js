@@ -16,6 +16,8 @@ const Route = use("Route");
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
+Route.get("/test/reset", "TestController.reset");
+
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll');
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
@@ -26,7 +28,7 @@ Route.get("/user/:id", "UserController.get");
 
 Route.get("/processedFile", "ProcessedFileController.get");
 Route.post("/processedFile", "ProcessedFileController.store");
-
+  
 Route.get("/product", "ProductController.index");
 Route.put("/product", "ProductController.updateCorrespondence");
 Route.get(
@@ -35,6 +37,7 @@ Route.get(
 );
 
 Route.get("/company", "CompanyController.index");
+Route.get("/company/:id", "CompanyController.get");
 
 Route.get("/process", "ProcessController.get");
 Route.post("/process", "ProcessController.store");

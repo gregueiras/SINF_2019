@@ -8,8 +8,7 @@ import {
   getSellerPartyKey,
   createSellerParty
 } from "../services/jasmin";
-import { isProcessed, addProcessed } from "../services/db";
-import { constants } from "../services/jasmin/constants";
+import { isProcessed, addProcessed, getCompany } from "../services/db";
 
 const options = {
   repeat: {
@@ -22,8 +21,8 @@ export default {
   options,
   async handle({ data }, done) {
     const { companyA, companyB } = data;
-    const cA = constants[companyA];
-    const cB = constants[companyB];
+    const cA = getCompany(companyA);
+    const cB = getCompany(companyB);
 
     const userID = 1;
 
@@ -79,14 +78,14 @@ export default {
     let isNewDocuments = false;
 
     for (const purchaseOrder of purchaseOrders) {
-      console.log("PO")
+      console.log("PO");
       // TODO check if purchase order was already replicated (save this information in db)
       const replicated = await isProcessed({
         userID,
         fileID: purchaseOrder.id
       });
       if (!replicated) {
-        console.log("NEW PO")
+        console.log("NEW PO");
         isNewDocuments = true;
         // create sales order
         // IF SERIES ERROR; MUST HAVE ICx SERIES IN DOCUMENT TYPE EVF
@@ -166,7 +165,7 @@ export default {
           }
         }
       }
-    };
+    }
 
     if (!isNewDocuments) {
       console.log("NO NEW RES");

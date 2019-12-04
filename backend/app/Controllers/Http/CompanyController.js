@@ -31,6 +31,12 @@ class CompanyController {
     company.save();
 
   }*/
+
+  async get({ request }) {
+    console.log(request.params)
+
+    return Company.find(request.params.id)
+  }
 }
 
 module.exports = CompanyController
