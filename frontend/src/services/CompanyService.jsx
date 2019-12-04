@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class ItemsService {
+export default class CompanyService {
   constructor() {
     this.masterDataBasePath = 'http://localhost:3335/master-data';
     this.companyBasePath = 'http://localhost:3335/company';
@@ -20,53 +20,14 @@ export default class ItemsService {
       });
   }
 
-  getItems(size, pageSize, companyId, callback) {
-    axios
-      .get(`${this.masterDataBasePath}/${companyId}/${size + 1}/${pageSize}`)
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        callback(error);
-      });
-  }
 
-  getCorrespondence(companyA, companyB, callback) {
-    axios
-      .get(`${this.productBasePath}/${companyA}/${companyB}`)
-      .then((response) => {
-        callback(response);
-      })
-      .catch((error) => {
-        callback(error);
-      });
-  }
   editCompany(data, callback) {
-
     console.log(data);
     axios
-      .put(`${this.settingsBasePath}`,{data})
-      .then((response) => {
-       
-        callback(response);
-        console.log("company "+JSON.stringify(response));
-      })
-      .catch((error) => {
-        console.log(error.response);
-        callback(error);
-      });
-  }
-
-
-  updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
-    console.log(deletedCorrespondences);
-    axios
-      .put(`${this.productBasePath}`, {
-        addedCorrespondences,
-        deletedCorrespondences,
-      })
+      .put(`${this.settingsBasePath}`, { data })
       .then((response) => {
         callback(response);
+        console.log(`company ${JSON.stringify(response)}`);
       })
       .catch((error) => {
         console.log(error.response);

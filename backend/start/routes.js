@@ -17,8 +17,10 @@ const Route = use("Route");
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
+Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
+Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
+Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
 
-Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll');
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');
@@ -45,8 +47,6 @@ Route.get("/company/:id", "CompanyController.get");
 
 Route.get("/process", "ProcessController.get");
 Route.post("/process", "ProcessController.store");
-
-Route.get('/company', 'CompanyController.index');
 
 Route.get('/log', 'LogController.index');
 Route.get('/log/byId/:id', 'LogController.getById');
