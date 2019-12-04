@@ -39,4 +39,19 @@ export default class ItemsService {
         callback(error);
       });
   }
+
+  updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
+    axios
+      .put(`${this.productBasePath}`, {
+        addedCorrespondences,
+        deletedCorrespondences,
+      })
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        callback(error);
+      });
+  }
 }

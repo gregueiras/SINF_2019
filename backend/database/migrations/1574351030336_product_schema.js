@@ -7,8 +7,6 @@ class ProductSchema extends Schema {
   up () {
     this.create('products', (table) => {
       table.increments()
-      table.bigInteger('user').notNullable()
-      table.foreign('user').references('id').inTable('users')
       table.string('id_company_a',256).notNullable(),
       table.string('id_company_b',256).notNullable(),
       table.bigInteger('company_a')
