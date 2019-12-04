@@ -10,7 +10,16 @@ class ProductController {
     const { params } = request;
     const { companyA, companyB } = params;
     const ab = (await Product.query().where({company_a: companyA, company_b: companyB}).fetch()).toJSON();
-    const ba = (await Product.query().where({company_a: companyB, company_b: companyA}).fetch()).toJSON();
+    let ba = (await Product.query().where({company_a: companyB, company_b: companyA}).fetch()).toJSON();
+    // todo flip ba
+    ba = ba.map(element => {
+      const {id_company_a, id_company_b} = element;
+      
+      return {
+        ...element,
+        id_company_a: id_company_b,
+        id_company_b: id_company_a,
+      }});
     return ab.concat(ba);
   }
 
@@ -18,8 +27,15 @@ class ProductController {
     const body = request.post();
     const {addedCorrespondences, deletedCorrespondences} = body;
     if(addedCorrespondences.length !== 0) {
-      //const data = addedCorrespondences.collect(['id_company_a', 'id_company_b', 'company_a', 'company_b'])
       const products = await Product.createMany(addedCorrespondences); 
+    }
+    if(deletedCorrespondences.length !== 0) {
+      deletedCorrespondences.forEach(async (element) => {
+        const {id} = element;
+        console.log(id);
+        const product = await Product.find(id); 
+        await product.delete();
+      });
     }
   }
 }

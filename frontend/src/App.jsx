@@ -26,7 +26,7 @@ const App = () => (
     <Router>
       <div className="App">
         <Switch>
-          <Route exact path="/" exact>
+          <Route exact path="/">
             <Overview />
           </Route>
           <Route path="/logs" exact>

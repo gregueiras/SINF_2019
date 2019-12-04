@@ -32,11 +32,11 @@ export class Settings extends Component {
           clientSecret: data.clientSecret,
         }
 
-      ));
-      this.state.organizations = companies;
-      this.setState(this.state);
-    });
-  }
+    ));
+    const newState = {organizations: companies};
+    this.setState(newState);
+  });
+}
 
   onAddOrganization = () => {
     this.setState({

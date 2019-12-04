@@ -1,0 +1,7 @@
+.alert-dismissible {
+    position: fixed !important;
+    width: 50%;
+    z-index: 9999;
+    right: 30px;
+    top: 90px !important;
+}

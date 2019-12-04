@@ -7,6 +7,13 @@ const Hash = use('Hash');
 
 class Process extends Model {
 
+    user() {
+        return this.belongsTo('App/Model/User');
+    }
+
+    type() {
+        return this.hasOne('App/Model/ProcessType');
+    }
 
     logs() {
         return this.hasMany('App/Model/Log');

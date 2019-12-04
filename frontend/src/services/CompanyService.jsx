@@ -69,6 +69,7 @@ export default class ItemsService {
 
 
   updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
+    console.log(deletedCorrespondences);
     axios
       .put(`${this.productBasePath}`, {
         addedCorrespondences,
