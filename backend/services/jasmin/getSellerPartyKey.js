@@ -25,3 +25,12 @@ export const isSellerParty = async ({ company, key }) => {
   return res.status === 200;
 };
 
+
+export const getSellerParties = async ( {company} ) => {
+  const res = await makeRequest({
+    method: "GET",
+    endPoint: endPoints.sellerParties,
+    company
+  });
+  return res;
+};

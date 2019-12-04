@@ -16,7 +16,10 @@ const Route = use("Route");
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
 Route.get('/test', 'TestController.index');
-Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAll');
+Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
+Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
+Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
+
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');

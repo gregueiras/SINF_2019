@@ -91,7 +91,6 @@ class MasterDataTable extends Component {
   }
 
   onFetchDataCorrespondanceCallback(dataCorrespondence) {
-    console.log(dataCorrespondence);
     this.setState({ dataCorrespondence, loadingDataCorrespondence: false });
   }
 

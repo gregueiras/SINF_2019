@@ -81,7 +81,6 @@ class MasterData extends Component {
         const dataCompanyA = data.data.map((item) => (
           { id: item.itemKey, description: item.description }
         ));
-        // this.setState({ dataCompanyA, loadingCompanyA: false });
         callback(dataCompanyA);
       }
     });
@@ -108,7 +107,6 @@ class MasterData extends Component {
       filtered,
       deletedCorrespondences,
       (response) => {
-        console.log(response);
         callback(response);
       },
     );
