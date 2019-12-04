@@ -22,7 +22,7 @@ class MasterDataTable extends Component {
     super(props);
     const {
       onFetchDataCompanyA, onFetchDataCompanyB,
-      onFetchDataCorrespondance, updateCorrespondence,
+      onFetchDataCorrespondance, updateCorrespondence, pagination,
     } = props;
     this.state = {
       dataCompanyA: [],
@@ -53,6 +53,8 @@ class MasterDataTable extends Component {
       onFetchDataCompanyB,
       onFetchDataCorrespondance,
       updateCorrespondence,
+
+      pagination,
     };
     this.CompanyService = new CompanyService();
 
@@ -121,6 +123,7 @@ class MasterDataTable extends Component {
   }
 
   updateCorrespondenceCallback(response) {
+    console.log(response);
     this.setState({ show: true, showVariant: 'success', showText: 'All updates were succesfully made!' });
     const { company_a, company_b, onFetchDataCorrespondance } = this.state;
     this.setState({ loadingDataCorrespondence: true });
@@ -290,8 +293,8 @@ class MasterDataTable extends Component {
       pageIndexA, pageIndexB, pageSize,
       company_b, company_a, show, showVariant, showText,
       onFetchDataCompanyB, onFetchDataCompanyA, onFetchDataCorrespondance,
+      pagination,
     } = this.state;
-
     return (
       <Container>
         <AlertDismissible variant={showVariant} show={show} setShow={() => { this.setState({ show: false }); }} text={showText} />
@@ -304,7 +307,7 @@ class MasterDataTable extends Component {
               onChange={(e) => {
                 onFetchDataCompanyA(pageIndexA, this.onFetchDataCompanyACallback, e.target.value);
                 onFetchDataCorrespondance(e.target.value, company_b, this.onFetchDataCorrespondanceCallback);
-                this.setState({ company_a: e.target.value });
+                this.setState({ company_a: e.target.value, loadingCompanyA: true, loadingDataCorrespondence: true });
               }}
 
             >
@@ -323,7 +326,7 @@ class MasterDataTable extends Component {
               onChange={(e) => {
                 onFetchDataCompanyB(pageIndexB, this.onFetchDataCompanyBCallback, e.target.value);
                 onFetchDataCorrespondance(company_a, e.target.value, this.onFetchDataCorrespondanceCallback);
-                this.setState({ company_b: e.target.value });
+                this.setState({ company_b: e.target.value, loadingCompanyB: true, loadingDataCorrespondence: true });
               }}
             >
               {companyBoptions.map((e, key) => (
@@ -347,7 +350,7 @@ class MasterDataTable extends Component {
                   onFetchDataCompanyA(pageIndex, this.onFetchDataCompanyACallback, company_a);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
-                manual
+                manual={pagination}
                 columns={[
                   {
                     Header: 'ID',
@@ -415,7 +418,7 @@ class MasterDataTable extends Component {
                   onFetchDataCompanyB(pageIndex, this.onFetchDataCompanyBCallback, company_b);
                 }}
                 pages={20} // TODO CHECK NR OF PAGES
-                manual
+                manual={pagination}
                 columns={[
                   {
                     Header: 'ID',
@@ -463,6 +466,7 @@ MasterDataTable.propTypes = {
   onFetchDataCompanyB: propTypes.func.isRequired,
   onFetchDataCorrespondance: propTypes.func.isRequired,
   updateCorrespondence: propTypes.func.isRequired,
+  pagination: propTypes.bool.isRequired,
 };
 
 export default MasterDataTable;

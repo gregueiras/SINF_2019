@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
@@ -15,6 +16,7 @@ import MasterDataTable from '../MasterDataTable/MasterDataTable';
 import './MasterData.css';
 import CompanyService from '../../services/CompanyService';
 import ProductService from '../../services/ProductService';
+import EntityService from '../../services/EntityService';
 
 
 class MasterData extends Component {
@@ -50,18 +52,20 @@ class MasterData extends Component {
 
     this.CompanyService = new CompanyService();
     this.ProductService = new ProductService();
+    this.EntityService = new EntityService();
 
+    this.onFetchDataCompanyBItems = this.onFetchDataCompanyBItems.bind(this);
+    this.onFetchDataCompanyAItems = this.onFetchDataCompanyAItems.bind(this);
+    this.onFetchDataCorrespondanceItems = this.onFetchDataCorrespondanceItems.bind(this);
+    this.updateCorrespondenceItems = this.updateCorrespondenceItems.bind(this);
 
-    this.onFetchDataCompanyB = this.onFetchDataCompanyB.bind(this);
-    this.onFetchDataCompanyA = this.onFetchDataCompanyA.bind(this);
-    this.onFetchDataCorrespondance = this.onFetchDataCorrespondance.bind(this);
-    this.updateCorrespondence = this.updateCorrespondence.bind(this);
+    this.onFetchDataCompanyAParties = this.onFetchDataCompanyAParties.bind(this);
+    this.onFetchDataCompanyBParties = this.onFetchDataCompanyBParties.bind(this);
   }
 
-  onFetchDataCorrespondance(companyAId, companyBId, callback) {
+  onFetchDataCorrespondanceItems(companyAId, companyBId, callback) {
     this.ProductService.getCorrespondence(companyAId, companyBId,
       (response) => {
-        console.log(response);
         const dataCorrespondence = response.data.map((item) => (
           { id: item.id, id_company_a: item.id_company_a, id_company_b: item.id_company_b }
         ));
@@ -69,12 +73,10 @@ class MasterData extends Component {
       });
   }
 
-
-  onFetchDataCompanyA(page, callback, value = null) {
+  onFetchDataCompanyAItems(page, callback, value = null) {
     const { company_a, pageSize } = this.state;
     let cA = company_a;
     if (value !== null && value !== company_a) { cA = value; }
-    this.setState({ loadingCompanyA: true });
     this.ProductService.getItems(page, pageSize, cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
@@ -86,11 +88,10 @@ class MasterData extends Component {
     });
   }
 
-  onFetchDataCompanyB(page, callback, value = null) {
+  onFetchDataCompanyBItems(page, callback, value = null) {
     const { company_b, pageSize } = this.state;
     let cB = company_b;
     if (value !== null && value !== company_b) { cB = value; }
-    this.setState({ loadingCompanyB: true });
     this.ProductService.getItems(page, pageSize, cB, (response) => {
       if (response.status === 200) {
         const { data } = response;
@@ -102,8 +103,8 @@ class MasterData extends Component {
     });
   }
 
-  updateCorrespondence(filtered, deletedCorrespondences, callback) {
-    this.ProductService.updateCorrespondence(
+  updateCorrespondenceItems(filtered, deletedCorrespondences, callback) {
+    this.ProductService.updateCorrespondenceItems(
       filtered,
       deletedCorrespondences,
       (response) => {
@@ -112,7 +113,34 @@ class MasterData extends Component {
     );
   }
 
+  onFetchDataCompanyAParties(pageIndex, callback, value = null) {
+    const cA = value;
+    this.EntityService.getSupplierParties(cA, (response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const dataCompanyA = data.map((item) => (
+          { id: item.partyKey, description: item.name }
+        ));
+        callback(dataCompanyA);
+      }
+    });
+  }
+
+  onFetchDataCompanyBParties(pageIndex, callback, value = null) {
+    const cB = value;
+    this.EntityService.getPurchaserParties(cB, (response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const dataCompanyB = data.map((item) => (
+          { id: item.partyKey, description: item.name }
+        ));
+        callback(dataCompanyB);
+      }
+    });
+  }
+
   render() {
+    const { category } = this.state;
     return (
       <Container>
         <Col md={4} className="mb-6">
@@ -130,13 +158,25 @@ class MasterData extends Component {
           </select>
         </Col>
 
-        <MasterDataTable
-          onFetchDataCompanyA={this.onFetchDataCompanyA}
-          onFetchDataCorrespondance={this.onFetchDataCorrespondance}
-          onFetchDataCompanyB={this.onFetchDataCompanyB}
-          updateCorrespondence={this.updateCorrespondence}
-        />
+        {category === 'items' ? (
+          <MasterDataTable
+            onFetchDataCompanyA={this.onFetchDataCompanyAItems}
+            onFetchDataCorrespondance={this.onFetchDataCorrespondanceItems}
+            onFetchDataCompanyB={this.onFetchDataCompanyBItems}
+            updateCorrespondence={this.updateCorrespondenceItems}
+            pagination
+          />
+        ) : null}
 
+        {category === 'entities' ? (
+          <MasterDataTable
+            onFetchDataCompanyA={this.onFetchDataCompanyAParties}
+            onFetchDataCorrespondance={this.onFetchDataCorrespondanceItems}
+            onFetchDataCompanyB={this.onFetchDataCompanyBParties}
+            updateCorrespondence={this.updateCorrespondenceItems}
+            pagination={false}
+          />
+        ) : null}
 
       </Container>
     );
