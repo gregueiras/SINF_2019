@@ -17,11 +17,11 @@ function getVariantMessage(variant) {
 }
 
 function AlertDismissible({
-  show, setShow, text, variant,
+  show, setShow, text, variant, alertId,
 }) {
   if (show) {
     return (
-      <Alert className="alert-dismissible" variant={variant} onClose={() => setShow(false)} dismissible>
+      <Alert className="alert-dismissible" id={alertId} variant={variant} onClose={() => setShow(false)} dismissible>
         <Alert.Heading>{getVariantMessage(variant)}</Alert.Heading>
         <p>
           {text}
@@ -36,6 +36,7 @@ AlertDismissible.propTypes = {
   setShow: propTypes.func.isRequired,
   text: propTypes.string.isRequired,
   variant: propTypes.string.isRequired,
+  alertId: propTypes.string,
 };
 
 export default AlertDismissible;
