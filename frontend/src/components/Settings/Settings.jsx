@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import AlertDismissible from '../Alert/Alert';
 
 import './Settings.css';
 import CompanyService from '../../services/CompanyService';
@@ -14,6 +15,8 @@ export class Settings extends Component {
 
     this.state = {
       organizations: [],
+      showSuccessMessage: false,
+      showText: '',
     };
 
     this.CompanyService = new CompanyService();
@@ -109,18 +112,22 @@ export class Settings extends Component {
       company = organization;
 
     })
-    console.log(" before "+JSON.stringify(company));
-
-   
     this.CompanyService.editCompany(company, (response) => {
-      console.log(" response "+JSON.stringify(response));})
+
+      if (response.status === 200){
+        this.setState({showSuccessMessage:true, showText: "Changes saved with success!"});
+        
+      }
+    });
   };
 
   render() {
+    const {showSuccessMessage,showText} = this.state;
 
 
     return (
       <Container className="settingsContainer">
+          <AlertDismissible variant='success' show={showSuccessMessage} setShow={() => { this.setState({ showSuccessMessage: false }); }} text={showText} />
 
         <Form className="settingsForm">
 

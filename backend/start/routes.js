@@ -15,6 +15,8 @@
 const Route = use("Route");
 
 Route.get('/', () => ({ greeting: 'Hello world in JSON' }));
+Route.post('/login','UserController.login');
+Route.post('/register','UserController.register');
 Route.get('/test', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
 
