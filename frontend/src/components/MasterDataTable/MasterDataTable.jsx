@@ -23,6 +23,7 @@ class MasterDataTable extends Component {
     const {
       onFetchDataCompanyA, onFetchDataCompanyB,
       onFetchDataCorrespondance, updateCorrespondence, pagination,
+      companyAlabel, companyBlabel, columnName,
     } = props;
     this.state = {
       dataCompanyA: [],
@@ -53,6 +54,9 @@ class MasterDataTable extends Component {
       onFetchDataCompanyB,
       onFetchDataCorrespondance,
       updateCorrespondence,
+      companyAlabel, 
+      companyBlabel, 
+      columnName,
 
       pagination,
     };
@@ -293,14 +297,14 @@ class MasterDataTable extends Component {
       pageIndexA, pageIndexB, pageSize,
       company_b, company_a, show, showVariant, showText,
       onFetchDataCompanyB, onFetchDataCompanyA, onFetchDataCorrespondance,
-      pagination,
+      pagination, companyAlabel, companyBlabel, columnName,
     } = this.state;
     return (
       <Container>
         <AlertDismissible variant={showVariant} show={show} setShow={() => { this.setState({ show: false }); }} text={showText} />
         <Row id="companySelectorsRow">
           <Col md={4}>
-            <div className="gray-label"> Company A </div>
+            <div className="gray-label"> Company A</div>
             <select
               className="selector company-selector pos-lt rel-text-white"
               name="company_a"
@@ -340,7 +344,7 @@ class MasterDataTable extends Component {
         <Row>
           <Col>
             <div className="reactTable">
-              <div className="gray-label"> Company A Products </div>
+              <div className="gray-label"> Company A {companyAlabel}  </div>
               <ReactTable
                 data={dataCompanyA}
                 loading={loadingCompanyA}
@@ -362,7 +366,7 @@ class MasterDataTable extends Component {
                     ),
                   },
                   {
-                    Header: 'Description',
+                    Header: columnName,
                     accessor: 'description',
                   },
                 ]}
@@ -408,7 +412,7 @@ class MasterDataTable extends Component {
           </Col>
           <Col>
             <div className="reactTable">
-              <div className="gray-label"> Company B Products </div>
+              <div className="gray-label"> Company B {companyBlabel}  </div>
               <ReactTable
                 data={dataCompanyB}
                 loading={loadingCompanyB}
@@ -430,7 +434,7 @@ class MasterDataTable extends Component {
                     ),
                   },
                   {
-                    Header: 'Description',
+                    Header: columnName,
                     accessor: 'description',
                   },
                 ]}
@@ -467,6 +471,9 @@ MasterDataTable.propTypes = {
   onFetchDataCorrespondance: propTypes.func.isRequired,
   updateCorrespondence: propTypes.func.isRequired,
   pagination: propTypes.bool.isRequired,
+  companyAlabel: propTypes.string.isRequired,
+  companyBlabel: propTypes.string.isRequired,
+  columnName: propTypes.string.isRequired,
 };
 
 export default MasterDataTable;

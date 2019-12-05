@@ -61,6 +61,9 @@ class MasterData extends Component {
 
     this.onFetchDataCompanyAParties = this.onFetchDataCompanyAParties.bind(this);
     this.onFetchDataCompanyBParties = this.onFetchDataCompanyBParties.bind(this);
+    this.onFetchDataCorrespondanceParties = this.onFetchDataCorrespondanceParties.bind(this);
+    this.updateCorrespondenceParties = this.updateCorrespondenceParties.bind(this);
+
   }
 
   onFetchDataCorrespondanceItems(companyAId, companyBId, callback) {
@@ -104,7 +107,7 @@ class MasterData extends Component {
   }
 
   updateCorrespondenceItems(filtered, deletedCorrespondences, callback) {
-    this.ProductService.updateCorrespondenceItems(
+    this.ProductService.updateCorrespondence(
       filtered,
       deletedCorrespondences,
       (response) => {
@@ -113,9 +116,20 @@ class MasterData extends Component {
     );
   }
 
+
+  onFetchDataCorrespondanceParties(companyAId, companyBId, callback) {
+    this.EntityService.getCorrespondence(companyAId, companyBId,
+      (response) => {
+        const dataCorrespondence = response.data.map((item) => (
+          { id: item.id, id_company_a: item.id_company_a, id_company_b: item.id_company_b }
+        ));
+        callback(dataCorrespondence);
+      });
+  }
+
   onFetchDataCompanyAParties(pageIndex, callback, value = null) {
     const cA = value;
-    this.EntityService.getSupplierParties(cA, (response) => {
+    this.EntityService.getPurchaserParties(cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyA = data.map((item) => (
@@ -128,7 +142,7 @@ class MasterData extends Component {
 
   onFetchDataCompanyBParties(pageIndex, callback, value = null) {
     const cB = value;
-    this.EntityService.getPurchaserParties(cB, (response) => {
+    this.EntityService.getSupplierParties(cB, (response) => {
       if (response.status === 200) {
         const { data } = response;
         const dataCompanyB = data.map((item) => (
@@ -138,6 +152,17 @@ class MasterData extends Component {
       }
     });
   }
+
+  updateCorrespondenceParties(filtered, deletedCorrespondences, callback) {
+    this.EntityService.updateCorrespondence(
+      filtered,
+      deletedCorrespondences,
+      (response) => {
+        callback(response);
+      },
+    );
+  }
+
 
   render() {
     const { category } = this.state;
@@ -165,16 +190,22 @@ class MasterData extends Component {
             onFetchDataCompanyB={this.onFetchDataCompanyBItems}
             updateCorrespondence={this.updateCorrespondenceItems}
             pagination
+            companyAlabel="Products"
+            companyBlabel="Products"
+            columnName="Description"
           />
         ) : null}
 
         {category === 'entities' ? (
           <MasterDataTable
             onFetchDataCompanyA={this.onFetchDataCompanyAParties}
-            onFetchDataCorrespondance={this.onFetchDataCorrespondanceItems}
+            onFetchDataCorrespondance={this.onFetchDataCorrespondanceParties}
             onFetchDataCompanyB={this.onFetchDataCompanyBParties}
-            updateCorrespondence={this.updateCorrespondenceItems}
+            updateCorrespondence={this.updateCorrespondenceParties}
             pagination={false}
+            companyAlabel="Suppliers"
+            companyBlabel="Customers"
+            columnName="Name"
           />
         ) : null}
 

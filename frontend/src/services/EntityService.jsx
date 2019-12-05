@@ -3,6 +3,8 @@ import axios from 'axios';
 export default class EntityService {
   constructor() {
     this.masterDataBasePath = 'http://localhost:3335/master-data';
+    this.entityBasePath = 'http://localhost:3335/entity';
+
   }
 
 
@@ -28,9 +30,9 @@ export default class EntityService {
       });
   }
 
-  /* getCorrespondence(companyA, companyB, callback) {
+  getCorrespondence(companyA, companyB, callback) {
     axios
-      .get(`${this.productBasePath}/${companyA}/${companyB}`)
+      .get(`${this.entityBasePath}/${companyA}/${companyB}`)
       .then((response) => {
         callback(response);
       })
@@ -41,7 +43,7 @@ export default class EntityService {
 
   updateCorrespondence(addedCorrespondences, deletedCorrespondences, callback) {
     axios
-      .put(`${this.productBasePath}`, {
+      .put(`${this.entityBasePath}`, {
         addedCorrespondences,
         deletedCorrespondences,
       })
@@ -52,5 +54,5 @@ export default class EntityService {
         console.log(error.response);
         callback(error);
       });
-  } */
+  } 
 }
