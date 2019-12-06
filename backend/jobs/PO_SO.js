@@ -90,11 +90,6 @@ export default {
         && po.sellerSupplierParty == sellerParty,
     );
 
-    console.log('SELLER\t', sellerParty);
-    console.log(purchasesOrdersData.map((e) => ({
-      serie: e.serie, isActive: e.isActive, isDeleted: e.isDeleted, seller: e.sellerSupplierParty,
-    })));
-    console.log(purchaseOrders);
     if (!purchaseOrders) {
       done(null, {
         value: RETURN_TYPES.END_TRIGGER_FAIL,
@@ -105,8 +100,6 @@ export default {
     }
     let areNewDocuments = false;
     for (const purchaseOrder of purchaseOrders) {
-      console.log('PO');
-
       const replicated = await isProcessed({
         userID,
         fileID: purchaseOrder.id,
