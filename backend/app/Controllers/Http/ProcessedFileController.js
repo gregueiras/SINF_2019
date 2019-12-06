@@ -8,9 +8,13 @@ class ProcessedFileController {
 
     const user = await User.find(userID);
 
-    return await user.processedFiles().create({
-      file_id: fileID
-    });
+    try {
+      return await user.processedFiles().create({
+        file_id: fileID
+      });
+    } catch (e) {
+      return 200;
+    }
   }
 
   async get({ request }) {
@@ -18,7 +22,12 @@ class ProcessedFileController {
     const { fileID, userID } = body;
 
     const user = await User.find(userID);
-    const res = (await user.processedFiles().where('file_id', fileID).fetch()).toJSON();
+    const res = (
+      await user
+        .processedFiles()
+        .where("file_id", fileID)
+        .fetch()
+    ).toJSON();
     return res.length > 0;
   }
 }

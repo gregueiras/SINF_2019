@@ -5,3 +5,12 @@
     right: 30px;
     top: 90px !important;
 }
+
+#settingsAlert{
+    height: 100px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}

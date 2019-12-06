@@ -1,4 +1,3 @@
-'use strict'
 const Company = use("App/Models/Company");
 
 class CompanyController {
@@ -6,31 +5,26 @@ class CompanyController {
     return Company.all();
   }
 
-  /*async editCompany(req, res) {
-    const {
-      name,
-      organization,
-      tenant,
-      clientId,
-      clientSecret,
-    } = data;
+  async editCompany({ request }) {
+    const body = request.post();
 
-    const newData = {
-      name,
-      organization,
-      tenant,
-      clientId,
-      clientSecret,
+    const {id,name,organization, tenant, clientId,clientSecret} = body.data;
 
-    };
-    const {body} = req;
-    const {id,name,organization, clientId,clientSecret,tenant} = body;
-
-    const  company = await Company.find(id);
-    company = {...company, name,organization,tenant,clientId,clientSecret};
-    company.save();
-
-  }*/
+    const  company = await Company.find(id)
+    company.name =name;
+    company.organization = organization;
+    company.tenant = tenant;
+    company.clientId = clientId;
+    company.clientSecret = clientSecret;
+    return await company.save(); 
+  }
+  
+  async get({ request }) {
+    const { params } = request;
+    const { id } = params;
+    
+    return Company.find(id);
+  }
 }
 
 module.exports = CompanyController

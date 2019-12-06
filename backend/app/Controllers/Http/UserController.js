@@ -12,11 +12,43 @@ class UserController {
     console.log(id)
     return User.find(id);
   }
-  async login({request,auth}){
-    const {username, password} = request.all();
-    await auth.attempt(username, password);
-    return "Logged in successfully";
+  async register({ request, auth, response }) {
+    let body = request.post();
+    let {username, email, password} = body.data;
+    console.log(username);
+
+    let user = await User.create({username,email,password});
+
+    //generate token for user;
+    let token = await auth.generate(user)
+
+    Object.assign(user, token)
+
+    return response.json({message:'Success'})
   }
+
+  async login({ request, auth, response }) {
+    let body = request.post();
+
+    let { username, password } = body.data;
+
+    try {
+      if (await auth.attempt(username, password)) {
+        let user = await User.findBy('username', username)
+      
+        let token = await auth.generate(user)
+        console.log("user "+username);
+
+        Object.assign(user, token)
+        return response.json({message: 'Success'})
+      }
+    }
+    catch (e) {
+      console.log(e)
+      return response.json({ message: 'You are not registered!' })
+    }
+  }
+
 }
 
 module.exports = UserController

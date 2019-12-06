@@ -4,6 +4,10 @@ import { Link, withRouter } from 'react-router-dom';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import AlertDismissible from '../Alert/Alert';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+ 
 
 import './Settings.css';
 import CompanyService from '../../services/CompanyService';
@@ -14,6 +18,9 @@ export class Settings extends Component {
 
     this.state = {
       organizations: [],
+      showMessage: false,
+      showText: '',
+      variantType:'',
     };
 
     this.CompanyService = new CompanyService();
@@ -25,6 +32,7 @@ export class Settings extends Component {
       const reverse = response.data.slice().reverse();
       const companies = reverse.map((data) => (
         {
+          id: data.id,
           name: data.name,
           organization: data.organization,
           tenant: data.tenant,
@@ -37,6 +45,23 @@ export class Settings extends Component {
     this.setState(newState);
   });
 }
+
+onClickDelete = idx => evt =>  {
+  confirmAlert({
+    title: 'Confirm to submit',
+    message: 'Are you sure to delete this company?',
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: this.onDeleteOrganization(idx),
+      },
+      {
+        label: 'No',
+        onClick: () =>  {}
+      }
+    ]
+  });
+};
 
   onAddOrganization = () => {
     this.setState({
@@ -95,23 +120,48 @@ export class Settings extends Component {
   };
 
   onDeleteOrganization = idx => () => {
+    console.log('in delete, ', idx);
     this.setState({
-      organizations: this.state.organizations.filter((s, sidx) => idx !== sidx)
+      organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+      variantType:'success',
+      showText: 'Company deleted with success!',
+      showMessage:true,
     });
   };
 
+  onUpdateCompany = idx => () => {
+    let company;
+    this.state.organizations.map((organization, sidx) => {
+        
+      if (idx === sidx)
+      company = organization;
+
+    })
+    this.CompanyService.editCompany(company, (response) => {
+      let text;
+      if (response.status === 200){
+        text = 'Changes saved with success!';
+        this.setState({variantType:'success'});
+      } else{
+        text = 'Something went wrong...';
+        this.setState({variantType:'danger'});
+      }
+      this.setState({showMessage:true, showText:text}); 
+    });
+  };
 
   render() {
-
-
+    const {organizations, showMessage,showText, variantType} = this.state;
+  
     return (
       <Container className="settingsContainer">
+        <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
 
         <Form className="settingsForm">
 
 
           <Form.Group controlId="controlOrganizations" className="organizations">
-            {this.state.organizations.map((organization, idx) => (
+            {organizations.map((organization, idx) => (
 
               <div className="organizationDiv" key={idx}>
                 <Form.Row>
@@ -128,7 +178,7 @@ export class Settings extends Component {
                     <Form.Label className="gray-label">{`Organization ID `}</Form.Label>
                     <Form.Control type="text"
                       placeholder={`Organization id ${idx + 1}`}
-                      onChange={this.onChangeOrganizationName(idx)}
+                      onChange={this.onChangeOrganization(idx)}
                       value={organization.organization} />
                   </Col>
                   <Col sm={6}>
@@ -153,11 +203,11 @@ export class Settings extends Component {
                       value={organization.clientSecret} />
                   </Col>
                   <Col >
-                    <div className="iconDelete" >
-                    <Button className="save-button blue-button">
+                    <div className="submitIcons" >
+                    <Button className="save-button blue-button"  onClick={this.onUpdateCompany(idx)}>
                       <FontAwesomeIcon icon={faCheck} /> Save Changes
                     </Button>
-                    <Button className="blue-button" onClick={this.onDeleteOrganization(idx)}>
+                    <Button className="iconDelete blue-button" onClick={this.onClickDelete(idx)}>
                       <FontAwesomeIcon icon={faTrashAlt} />
                     </Button>
                     
