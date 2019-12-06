@@ -1,12 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import AlertDismissible from '../Alert/Alert';
-/* import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css */
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+ 
 
 
 import './Settings.css';
@@ -46,24 +47,24 @@ export class Settings extends Component {
     });
   }
 
-  onClickDelete = idx => evt => {
-    /*confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to delete this company?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: this.onDeleteOrganization(idx),
-        },
-        {
-          label: 'No',
-          onClick: () => { }
-        }
-      ]
-    });*/
-  };
+onClickDelete = idx => evt =>  {
+  confirmAlert({
+    title: 'Confirm to submit',
+    message: 'Are you sure to delete this company?',
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: this.onDeleteCompany(idx),
+      },
+      {
+        label: 'No',
+        onClick: () =>  {}
+      }
+    ]
+  });
+};
 
-  onAddOrganization = () => {
+onAddOrganization = () => {
     this.setState({
       organizations: this.state.organizations.concat([{ name: "", organization: "", tenant: "", clientId: "", clientSecret: "" }])
     });
@@ -86,6 +87,7 @@ export class Settings extends Component {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeTenant = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -94,6 +96,7 @@ export class Settings extends Component {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeTenant = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -102,6 +105,7 @@ export class Settings extends Component {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeClientId = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -110,6 +114,7 @@ export class Settings extends Component {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeClientSecret = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -118,28 +123,61 @@ export class Settings extends Component {
     });
     this.setState({ organizations: newOrganizations });
   };
+  
+  onDeleteCompany = idx => () => {
+    let company;
 
-  onDeleteOrganization = idx => () => {
-    console.log('in delete, ', idx);
-    this.setState({
-      organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
-      variantType: 'success',
-      showText: 'Company deleted with success!',
-      showMessage: true,
+    this.state.organizations.map((organization, sidx) => {
+      if (idx === sidx)
+      company = organization;
+    })
+   
+    this.CompanyService.deleteCompany(company, (response) => {
+      if (response.status === 200){
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'success',
+          showText: 'Company deleted with success!',
+          showMessage:true,
+        });
+
+      } else{
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'danger',
+          showText: 'Something went wrong...',
+          showMessage:true,
+        });
+      }
     });
+    
   };
 
   onUpdateCompany = idx => () => {
     let company;
     this.state.organizations.map((organization, sidx) => {
-
       if (idx === sidx)
-        company = organization;
-
+      company = organization;
     })
-    this.CompanyService.editCompany(company, (response) => {
-      let text;
-      if (response.status === 200) {
+    let text;
+    
+    if(company.id === undefined){
+      
+      this.CompanyService.addCompany(company, (response) => {
+        if (response.status === 200){
+          text = 'Changes saved with success!';
+          this.setState({variantType:'success'});
+        } else{
+          text = 'Something went wrong...';
+          this.setState({variantType:'danger'});
+        }
+        this.setState({showMessage:true, showText:text}); 
+      });
+
+    }else{
+
+      this.CompanyService.editCompany(company, (response) => {
+      if (response.status === 200){
         text = 'Changes saved with success!';
         this.setState({ variantType: 'success' });
       } else {
@@ -148,6 +186,7 @@ export class Settings extends Component {
       }
       this.setState({ showMessage: true, showText: text });
     });
+  }
   };
 
   render() {

@@ -1,19 +1,18 @@
-import { RETURN_TYPES } from "./index";
+import { RETURN_TYPES } from './index';
 import {
   getSeries,
   createSeries,
   getPurchasesOrders,
   getCompanyName,
-  getSellerPartyKey,
-  createSellerParty
-} from "../services/jasmin";
+} from '../services/jasmin';
 import {
   isProcessed,
   getCompany,
-  getCorrespondence
-} from "../services/db";
-import Queue from "../lib/Queue";
-
+  getCorrespondence,
+  getCustomerParty,
+  getSellerParty,
+} from '../services/db';
+import Queue from '../lib/Queue';
 
 const options = {
   /*
@@ -24,12 +23,20 @@ const options = {
 };
 
 export default {
-  key: "PO_SO",
+  key: 'PO_SO',
   options,
   async handle({ data }, done) {
     const { companyA, companyB } = data;
-    const cA = await getCompany(companyA);
-    const cB = await getCompany(companyB);
+
+    const customerParty = await getCustomerParty({
+      companyA,
+      companyB,
+    });
+
+    const sellerParty = await getSellerParty({
+      companyA,
+      companyB,
+    });
 
     const userID = 1;
 
@@ -37,13 +44,14 @@ export default {
       userID,
       processID: 1,
       companyA,
-      companyB
+      companyB,
     };
 
     let series;
     try {
-      series = (await getSeries({ company: cA })).data;
+      series = (await getSeries({ companyID: companyA })).data;
     } catch (error) {
+      console.log('ERROR SERIES');
       console.error(error.response.data);
     }
     // Check if 'IC_1' series exist
@@ -56,8 +64,13 @@ export default {
     if (serie === undefined) {
       const description = `Series to intercompany documents between ${companyA} and ${companyB}`;
       try {
-        await createSeries({ company: cA, serieName: serieKey, description });
+        await createSeries({
+          companyID: companyA,
+          serieName: serieKey,
+          description,
+        });
       } catch (e) {
+        console.log('ERROR CREATING SERIES');
         console.error(e.response.data);
       }
     }
@@ -65,13 +78,16 @@ export default {
     // get serie's purchase order
     let purchasesOrdersData;
     try {
-      purchasesOrdersData = (await getPurchasesOrders({ company: cA })).data;
+      purchasesOrdersData = (await getPurchasesOrders({ companyID: companyA })).data;
     } catch (e) {
       console.error(e.response.data);
     }
 
     const purchaseOrders = purchasesOrdersData.filter(
-      po => po.serie === serieKey && po.isActive && !po.isDeleted
+      (po) => po.serie === serieKey
+        && po.isActive
+        && !po.isDeleted
+        && po.sellerSupplierParty == sellerParty,
     );
 
     if (!purchaseOrders) {
@@ -79,34 +95,32 @@ export default {
         value: RETURN_TYPES.END_TRIGGER_FAIL,
         msg: `No purchases orders found with series ${serieKey}. Please check if you have defined it correctly.`,
         ...info,
-        options
+        options,
       });
     }
     let areNewDocuments = false;
-
     for (const purchaseOrder of purchaseOrders) {
-      console.log("PO");
-
       const replicated = await isProcessed({
         userID,
-        fileID: purchaseOrder.id
+        fileID: purchaseOrder.id,
       });
       if (!replicated) {
-        console.log("NEW PO");
+        console.log('NEW PO');
         areNewDocuments = true;
         // create sales order
         // IF SERIES ERROR; MUST HAVE ICx SERIES IN DOCUMENT TYPE EVF
 
         try {
           // GET SELLER CUSTOM PARTY
-          const party = await getCompanyName({ company: cA });
-          let key = await getSellerPartyKey({ company: cB, party });
+          const company = await getCompanyName({ companyID: companyB });
+          /* let key = await getSellerPartyKey({ company: cB, party });
 
           if (key === undefined) {
             key = await createSellerParty({ company: cB, name: party });
           }
-
-          const documentLines = []
+          */
+          const documentLines = [];
+          let abort = false;
           for (const line of purchaseOrder.documentLines) {
             const {
               quantity,
@@ -114,46 +128,48 @@ export default {
               grossValue,
               taxTotal,
               lineExtensionAmount,
-              purchasesItem
+              purchasesItem,
             } = line;
-
-            console.log(companyA, companyB, purchasesItem)
 
             const salesItem = await getCorrespondence({
               companyA,
               companyB,
-              product: purchasesItem
+              product: purchasesItem,
             });
 
-            documentLines.push({
-              quantity,
-              unitPrice,
-              deliveryDate: "2019-12-30T00:00:00",
-              grossValue,
-              taxTotal,
-              lineExtensionAmount,
-              salesItem
+            if (salesItem === undefined) {
+              abort = true;
+              // LOG UNDEFINED CORRESPONDENCE done(RETURN_TYPES.END_ACTION_FAIL, {value: `There is no correspondence of ${purchasesItem} in ${companyA} and ${companyB}`})
+            } else {
+              documentLines.push({
+                quantity,
+                unitPrice,
+                deliveryDate: '2019-12-30T00:00:00',
+                grossValue,
+                taxTotal,
+                lineExtensionAmount,
+                salesItem,
+              });
+            }
+          }
+          if (!abort) {
+            console.dir({
+              company,
+              buyerCustomerParty: customerParty,
+              deliveryTerm: purchaseOrder.deliveryTerm,
+              documentLines,
             });
-          };
 
-
-          // TODO: Get correspondence from DB
-          const partyB = await getCompanyName({ company: cB }); 
-          console.dir({
-            company: partyB,
-            buyerCustomerParty: key,
-            deliveryTerm: purchaseOrder.deliveryTerm,
-            documentLines
-          });
-
-          Queue.add("create_SO", {
-            purchaseOrder,
-            company: cB,
-            buyerCustomerParty: key,
-            sellerCompany: partyB,
-            documentLines,
-            userID
-          });
+            Queue.add('create_SO', {
+              purchaseOrder,
+              company,
+              buyerCustomerParty: customerParty,
+              sellerCompany: company,
+              documentLines,
+              userID,
+              companyID: companyB
+            });
+          }
         } catch (e) {
           if (e.response) {
             console.error(e.response.data);
@@ -161,7 +177,7 @@ export default {
               value: RETURN_TYPES.END_ACTION_FAIL,
               data: e.response.data,
               ...info,
-              options
+              options,
             });
           } else {
             console.error(e);
@@ -169,26 +185,25 @@ export default {
               value: RETURN_TYPES.END_ACTION_FAIL,
               ...info,
               data: e,
-              options
+              options,
             });
           }
         }
       }
     }
-
     if (!areNewDocuments) {
-      console.log("NO NEW RES");
+      console.log('NO NEW RES');
       done(null, {
         result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
         ...info,
-        options
+        options,
       });
     } else {
       done(null, {
         value: RETURN_TYPES.END_SUCCESS,
         ...info,
-        options
+        options,
       });
     }
-  }
+  },
 };

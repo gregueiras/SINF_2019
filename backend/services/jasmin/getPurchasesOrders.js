@@ -1,10 +1,10 @@
-import makeRequest, { endPoints, constants } from './constants';
+import makeRequest, { endPoints } from './constants';
 
 
-const getPurchasesOrders = ({company, page, pageSize}) => makeRequest({
+const getPurchasesOrders = ({ companyID, page, pageSize }) => makeRequest({
   method: 'GET',
   endPoint: endPoints.purchasesOrders,
-  company,
+  companyID,
   query: {
     page,
     pageSize,

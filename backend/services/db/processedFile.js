@@ -1,22 +1,19 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const isProcessed = async ({userID, fileID}) => {
-  const req = await axios.get("http://0.0.0.0:3335/processedFile", {
+export const isProcessed = async ({ userID, fileID }) => {
+  const req = await axios.get('http://0.0.0.0:3335/processedFile', {
     data: {
       userID,
-      fileID
-    }
+      fileID,
+    },
   });
-  
-  const {data} = req
-  
+
+  const { data } = req;
+
   return data;
 };
 
-export const addProcessed = ({userID, fileID}) => {
-  return axios.post("http://0.0.0.0:3335/processedFile", {
-    userID,
-    fileID,
-  })
-}
-
+export const addProcessed = ({ userID, fileID }) => axios.post('http://0.0.0.0:3335/processedFile', {
+  userID,
+  fileID,
+});

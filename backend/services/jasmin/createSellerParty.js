@@ -1,19 +1,19 @@
-import makeRequest, { endPoints } from "./constants";
-import { getSellerPartyKey } from "./getSellerPartyKey";
+import makeRequest, { endPoints } from './constants';
+import { getSellerPartyKey } from './getSellerPartyKey';
 
-const createSellerParty = async ({ company, name }) => {
+const createSellerParty = async ({ companyID, name }) => {
   await makeRequest({
-    method: "POST",
+    method: 'POST',
     endPoint: endPoints.sellerParties,
-    company,
+    companyID,
     data: {
       name,
-      currency: "EUR",
-      country: "PT",
-    }
+      currency: 'EUR',
+      country: 'PT',
+    },
   });
 
-  const key = await getSellerPartyKey({ company, name });
+  const key = await getSellerPartyKey({ companyID, name });
   return key;
 };
 
