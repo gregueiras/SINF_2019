@@ -63,7 +63,7 @@ onClickDelete = idx => evt =>  {
   });
 };
 
-  onAddOrganization = () => {
+onAddOrganization = () => {
     this.setState({
       organizations: this.state.organizations.concat([{ name: "", organization: "", tenant: "", clientId: "", clientSecret: "" }])
     });
@@ -86,6 +86,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeTenant = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -94,6 +95,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeTenant = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -102,6 +104,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeClientId = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -110,6 +113,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeClientSecret = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -118,7 +122,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
-
+  
   onDeleteCompany = idx => () => {
     let company;
 
@@ -155,7 +159,9 @@ onClickDelete = idx => evt =>  {
       company = organization;
     })
     let text;
-    if(company._id === undefined){
+    
+    if(company.id === undefined){
+      
       this.CompanyService.addCompany(company, (response) => {
         if (response.status === 200){
           text = 'Changes saved with success!';
@@ -166,8 +172,10 @@ onClickDelete = idx => evt =>  {
         }
         this.setState({showMessage:true, showText:text}); 
       });
+
     }else{
-    this.CompanyService.editCompany(company, (response) => {
+
+      this.CompanyService.editCompany(company, (response) => {
       if (response.status === 200){
         text = 'Changes saved with success!';
         this.setState({variantType:'success'});

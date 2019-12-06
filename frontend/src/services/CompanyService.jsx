@@ -22,7 +22,6 @@ export default class CompanyService {
 
 
   editCompany(data, callback) {
-    console.log(data);
     axios
       .put(`${this.settingsBasePath}`, { data })
       .then((response) => {
