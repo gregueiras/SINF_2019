@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import UserService from '../../services/UserService';
+import AlertDismissible from '../Alert/Alert';
 import { Redirect } from 'react-router-dom';
 
 import '../Login/Login.css';
@@ -15,7 +16,10 @@ class Register extends Component {
             email: '',
             password: '',
             repeatPassword: '',
-            redirect: false
+            redirect: false,
+            showMessage: false,
+            showText: '',
+            variantType:'',
         }
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -57,9 +61,13 @@ class Register extends Component {
             repeatPassword: this.state.repeatPassword
         }, (response) => {
             console.log(response);
-            if (response.data.message === "Success")
+            if (response.status === 200)
                 this.setState({ redirect: true });
-            else console.log("failed");
+            else {
+                console.log("failed");
+                const text = 'Register failed, username or password invalid.'
+                this.setState({variantType:'danger', showText:text, showMessage:true});
+            }
         });
     }
 
@@ -71,10 +79,12 @@ class Register extends Component {
     }
 
     render() {
+        const {showMessage,showText,variantType} = this.state;
 
         return (
             <Container className="register-container">
                 {this.renderRedirect()}
+                <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
 
                 <Form id="register-form">
                     <h3 className="register-title">Create Account </h3>

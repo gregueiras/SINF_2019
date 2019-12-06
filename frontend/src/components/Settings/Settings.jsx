@@ -24,8 +24,18 @@ export class Settings extends Component {
       variantType: '',
     };
 
-    this.CompanyService = new CompanyService();
+    this.onClickDelete = this.onClickDelete.bind(this);
+    this.onChangeOrganization = this.onChangeOrganization.bind(this);
+    this.onChangeCompanyName = this.onChangeCompanyName.bind(this);
+    this.onUpdateCompany = this.onUpdateCompany.bind(this);
+    this.onChangeClientId = this.onChangeClientId.bind(this);
+    this.onChangeClientSecret = this.onChangeClientSecret.bind(this);
+    this.onChangeTenant = this.onChangeTenant.bind(this);
+    this.onDeleteCompany = this.onDeleteCompany.bind(this);
+    this.onAddOrganization = this.onAddOrganization.bind(this);
+    this.onCheckSuccess = this.onCheckSuccess.bind(this);
 
+    this.CompanyService = new CompanyService();
   }
 
   componentDidMount() {
@@ -70,7 +80,7 @@ onAddOrganization = () => {
     });
   };
 
-  onChangeOrganizationName = idx => evt => {
+  onChangeCompanyName = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
         return organization;
@@ -84,15 +94,6 @@ onAddOrganization = () => {
       if (idx !== sidx)
         return organization1;
       return { ...organization1, organization: evt.target.value };
-    });
-    this.setState({ organizations: newOrganizations });
-  };
-
-  onChangeTenant = idx => evt => {
-    const newOrganizations = this.state.organizations.map((organization, sidx) => {
-      if (idx !== sidx)
-        return organization;
-      return { ...organization, tenant: evt.target.value };
     });
     this.setState({ organizations: newOrganizations });
   };
@@ -153,38 +154,33 @@ onAddOrganization = () => {
     
   };
 
+  onCheckSuccess(response){   
+    let text, variant;
+
+    if (response.status === 200){
+      text = 'Changes saved with success!';
+      variant = 'success';
+    } else{
+      text = 'Something went wrong...';
+      variant = 'danger';
+    }
+    this.setState({showMessage:true, showText:text, variantType:variant});
+  }
+
   onUpdateCompany = idx => () => {
     let company;
     this.state.organizations.map((organization, sidx) => {
       if (idx === sidx)
       company = organization;
     })
-    let text;
-    
+  
     if(company.id === undefined){
-      
       this.CompanyService.addCompany(company, (response) => {
-        if (response.status === 200){
-          text = 'Changes saved with success!';
-          this.setState({variantType:'success'});
-        } else{
-          text = 'Something went wrong...';
-          this.setState({variantType:'danger'});
-        }
-        this.setState({showMessage:true, showText:text}); 
-      });
-
+        this.onCheckSuccess(response);
+     });
     }else{
-
-      this.CompanyService.editCompany(company, (response) => {
-      if (response.status === 200){
-        text = 'Changes saved with success!';
-        this.setState({ variantType: 'success' });
-      } else {
-        text = 'Something went wrong...';
-        this.setState({ variantType: 'danger' });
-      }
-      this.setState({ showMessage: true, showText: text });
+      this.CompanyService.editCompany(company, (response) => { 
+        this.onCheckSuccess(response);
     });
   }
   };
@@ -208,7 +204,7 @@ onAddOrganization = () => {
                     <Form.Label className="gray-label">{`Company Name ${idx + 1}`}</Form.Label>
                     <Form.Control type="text"
                       placeholder={`Organization name ${idx + 1}`}
-                      onChange={this.onChangeOrganizationName(idx)}
+                      onChange={this.onChangeCompanyName(idx)}
                       value={organization.name} />
                   </Col>
                 </Form.Row>

@@ -54,7 +54,6 @@ class UserController {
       return response.json({ message: 'You are not registered!' })
     }
   }
-
 }
 
 module.exports = UserController
