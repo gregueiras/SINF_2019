@@ -1,11 +1,10 @@
-import makeRequest, { endPoints } from "./constants";
+import makeRequest, { endPoints } from './constants';
 
-
-export const getPurchaserParties = async ( {company} ) => {
+export const getPurchaserParties = async ({ companyID }) => {
   const res = await makeRequest({
-    method: "GET",
+    method: 'GET',
     endPoint: endPoints.purchaserParties,
-    company
+    companyID,
   });
   return res;
 };

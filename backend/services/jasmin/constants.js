@@ -1,5 +1,6 @@
 import axios from "axios";
 import FormData from "form-data";
+import { fetchToken, storeToken, getCompany } from "../db";
 
 export const constants = {
   url: "https://my.jasminsoftware.com",
@@ -47,13 +48,13 @@ const makeUrl = (endPoint, query, company) => {
   return url;
 };
 
-const getToken = async company => {
+const getTokenFromJasmin = async company => {
   const formData = new FormData();
   formData.append("grant_type", constants.grantType);
   formData.append("client_id", company.clientId);
   formData.append("client_secret", company.clientSecret);
   formData.append("scope", constants.scope);
-
+  
   const { data } = await axios.post(
     "https://identity.primaverabss.com/connect/token",
     formData,
@@ -62,24 +63,33 @@ const getToken = async company => {
         ...formData.getHeaders()
       }
     }
-  );
-  const { access_token } = data;
-
-  return access_token;
+    );
+    const { access_token, expires_in } = data;
+    
+  return { token: access_token, expires: expires_in };
 };
 
-const makeRequest = async ({
-  token,
-  endPoint,
-  method,
-  data,
-  query,
-  company
-}) => {
-  let myToken = token;
-  if (!token) {
-    myToken = await getToken(company);
+const getToken = async companyID => {
+  const db = await fetchToken(companyID);
+
+  if (db.id) {
+
+    const { token, expires } = await getTokenFromJasmin(db);
+    
+    const newExpire = Date.now() + expires;
+
+    await storeToken({ companyID, token, expires: newExpire });
+
+    return token;
   }
+
+  return db;
+};
+
+const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
+  const company = await getCompany(companyID);
+
+  const token = await getToken(companyID);
 
   const url = makeUrl(endPoint, query, company);
 
@@ -88,7 +98,7 @@ const makeRequest = async ({
     url,
     data,
     headers: {
-      Authorization: `Bearer ${myToken}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"
     }
   });

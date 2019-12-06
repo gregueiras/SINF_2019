@@ -25,6 +25,30 @@ class CompanyController {
     
     return Company.find(id);
   }
+
+  async setToken({ request }, response) {
+    const { token, expires, companyID } = request.post();
+    const company = await Company.find(companyID);
+    
+    company.token = token;
+    company.expires = expires;
+
+    company.save();
+
+    return 201;
+  }
+
+  async getToken({ request }) {
+    const Company = await this.get({ request });
+
+    const time = Date.now();
+    if (Company.token !== null && Company.expires !== null && time < Company.expires) {
+      return Company.token;
+    } else {
+      return Company;
+    }
+
+  }
 }
 
 module.exports = CompanyController
