@@ -5,9 +5,9 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import AlertDismissible from '../Alert/Alert';
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
- 
+/* import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css */
+
 
 import './Settings.css';
 import CompanyService from '../../services/CompanyService';
@@ -20,7 +20,7 @@ export class Settings extends Component {
       organizations: [],
       showMessage: false,
       showText: '',
-      variantType:'',
+      variantType: '',
     };
 
     this.CompanyService = new CompanyService();
@@ -40,28 +40,28 @@ export class Settings extends Component {
           clientSecret: data.clientSecret,
         }
 
-    ));
-    const newState = {organizations: companies};
-    this.setState(newState);
-  });
-}
+      ));
+      const newState = { organizations: companies };
+      this.setState(newState);
+    });
+  }
 
-onClickDelete = idx => evt =>  {
-  confirmAlert({
-    title: 'Confirm to submit',
-    message: 'Are you sure to delete this company?',
-    buttons: [
-      {
-        label: 'Yes',
-        onClick: this.onDeleteOrganization(idx),
-      },
-      {
-        label: 'No',
-        onClick: () =>  {}
-      }
-    ]
-  });
-};
+  onClickDelete = idx => evt => {
+    /*confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to delete this company?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: this.onDeleteOrganization(idx),
+        },
+        {
+          label: 'No',
+          onClick: () => { }
+        }
+      ]
+    });*/
+  };
 
   onAddOrganization = () => {
     this.setState({
@@ -123,36 +123,36 @@ onClickDelete = idx => evt =>  {
     console.log('in delete, ', idx);
     this.setState({
       organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
-      variantType:'success',
+      variantType: 'success',
       showText: 'Company deleted with success!',
-      showMessage:true,
+      showMessage: true,
     });
   };
 
   onUpdateCompany = idx => () => {
     let company;
     this.state.organizations.map((organization, sidx) => {
-        
+
       if (idx === sidx)
-      company = organization;
+        company = organization;
 
     })
     this.CompanyService.editCompany(company, (response) => {
       let text;
-      if (response.status === 200){
+      if (response.status === 200) {
         text = 'Changes saved with success!';
-        this.setState({variantType:'success'});
-      } else{
+        this.setState({ variantType: 'success' });
+      } else {
         text = 'Something went wrong...';
-        this.setState({variantType:'danger'});
+        this.setState({ variantType: 'danger' });
       }
-      this.setState({showMessage:true, showText:text}); 
+      this.setState({ showMessage: true, showText: text });
     });
   };
 
   render() {
-    const {organizations, showMessage,showText, variantType} = this.state;
-  
+    const { organizations, showMessage, showText, variantType } = this.state;
+
     return (
       <Container className="settingsContainer">
         <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
@@ -204,13 +204,13 @@ onClickDelete = idx => evt =>  {
                   </Col>
                   <Col >
                     <div className="submitIcons" >
-                    <Button className="save-button blue-button"  onClick={this.onUpdateCompany(idx)}>
-                      <FontAwesomeIcon icon={faCheck} /> Save Changes
+                      <Button className="save-button blue-button" onClick={this.onUpdateCompany(idx)}>
+                        <FontAwesomeIcon icon={faCheck} /> Save Changes
                     </Button>
-                    <Button className="iconDelete blue-button" onClick={this.onClickDelete(idx)}>
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </Button>
-                    
+                      <Button className="iconDelete blue-button" onClick={this.onClickDelete(idx)}>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+
                     </div>
                   </Col>
                 </Form.Row>

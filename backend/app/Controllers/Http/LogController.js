@@ -6,7 +6,12 @@ const Database = use('Database');
 
 class LogController {
   async index() {
-    return Log.all();
+    const logs =  Log.all();
+    console.log("logs "+logs.resolve());
+    /*logs.map((log)=> (
+      console.log(log)
+    ));*/
+    return logs;
   }
 
 
