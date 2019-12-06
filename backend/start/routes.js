@@ -66,6 +66,8 @@ Route.post("/log/store", "LogController.store");
 
 Route.get('/settings', "CompanyController.index");
 Route.put('/settings', "CompanyController.editCompany");
+Route.post('/settings', "CompanyController.addCompany");
+Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get("/entity", "EntityController.index");
 Route.get("/entity/:companyA/:companyB", "EntityController.getCorrespondence");
