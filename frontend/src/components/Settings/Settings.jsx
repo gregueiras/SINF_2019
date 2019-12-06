@@ -53,7 +53,7 @@ onClickDelete = idx => evt =>  {
     buttons: [
       {
         label: 'Yes',
-        onClick: this.onDeleteOrganization(idx),
+        onClick: this.onDeleteCompany(idx),
       },
       {
         label: 'No',
@@ -119,26 +119,55 @@ onClickDelete = idx => evt =>  {
     this.setState({ organizations: newOrganizations });
   };
 
-  onDeleteOrganization = idx => () => {
-    console.log('in delete, ', idx);
-    this.setState({
-      organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
-      variantType:'success',
-      showText: 'Company deleted with success!',
-      showMessage:true,
+  onDeleteCompany = idx => () => {
+    let company;
+
+    this.state.organizations.map((organization, sidx) => {
+      if (idx === sidx)
+      company = organization;
+    })
+   
+    this.CompanyService.deleteCompany(company, (response) => {
+      if (response.status === 200){
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'success',
+          showText: 'Company deleted with success!',
+          showMessage:true,
+        });
+
+      } else{
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'danger',
+          showText: 'Something went wrong...',
+          showMessage:true,
+        });
+      }
     });
+    
   };
 
   onUpdateCompany = idx => () => {
     let company;
     this.state.organizations.map((organization, sidx) => {
-        
       if (idx === sidx)
       company = organization;
-
     })
+    let text;
+    if(company._id === undefined){
+      this.CompanyService.addCompany(company, (response) => {
+        if (response.status === 200){
+          text = 'Changes saved with success!';
+          this.setState({variantType:'success'});
+        } else{
+          text = 'Something went wrong...';
+          this.setState({variantType:'danger'});
+        }
+        this.setState({showMessage:true, showText:text}); 
+      });
+    }else{
     this.CompanyService.editCompany(company, (response) => {
-      let text;
       if (response.status === 200){
         text = 'Changes saved with success!';
         this.setState({variantType:'success'});
@@ -148,6 +177,7 @@ onClickDelete = idx => evt =>  {
       }
       this.setState({showMessage:true, showText:text}); 
     });
+  }
   };
 
   render() {

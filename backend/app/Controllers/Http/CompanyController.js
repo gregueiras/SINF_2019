@@ -1,4 +1,5 @@
 const Company = use("App/Models/Company");
+const Database = use('Database');
 
 class CompanyController {
   async index() {
@@ -24,6 +25,28 @@ class CompanyController {
     const { id } = params;
     
     return Company.find(id);
+  }
+
+  async addCompany({request}) {
+    const body = request.post();
+    const {name,organization, tenant, clientId,clientSecret} = body.data;
+    console.log('data in controller: ', body.data);
+    return await Database.table('companies')
+        .insert({
+          name:name,
+          organization:organization,
+          tenant:tenant,
+          clientId:clientId,
+          clientSecret:clientSecret,
+        });
+  }
+
+  async deleteCompany({ request }) {
+    const body = request.post();
+    const {id} = body;
+
+    const  company = await Company.find(id)
+    return await company.delete(); 
   }
 }
 

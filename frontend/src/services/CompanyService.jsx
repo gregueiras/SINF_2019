@@ -34,4 +34,33 @@ export default class CompanyService {
         callback(error);
       });
   }
+
+  addCompany(data, callback){
+    console.log(data);
+    axios
+      .post(`${this.settingsBasePath}`, { data })
+      .then((response) => {
+        callback(response);
+        console.log(`company ${JSON.stringify(response)}`);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        callback(error);
+      });
+  }
+
+  deleteCompany(data, callback) {
+    console.log(data);
+    axios
+      .delete(`${this.settingsBasePath}`, { data })
+      .then((response) => {
+        callback(response);
+        console.log(`company ${JSON.stringify(response)}`);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        callback(error);
+      });
+  }
+
 }
