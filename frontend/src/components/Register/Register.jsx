@@ -49,7 +49,8 @@ class Register extends Component {
         this.setState({ repeatPassword: newPassword });
 
     }
-    onValidateRegister() {
+    onValidateRegister(event) {
+        event.preventDefault();
         console.log("state " + JSON.stringify(this.state));
         this.UserService.register({
             username: this.state.username, email: this.state.email, password: this.state.password,
@@ -64,6 +65,7 @@ class Register extends Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
+            console.log("redirect " +this.state.redirect);
             return <Redirect to='/' />
         }
     }
@@ -82,7 +84,7 @@ class Register extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Email</Form.Label>
-                        <Form.Control type="email" placeholder="email" onChange={this.onChangeEmail} required />
+                        <Form.Control type="email" placeholder="email" onChange={this.onChangeEmail} required/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Password</Form.Label>
@@ -92,7 +94,7 @@ class Register extends Component {
                         <Form.Label className="gray-label">Confirm Password</Form.Label>
                         <Form.Control type="password" placeholder="password" onChange={this.onChangeRepeatPassword} required />
                     </Form.Group>
-                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateRegister}>
+                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateRegister} type="submit">
                         Register
                     </Button>
                     <Form.Group>

@@ -34,7 +34,8 @@ class Login extends Component {
         this.setState({password: newPassword});
 
     }
-    onValidateLogin(){
+    onValidateLogin(event){
+        event.preventDefault();
        console.log("state "+JSON.stringify(this.state));
         this.UserService.login({username: this.state.username,password: this.state.password}, (response)=> {
            if(response.data.message === "Success")
@@ -56,7 +57,7 @@ class Login extends Component {
             <Container className="login-container">
                 {this.renderRedirect()}
 
-                <Form id="loginForm">
+                <Form id="loginForm" action="#">
                     <h3 className="login-title">Welcome back!</h3>
                     <Form.Group>
                         <Form.Label className="gray-label">Username</Form.Label>
@@ -64,10 +65,10 @@ class Login extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Password</Form.Label>
-                        <Form.Control type="text" placeholder="Password" onChange = {this.onChangePassword} />
+                        <Form.Control type="text" placeholder="Password" onChange = {this.onChangePassword} required/>
                     </Form.Group>
 
-                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateLogin}>
+                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateLogin} type="submit">
                         Login
                     </Button>
                     <Form.Group>
