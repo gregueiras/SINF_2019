@@ -39,8 +39,6 @@ Route.get("/company", "CompanyController.index");
 Route.get("/process", "ProcessController.get");
 Route.post("/process", "ProcessController.store");
 
-Route.get('/company', 'CompanyController.index');
-
 Route.get('/log', 'LogController.index');
 Route.get('/log/byId/:id', 'LogController.getById');
 Route.get('/log/byState/:state', 'LogController.getByState');
