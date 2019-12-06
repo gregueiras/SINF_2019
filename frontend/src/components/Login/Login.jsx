@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import  UserService  from '../../services/UserService';
+import AlertDismissible from '../Alert/Alert';
 import { Redirect } from 'react-router-dom';
 
 import './Login.css';
@@ -14,7 +15,10 @@ class Login extends Component {
             
             username: '',
             password: '',
-            redirect: false
+            redirect: false,
+            showMessage: false,
+            showText: '',
+            variantType:'',
         }
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
@@ -25,8 +29,6 @@ class Login extends Component {
     onChangeUsername(event){
         const newUsername = event.target.value;
         this.setState({username: newUsername});
-
-
     }
 
     onChangePassword(event){
@@ -37,9 +39,13 @@ class Login extends Component {
     onValidateLogin(){
        console.log("state "+JSON.stringify(this.state));
         this.UserService.login({username: this.state.username,password: this.state.password}, (response)=> {
-           if(response.data.message === "Success")
+           if(response.status === 200)
             this.setState({redirect: true});
-            else console.log("failed");
+            else {
+                console.log("failed");
+                const text = 'Login failed, username or password invalid.'
+                this.setState({variantType:'danger', showText:text, showMessage:true});
+            }
         });
     }
 
@@ -52,9 +58,11 @@ class Login extends Component {
       }
     render() {
 
+        const {showMessage,showText,variantType} = this.state;
         return (
             <Container className="login-container">
                 {this.renderRedirect()}
+                <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
 
                 <Form id="loginForm">
                     <h3 className="login-title">Welcome back!</h3>
