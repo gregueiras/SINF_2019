@@ -27,6 +27,7 @@ Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getA
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');
+Route.post('/proc-type', 'ProcTypeController.createProcType');
 
 Route.get("/user", "UserController.index");
 Route.get("/user/:id", "UserController.get");
