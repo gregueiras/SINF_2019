@@ -22,9 +22,33 @@ export default class CompanyService {
 
 
   editCompany(data, callback) {
-    console.log(data);
     axios
       .put(`${this.settingsBasePath}`, { data })
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        callback(error);
+      });
+  }
+
+  addCompany(data, callback){
+    axios
+      .post(`${this.settingsBasePath}`, { data })
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        callback(error);
+      });
+  }
+
+  deleteCompany(data, callback) {
+    console.log(data);
+    axios
+      .delete(`${this.settingsBasePath}`, { data })
       .then((response) => {
         callback(response);
         console.log(`company ${JSON.stringify(response)}`);
@@ -34,4 +58,5 @@ export default class CompanyService {
         callback(error);
       });
   }
+
 }

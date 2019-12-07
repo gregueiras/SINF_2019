@@ -6,6 +6,20 @@ class EntityController {
     return Entity.all();
   }
 
+  async getCorrespondence(request) {
+    const { params } = request;
+    const { companyA, companyB } = params;
+
+    const correspondence = (
+      await Entity.query()
+        .where({ company_a: companyA, company_b: companyB })
+        .fetch()
+    ).toJSON();
+
+    return correspondence[0];
+  }
+
+
   async getAllCorrespondences(request, response) {
     const { params } = request;
     const { companyA, companyB } = params;
@@ -26,7 +40,6 @@ class EntityController {
     if (deletedCorrespondences.length !== 0) {
       deletedCorrespondences.forEach(async element => {
         const { id } = element;
-        console.log(id);
         const entity = await Entity.find(id);
         await entity.delete();
       });

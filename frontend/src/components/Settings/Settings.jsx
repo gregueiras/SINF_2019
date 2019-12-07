@@ -1,13 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import AlertDismissible from '../Alert/Alert';
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
  
+
 
 import './Settings.css';
 import CompanyService from '../../services/CompanyService';
@@ -20,11 +21,21 @@ export class Settings extends Component {
       organizations: [],
       showMessage: false,
       showText: '',
-      variantType:'',
+      variantType: '',
     };
 
-    this.CompanyService = new CompanyService();
+    this.onClickDelete = this.onClickDelete.bind(this);
+    this.onChangeOrganization = this.onChangeOrganization.bind(this);
+    this.onChangeCompanyName = this.onChangeCompanyName.bind(this);
+    this.onUpdateCompany = this.onUpdateCompany.bind(this);
+    this.onChangeClientId = this.onChangeClientId.bind(this);
+    this.onChangeClientSecret = this.onChangeClientSecret.bind(this);
+    this.onChangeTenant = this.onChangeTenant.bind(this);
+    this.onDeleteCompany = this.onDeleteCompany.bind(this);
+    this.onAddOrganization = this.onAddOrganization.bind(this);
+    this.onCheckSuccess = this.onCheckSuccess.bind(this);
 
+    this.CompanyService = new CompanyService();
   }
 
   componentDidMount() {
@@ -40,11 +51,11 @@ export class Settings extends Component {
           clientSecret: data.clientSecret,
         }
 
-    ));
-    const newState = {organizations: companies};
-    this.setState(newState);
-  });
-}
+      ));
+      const newState = { organizations: companies };
+      this.setState(newState);
+    });
+  }
 
 onClickDelete = idx => evt =>  {
   confirmAlert({
@@ -53,7 +64,7 @@ onClickDelete = idx => evt =>  {
     buttons: [
       {
         label: 'Yes',
-        onClick: this.onDeleteOrganization(idx),
+        onClick: this.onDeleteCompany(idx),
       },
       {
         label: 'No',
@@ -63,13 +74,13 @@ onClickDelete = idx => evt =>  {
   });
 };
 
-  onAddOrganization = () => {
+onAddOrganization = () => {
     this.setState({
       organizations: this.state.organizations.concat([{ name: "", organization: "", tenant: "", clientId: "", clientSecret: "" }])
     });
   };
 
-  onChangeOrganizationName = idx => evt => {
+  onChangeCompanyName = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
         return organization;
@@ -86,6 +97,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeTenant = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -94,14 +106,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
-  onChangeTenant = idx => evt => {
-    const newOrganizations = this.state.organizations.map((organization, sidx) => {
-      if (idx !== sidx)
-        return organization;
-      return { ...organization, tenant: evt.target.value };
-    });
-    this.setState({ organizations: newOrganizations });
-  };
+
   onChangeClientId = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -110,6 +115,7 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+
   onChangeClientSecret = idx => evt => {
     const newOrganizations = this.state.organizations.map((organization, sidx) => {
       if (idx !== sidx)
@@ -118,41 +124,70 @@ onClickDelete = idx => evt =>  {
     });
     this.setState({ organizations: newOrganizations });
   };
+  
+  onDeleteCompany = idx => () => {
+    let company;
 
-  onDeleteOrganization = idx => () => {
-    console.log('in delete, ', idx);
-    this.setState({
-      organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
-      variantType:'success',
-      showText: 'Company deleted with success!',
-      showMessage:true,
+    this.state.organizations.map((organization, sidx) => {
+      if (idx === sidx)
+      company = organization;
+    })
+   
+    this.CompanyService.deleteCompany(company, (response) => {
+      if (response.status === 200){
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'success',
+          showText: 'Company deleted with success!',
+          showMessage:true,
+        });
+
+      } else{
+        this.setState({
+          organizations: this.state.organizations.filter((s, sidx) => idx !== sidx),
+          variantType:'danger',
+          showText: 'Something went wrong...',
+          showMessage:true,
+        });
+      }
     });
+    
   };
+
+  onCheckSuccess(response){   
+    let text, variant;
+
+    if (response.status === 200){
+      text = 'Changes saved with success!';
+      variant = 'success';
+    } else{
+      text = 'Something went wrong...';
+      variant = 'danger';
+    }
+    this.setState({showMessage:true, showText:text, variantType:variant});
+  }
 
   onUpdateCompany = idx => () => {
     let company;
     this.state.organizations.map((organization, sidx) => {
-        
       if (idx === sidx)
       company = organization;
-
     })
-    this.CompanyService.editCompany(company, (response) => {
-      let text;
-      if (response.status === 200){
-        text = 'Changes saved with success!';
-        this.setState({variantType:'success'});
-      } else{
-        text = 'Something went wrong...';
-        this.setState({variantType:'danger'});
-      }
-      this.setState({showMessage:true, showText:text}); 
+  
+    if(company.id === undefined){
+      this.CompanyService.addCompany(company, (response) => {
+        this.onCheckSuccess(response);
+     });
+    }else{
+      this.CompanyService.editCompany(company, (response) => { 
+        this.onCheckSuccess(response);
     });
+  }
   };
 
   render() {
-    const {organizations, showMessage,showText, variantType} = this.state;
-  
+    const { organizations, showMessage, showText, variantType } = this.state;
+
     return (
       <Container className="settingsContainer">
         <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
@@ -169,7 +204,7 @@ onClickDelete = idx => evt =>  {
                     <Form.Label className="gray-label">{`Company Name ${idx + 1}`}</Form.Label>
                     <Form.Control type="text"
                       placeholder={`Organization name ${idx + 1}`}
-                      onChange={this.onChangeOrganizationName(idx)}
+                      onChange={this.onChangeCompanyName(idx)}
                       value={organization.name} />
                   </Col>
                 </Form.Row>
@@ -204,13 +239,13 @@ onClickDelete = idx => evt =>  {
                   </Col>
                   <Col >
                     <div className="submitIcons" >
-                    <Button className="save-button blue-button"  onClick={this.onUpdateCompany(idx)}>
-                      <FontAwesomeIcon icon={faCheck} /> Save Changes
+                      <Button className="save-button blue-button" onClick={this.onUpdateCompany(idx)}>
+                        <FontAwesomeIcon icon={faCheck} /> Save Changes
                     </Button>
-                    <Button className="iconDelete blue-button" onClick={this.onClickDelete(idx)}>
-                      <FontAwesomeIcon icon={faTrashAlt} />
-                    </Button>
-                    
+                      <Button className="iconDelete blue-button" onClick={this.onClickDelete(idx)}>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+
                     </div>
                   </Col>
                 </Form.Row>

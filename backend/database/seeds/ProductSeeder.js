@@ -15,6 +15,12 @@ class ProductSeeder {
     idCompanyA: 'PORTES',
     idCompanyB: 'PORTES',
    });
+   await Factory.model("App/Models/Product").create({
+     companyA: 1, // intercompany
+     companyB: 2, //feup
+     idCompanyA: "IHA250526",
+     idCompanyB: "TAP1"
+   });
   
   }
 }

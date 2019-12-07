@@ -13,9 +13,7 @@ const TestController = {
       //companyB: 3, // ritaNorinho
     });
 
-    const company = constants.intercompany;
-
-    const sO = await getPurchasesOrders({ company });
+    const sO = await getPurchasesOrders({ companyID: 1 });
     return sO.data;
   },
 

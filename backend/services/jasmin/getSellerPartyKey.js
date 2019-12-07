@@ -1,10 +1,10 @@
-import makeRequest, { endPoints, constants } from "./constants";
+import makeRequest, { endPoints } from './constants';
 
-export const getSellerPartyKey = async ({ company, name }) => {
+export const getSellerPartyKey = async ({ companyID, name }) => {
   const res = await makeRequest({
-    method: "GET",
+    method: 'GET',
     endPoint: endPoints.sellerParties,
-    company
+    companyID,
   });
 
   try {
@@ -15,22 +15,21 @@ export const getSellerPartyKey = async ({ company, name }) => {
   }
 };
 
-export const isSellerParty = async ({ company, key }) => {
+export const isSellerParty = async ({ companyID, key }) => {
   const res = await makeRequest({
-    method: "GET",
+    method: 'GET',
     endPoint: `${endPoints.sellerParties}/${key}`,
-    company
+    companyID,
   });
 
   return res.status === 200;
 };
 
-
-export const getSellerParties = async ( {company} ) => {
+export const getSellerParties = async ({ companyID }) => {
   const res = await makeRequest({
-    method: "GET",
+    method: 'GET',
     endPoint: endPoints.sellerParties,
-    company
+    companyID,
   });
   return res;
 };

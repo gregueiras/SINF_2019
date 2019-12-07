@@ -1,15 +1,14 @@
-import makeRequest, { endPoints, constants } from './constants';
+import makeRequest, { endPoints } from './constants';
 
-const createSeries = ({ company, serieKey, description }) =>
-  makeRequest({
-    method: "POST",
-    endPoint: endPoints.series,
-    company,
-    data: {
-      serieKey,
-      description,
-      excludeAssociationOnCreateCompany: true
-    }
-  });
+const createSeries = ({ companyID, serieKey, description }) => makeRequest({
+  method: 'POST',
+  endPoint: endPoints.series,
+  companyID,
+  data: {
+    serieKey,
+    description,
+    excludeAssociationOnCreateCompany: true,
+  },
+});
 
 export default createSeries;

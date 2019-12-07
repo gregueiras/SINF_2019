@@ -47,6 +47,8 @@ Route.get(
 
 Route.get("/company", "CompanyController.index");
 Route.get("/company/:id", "CompanyController.get");
+Route.get("/company/:id/token", "CompanyController.getToken");
+Route.post("/company/token", "CompanyController.setToken");
 
 Route.get("/process", "ProcessController.get");
 Route.post("/process", "ProcessController.store");
@@ -64,9 +66,11 @@ Route.post("/log/store", "LogController.store");
 
 Route.get('/settings', "CompanyController.index");
 Route.put('/settings', "CompanyController.editCompany");
-
+Route.post('/settings', "CompanyController.addCompany");
+Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get("/entity", "EntityController.index");
+Route.get("/entity/:companyA/:companyB", "EntityController.getAllCorrespondences");
 Route.put("/entity", "EntityController.updateCorrespondence");
 Route.get(
   "/entity/:companyA/:companyB",

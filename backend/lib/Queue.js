@@ -17,6 +17,8 @@ export default {
   queues,
   add(name, data) {
     const queue = this.queues.find(q => q.name === name);
+    
+    const n = Math.round(Math.random() * 1000);
     return queue.bull.add(data, queue.options);
   },
   process() {

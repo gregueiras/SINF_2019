@@ -14,17 +14,23 @@ class UserController {
   }
   async register({ request, auth, response }) {
     let body = request.post();
-    let {username, email, password} = body.data;
-    console.log(username);
-
+    let {username, email, password,repeatPassword} = body.data;
+    console.log("repeat password "+password +" "+repeatPassword);
+    if (password !== repeatPassword) return response.json({message:'Passwords must be equal!'});
+    else {
+    try {
     let user = await User.create({username,email,password});
 
     //generate token for user;
     let token = await auth.generate(user)
-
     Object.assign(user, token)
-
     return response.json({message:'Success'})
+    } catch(e){
+      console.log(e)
+      return response.json({ message: 'Failed' })
+
+    }
+  }
   }
 
   async login({ request, auth, response }) {
@@ -48,7 +54,6 @@ class UserController {
       return response.json({ message: 'You are not registered!' })
     }
   }
-
 }
 
 module.exports = UserController

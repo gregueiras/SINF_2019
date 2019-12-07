@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 import UserService from '../../services/UserService';
+import AlertDismissible from '../Alert/Alert';
 import { Redirect } from 'react-router-dom';
 
 import '../Login/Login.css';
@@ -15,7 +16,10 @@ class Register extends Component {
             email: '',
             password: '',
             repeatPassword: '',
-            redirect: false
+            redirect: false,
+            showMessage: false,
+            showText: '',
+            variantType:'',
         }
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -49,30 +53,38 @@ class Register extends Component {
         this.setState({ repeatPassword: newPassword });
 
     }
-    onValidateRegister() {
+    onValidateRegister(event) {
+        event.preventDefault();
         console.log("state " + JSON.stringify(this.state));
         this.UserService.register({
             username: this.state.username, email: this.state.email, password: this.state.password,
             repeatPassword: this.state.repeatPassword
         }, (response) => {
             console.log(response);
-            if (response.data.message === "Success")
+            if (response.status === 200)
                 this.setState({ redirect: true });
-            else console.log("failed");
+            else {
+                console.log("failed");
+                const text = 'Register failed, username or password invalid.'
+                this.setState({variantType:'danger', showText:text, showMessage:true});
+            }
         });
     }
 
     renderRedirect = () => {
         if (this.state.redirect) {
+            console.log("redirect " +this.state.redirect);
             return <Redirect to='/' />
         }
     }
 
     render() {
+        const {showMessage,showText,variantType} = this.state;
 
         return (
             <Container className="register-container">
                 {this.renderRedirect()}
+                <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
 
                 <Form id="register-form">
                     <h3 className="register-title">Create Account </h3>
@@ -82,7 +94,7 @@ class Register extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Email</Form.Label>
-                        <Form.Control type="email" placeholder="email" onChange={this.onChangeEmail} required />
+                        <Form.Control type="email" placeholder="email" onChange={this.onChangeEmail} required/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label className="gray-label">Password</Form.Label>
@@ -92,7 +104,7 @@ class Register extends Component {
                         <Form.Label className="gray-label">Confirm Password</Form.Label>
                         <Form.Control type="password" placeholder="password" onChange={this.onChangeRepeatPassword} required />
                     </Form.Group>
-                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateRegister}>
+                    <Button className="blue-button login-button" variant="primary" onClick={this.onValidateRegister} type="submit">
                         Register
                     </Button>
                     <Form.Group>

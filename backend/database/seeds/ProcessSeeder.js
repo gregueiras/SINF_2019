@@ -3,7 +3,7 @@ const Database = use('Database')
 
 class ProcessSeeder {
   async run() {
-    await Factory.model('App/Models/Process').create(
+    const p1 = await Factory.model('App/Models/Process').create(
       {
         companyA: 1, // intercompany
         companyB: 3, //ritaNorinho
@@ -11,13 +11,20 @@ class ProcessSeeder {
         proc_type: 2
        
       });
-    await Factory.model('App/Models/Process').create({
+    const p2 = await Factory.model('App/Models/Process').create({
       companyA: 1, // intercompany
       companyB: 2, //feup
       user: 2,
       proc_type: 1
      
     });
+
+    const logs1 = await Factory.model("App/Models/Log").makeMany(5);
+    const logs2 = await Factory.model("App/Models/Log").makeMany(5);
+
+   // p1.logs().save(logs1);
+   // p2.logs().save(logs2);
+
   }
 }
 

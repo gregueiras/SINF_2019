@@ -1,17 +1,16 @@
-import makeRequest, { endPoints } from "./constants";
+import makeRequest, { endPoints } from './constants';
 
-const getCompanyName = async ({ company }) => {
-
+const getCompanyName = async ({ companyID }) => {
   const res = await makeRequest({
-    method: "GET",
+    method: 'GET',
     endPoint: endPoints.companies,
-    company,
+    companyID,
   });
 
   const comp = res.data.find(
-    ({ isActive, isSystem, isDeleted }) => isActive && !isSystem && !isDeleted
+    ({ isActive, isSystem, isDeleted }) => isActive && !isSystem && !isDeleted,
   );
   return comp.name;
-}
+};
 
 export default getCompanyName;
