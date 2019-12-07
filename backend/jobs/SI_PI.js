@@ -4,7 +4,7 @@ import {
 } from '../services/jasmin';
 import {
   isProcessed,
-  getCorrespondence,
+  getCorrespondenceB,
   getCustomerParty,
   getSellerParty,
 } from '../services/db';
@@ -36,8 +36,6 @@ export default {
       });
 
 
-      console.log(customerParty)
-
     const userID = 1;
 
     const info = {
@@ -56,8 +54,6 @@ export default {
       console.error(e.response.data);
     }
 
-    // company A = 2
-    console.log(salesInvoicesData)
 
     const salesInvoices = salesInvoicesData.filter(
       (si) => 
@@ -74,24 +70,21 @@ export default {
         options,
       });
     }
-    console.log(salesInvoices)
     let areNewDocuments = false;
     for (const salesInvoice of salesInvoices) {
       const replicated = await isProcessed({
         userID,
         fileID: salesInvoice.id,
       });
-      console.log("replicated " + replicated)
       if (!replicated) {
         console.log('NEW SI');
         areNewDocuments = true;
         try {
-          // GET SELLER CUSTOM PARTY
           const company = await getCompanyName({ companyID: companyB });
 
           const documentLines = [];
           let abort = false;
-          for (const line of saleInvoice.documentLines) {
+          for (const line of salesInvoice.documentLines) {
             const {
               quantity,
               unitPrice,
@@ -100,11 +93,10 @@ export default {
               lineExtensionAmount,
               salesItem,
             } = line;
-
-            const purchasesItem = await getCorrespondence({
+            const purchasesItem = await getCorrespondenceB({
               companyA,
               companyB,
-              product: salesItem,
+              product: salesItem, //TAP1
             });
 
             if (purchasesItem === undefined) {
@@ -122,6 +114,7 @@ export default {
               });
             }
           }
+          console.log(abort);
           if (!abort) {
             /*console.dir({
               company,
@@ -130,17 +123,15 @@ export default {
               documentLines,
             });*/
 
-            console.log('here');
-
-            /*Queue.add('create_PI', {
-              saleInvoice,
-              company,
-              buyerCustomerParty: customerParty,
-              sellerCompany: company,
+            Queue.add('create_PI', {
+              documentType: "VFA",
+              salesInvoice,
+              company, //FEUP-GX
               documentLines,
+              sellerSupplierParty: sellerParty,
               userID,
-              companyID: companyB
-            });*/
+              companyID: companyA,
+            });
           }
         } catch (e) {
           if (e.response) {
@@ -164,7 +155,7 @@ export default {
       }
     }
     if (!areNewDocuments) {
-      console.log('NO NEW RES AQUI');
+      console.log('NO NEW RES');
       done(null, {
         result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
         ...info,

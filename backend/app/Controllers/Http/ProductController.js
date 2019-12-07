@@ -22,6 +22,22 @@ class ProductController {
     return correspondence[0];
   }
 
+  async getCorrespondenceB(request) {
+    const { params } = request;
+    const { companyA, companyB, idCompanyB } = params;
+    const correspondence = (
+      await Product.query()
+        .where({
+          company_a: companyA,
+          company_b: companyB,
+          id_company_b: idCompanyB
+        })
+        .fetch()
+    ).toJSON();
+
+    return correspondence[0];
+  }
+
   async getAllCorrespondences(request, response) {
     const { params } = request;
     const { companyA, companyB } = params;

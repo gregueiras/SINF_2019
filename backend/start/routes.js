@@ -45,6 +45,11 @@ Route.get(
   "/product/:companyA/:companyB/:idCompanyA",
   "ProductController.getCorrespondence"
 );
+Route.get(
+  "/product/B/:companyA/:companyB/:idCompanyB",
+  "ProductController.getCorrespondenceB"
+);
+
 
 Route.get("/company", "CompanyController.index");
 Route.get("/company/:id", "CompanyController.get");

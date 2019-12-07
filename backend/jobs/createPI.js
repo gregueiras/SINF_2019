@@ -1,6 +1,7 @@
 import { createMinSalesOrder } from "../services/jasmin";
 import { addProcessed } from "../services/db";
 import { RETURN_TYPES } from "./index";
+import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
 
 const options = {};
 
@@ -13,20 +14,23 @@ export default {
   documentLines, */
     try {
       const {
-        company,
-        buyerCustomerParty,
-        documentLines,
-        salesOrder,
-        userID,
         companyID,
+        documentType,
+        company,
+        sellerSupplierParty,
+        documentLines,
+        salesInvoice,
+        userID,
       } = data;
 
-      const fileID = salesOrder.id;
+      const fileID = salesInvoice.id;
       
-      const res = await createMinSalesOrder({
-        buyerCustomerParty,
+      const res = await createMinPurchaseInvoice({
+        companyID,
+        documentType,
+        company: company + "-GX",
+        sellerSupplierParty,
         documentLines,
-        companyID
       });
 
       const { status } = res;

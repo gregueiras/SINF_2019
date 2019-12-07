@@ -23,7 +23,7 @@
         
         const res = await createMinSalesOrder({
           ...purchaseOrder,
-          company,
+          company: company,
           buyerCustomerParty,
           sellerCompany,
           documentLines,
