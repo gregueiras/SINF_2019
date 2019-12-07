@@ -1,5 +1,5 @@
 import Test from './Test';
-import PO_SO from './SI_PI';
+import PO_SO from './PO_SO';
 import createSO from './createSO';
 
 export const RETURN_TYPES = {
@@ -9,4 +9,4 @@ export const RETURN_TYPES = {
   END_NO_NEW_DOCUMENTS: 'END_NO_NEW_DOCUMENTS',
 };
 
-export default { Test, PO_SO };
+export default { Test, PO_SO, createSO };
