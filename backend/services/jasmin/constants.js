@@ -33,7 +33,9 @@ export const endPoints = {
   items: "businesscore/items",
   sellerParties: "salesCore/customerParties",
   purchaserParties: "purchasesCore/supplierParties",
-  companies: "corepatterns/companies"
+  companies: "corepatterns/companies",
+  invoiceReceipt: "invoiceReceipt/invoices",
+  billingInvoices: "billing/invoices"
 };
 
 const makeUrl = (endPoint, query, company) => {

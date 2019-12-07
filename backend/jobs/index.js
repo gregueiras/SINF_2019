@@ -1,6 +1,8 @@
 import Test from './Test';
 import PO_SO from './PO_SO';
+import SI_PI from './SI_PI';
 import createSO from './createSO';
+import createPI from './createPI';
 
 export const RETURN_TYPES = {
   END_SUCCESS: 'END_SUCCESS',
@@ -9,4 +11,4 @@ export const RETURN_TYPES = {
   END_NO_NEW_DOCUMENTS: 'END_NO_NEW_DOCUMENTS',
 };
 
-export default { Test, PO_SO, createSO };
+export default { Test, PO_SO, createSO, SI_PI, createPI };
