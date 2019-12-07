@@ -38,6 +38,9 @@ function ViewProcess() {
   const [stepNr, setStepNr] = useState(1);
   const [companyAOptions, setCompanyAOptions] = useState([]);
   const [companyBOptions, setCompanyBOptions] = useState([]);
+  const [actionCompanyOptions, setActionCompanyOptions] = useState([]);
+  const [triggerCompanyOptions, setTriggerCompanyOptions] = useState([]);
+
 
   useEffect(() => {
     async function getCompanyOptions() {
@@ -52,45 +55,61 @@ function ViewProcess() {
 
       //console.dir(options)
       setCompanyAOptions(options);
-      setCompanyBOptions(options)
+      setCompanyBOptions(options);
+      setTriggerCompanyOptions(options);
+      setActionCompanyOptions(options);
     }
 
     getCompanyOptions()
 
-  }, [setCompanyAOptions, setCompanyBOptions])
+  }, [setCompanyAOptions, setCompanyBOptions, setTriggerCompanyOptions, setActionCompanyOptions])
 
 
-    
-    
-  
 
 
-const [triggerOptions] = useState([
-  { value: '1', name: 'trigger1' },
-  { value: '2', name: 'trigger2' },
-  { value: '3', name: '-' },
-]);
 
-const [triggerCompanyOptions, setTriggerCompanyOptions] = useState([
-  { value: '0', name: '-' },
-  { value: '2', name: 'intercompany' },
-  { value: '1', name: 'ritaNorinho' },
-  { value: '3', name: 'option3' },
-  { value: '4', name: 'option4' },
-]);
 
-const [actionOptions] = useState([
-  { value: '1', name: 'action1' },
-  { value: '2', name: 'action2' },
-]);
 
-const [actionCompanyOptions, setActionCompanyOptions] = useState([
-  { value: '0', name: '-' },
-  { value: '2', name: 'intercompany' },
-  { value: '1', name: 'ritaNorinho' },
-  { value: '3', name: 'option3' },
-  { value: '4', name: 'option4' },
-]);
+  const [triggerOptions, setTriggerOptions] = useState([]);
+
+  useEffect(() => {
+    async function getTriggers() {
+      let i = 0;
+      let response = await axios.get(`http://0.0.0.0:3335/trigger`);
+      const { data } = response;
+
+      const options = data.map(({ description }) => {
+        i++;
+        return { value: i, name: description }
+      })
+
+      setTriggerOptions(options)
+    }
+
+    getTriggers()
+  }, [setTriggerOptions])
+
+
+
+  const [actionOptions, setActionOptions] = useState([]);
+
+  useEffect(() => {
+    async function getActions() {
+      let i = 0;
+      let response = await axios.get(`http://0.0.0.0:3335/action`);
+      const { data } = response;
+
+      const options = data.map(({ description }) => {
+        i++;
+        return { value: i, name: description }
+      })
+
+      setActionOptions(options)
+    }
+
+    getActions()
+}, [setActionOptions])
+
 
 const [trigger, setTrigger] = useState('1');
 const [triggerCompany, setTriggerCompany] = useState('1');

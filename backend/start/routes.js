@@ -69,6 +69,10 @@ Route.put('/settings', "CompanyController.editCompany");
 Route.post('/settings', "CompanyController.addCompany");
 Route.delete('/settings', "CompanyController.deleteCompany");
 
+Route.get('/trigger', 'TriggerController.index');
+
+Route.get('/action', 'ActionController.index');
+
 Route.get("/entity", "EntityController.index");
 Route.get("/entity/:companyA/:companyB", "EntityController.getAllCorrespondences");
 Route.put("/entity", "EntityController.updateCorrespondence");

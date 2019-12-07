@@ -50,6 +50,19 @@ Factory.blueprint('App/Models/User', (faker) => {
     }
   })
 
+
+  Factory.blueprint('App/Models/Trigger', (faker, i, data) =>{
+    return {
+      description: faker.animal()
+    }
+  })
+
+  Factory.blueprint('App/Models/Action', (faker, i, data) =>{
+    return{
+      description: faker.animal()
+    }
+  })
+
   Factory.blueprint('App/Models/Log', (faker, i , data) =>{
     let enu = ['Completed','Pending','In Progress','Failed'];
     let type = enu[Math.floor(Math.random()*4)];
