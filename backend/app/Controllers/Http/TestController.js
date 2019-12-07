@@ -26,7 +26,7 @@ const TestController = {
 
   async getSalesInvoicesTest(){
 
-    await Queue.add("SI_PI", {
+   await Queue.add("SI_PI", {
       companyA: 1, // intercompany
       companyB: 2, // feup
       //companyB: 3, // ritaNorinho

@@ -28,7 +28,7 @@ export default {
       const res = await createMinPurchaseInvoice({
         companyID,
         documentType,
-        company: company + "-GX",
+        company: company,
         sellerSupplierParty,
         documentLines,
       });

@@ -1,6 +1,6 @@
 import { RETURN_TYPES } from './index';
 import {
-  getCompanyName,
+  getCompanyKey,
 } from '../services/jasmin';
 import {
   isProcessed,
@@ -80,7 +80,7 @@ export default {
         console.log('NEW SI');
         areNewDocuments = true;
         try {
-          const company = await getCompanyName({ companyID: companyB });
+          const company = await getCompanyKey({ companyID: companyA });
 
           const documentLines = [];
           let abort = false;
