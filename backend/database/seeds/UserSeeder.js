@@ -1,5 +1,4 @@
 const Factory = use('Factory')
-const Database = use('Database')
 
 class UserSeeder {
   async run () {
