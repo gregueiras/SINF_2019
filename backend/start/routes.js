@@ -19,6 +19,7 @@ Route.post('/login','UserController.login');
 Route.post('/register','UserController.register');
 Route.get('/test', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
+Route.get("/test/salesInvoices", "TestController.getSalesInvoicesTest");
 
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
@@ -70,7 +71,8 @@ Route.post('/settings', "CompanyController.addCompany");
 Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get("/entity", "EntityController.index");
-Route.get("/entity/:companyA/:companyB", "EntityController.getAllCorrespondences");
+Route.get("/entity/:companyA/:companyB/all", "EntityController.getAllCorrespondences");
+Route.get("/entity/:companyA/:companyB", "EntityController.getCorrespondence");
 Route.put("/entity", "EntityController.updateCorrespondence");
 Route.get(
   "/entity/:companyA/:companyB",

@@ -4,7 +4,6 @@ export default class EntityService {
   constructor() {
     this.masterDataBasePath = 'http://localhost:3335/master-data';
     this.entityBasePath = 'http://localhost:3335/entity';
-
   }
 
 
@@ -32,7 +31,7 @@ export default class EntityService {
 
   getCorrespondence(companyA, companyB, callback) {
     axios
-      .get(`${this.entityBasePath}/${companyA}/${companyB}`)
+      .get(`${this.entityBasePath}/${companyA}/${companyB}/all`)
       .then((response) => {
         callback(response);
       })
@@ -54,5 +53,5 @@ export default class EntityService {
         console.log(error.response);
         callback(error);
       });
-  } 
+  }
 }
