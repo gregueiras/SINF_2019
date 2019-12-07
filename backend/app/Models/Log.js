@@ -7,6 +7,11 @@ const Hash = use('Hash');
 
 class Log extends Model {
 
+
+
+    process() {
+        return this.belongsTo('App/Models/Process');
+      }
     
 
 }

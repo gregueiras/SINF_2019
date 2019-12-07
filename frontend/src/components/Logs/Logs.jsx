@@ -11,40 +11,17 @@ class Logs extends Component {
  constructor(props) {
   super(props);
   this.state = { data: [
-    {
-      process: 'Purchase Rugs - PP781763',
-      state: 'Completed',
-      description: 'Receive Receipt',
-      timestamp: '12/02/2019 19:01',
-    },
-    {
-      process: 'Purchase Rugs - PP781763',
-      state: 'Failed',
-      description: 'Receive Receipt',
-      timestamp: '12/02/2019 19:01',
-    },
-    {
-      process: 'Purchase Rugs - PP781763',
-      state: 'Pending',
-      description: 'Receive Receipt',
-      timestamp: '12/02/2019 19:01',
-    },
-    {
-      process: 'Purchase Rugs - PP781763',
-      state: 'In progress',
-      description: 'Receive Receipt',
-      timestamp: '12/02/2019 19:01',
-    },
   ]};
   this.LogService = new LogService();
  }
 
  componentDidMount() {
   this.LogService.getLogs((response) => {
-    /*const reverse = response.data.slice().reverse();
+    console.log(response);
+    const reverse = response.data.slice().reverse();
     const logs = reverse.map((data) => (
       {
-        process: data.process,
+        process: data.descriptionProcess,
         state: data.state,
         description: data.description,
         timestamp: data.date,
@@ -52,7 +29,7 @@ class Logs extends Component {
 
     ));
     const newState = { data: logs };
-    this.setState(newState);*/
+    this.setState(newState);
   });
 }
  render(){
