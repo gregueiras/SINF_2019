@@ -50,10 +50,9 @@ function ViewProcess() {
 
       const options = data.map(({ name }) => {
         i++;
-        return { value: i, name }
+        return { value: i+'', name }
       })
 
-      //console.dir(options)
       setCompanyAOptions(options);
       setCompanyBOptions(options);
       setTriggerCompanyOptions(options);
@@ -80,7 +79,7 @@ function ViewProcess() {
 
       const options = data.map(({ description }) => {
         i++;
-        return { value: i, name: description }
+        return { value: i+'', name: description }
       })
 
       setTriggerOptions(options)
@@ -101,7 +100,7 @@ function ViewProcess() {
 
       const options = data.map(({ description }) => {
         i++;
-        return { value: i, name: description }
+        return { value: i+'', name: description }
       })
 
       setActionOptions(options)
@@ -111,12 +110,12 @@ function ViewProcess() {
 }, [setActionOptions])
 
 
-const [trigger, setTrigger] = useState('1');
-const [triggerCompany, setTriggerCompany] = useState('1');
-const [action, setAction] = useState('1');
-const [actionCompany, setActionCompany] = useState('2');
-const [companyA, setCompanyA] = useState('1');
-const [companyB, setCompanyB] = useState('2');
+const [trigger, setTrigger] = useState("1");
+const [triggerCompany, setTriggerCompany] = useState("1");
+const [action, setAction] = useState("1");
+const [actionCompany, setActionCompany] = useState("2");
+const [companyA, setCompanyA] = useState("1");
+const [companyB, setCompanyB] = useState("2");
 
 const [processName, setProcessName] = useState('');
 const [validProcName, setValidProcName] = useState(true);
