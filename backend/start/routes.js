@@ -70,7 +70,7 @@ Route.post('/settings', "CompanyController.addCompany");
 Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get("/entity", "EntityController.index");
-Route.get("/entity/:companyA/:companyB", "EntityController.getCorrespondence");
+Route.get("/entity/:companyA/:companyB", "EntityController.getAllCorrespondences");
 Route.put("/entity", "EntityController.updateCorrespondence");
 Route.get(
   "/entity/:companyA/:companyB",
