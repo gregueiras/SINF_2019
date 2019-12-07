@@ -26,7 +26,6 @@ export default class CompanyService {
       .put(`${this.settingsBasePath}`, { data })
       .then((response) => {
         callback(response);
-        console.log(`company ${JSON.stringify(response)}`);
       })
       .catch((error) => {
         console.log(error.response);
@@ -35,12 +34,10 @@ export default class CompanyService {
   }
 
   addCompany(data, callback){
-    console.log(data);
     axios
       .post(`${this.settingsBasePath}`, { data })
       .then((response) => {
         callback(response);
-        console.log(`company ${JSON.stringify(response)}`);
       })
       .catch((error) => {
         console.log(error.response);

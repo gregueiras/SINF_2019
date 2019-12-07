@@ -4,7 +4,7 @@ const Database = use("Database");
 class CompanySeeder {
   async run() {
     await Factory.model("App/Models/Company").create({
-      name: "intercompany",
+      name: 'intercompany',
       tenant: "224900",
       organization: "224900-0001",
       clientId: "FEUP-SINF",
@@ -24,10 +24,6 @@ class CompanySeeder {
       clientId: "FEUP-SINF",
       clientSecret: "92f0a4da-64ee-4449-99e4-f93df1038980"
     });
-
-    await Factory.model("App/Models/Company").create({
-      
-    })
   }
 }
 module.exports = CompanySeeder;
