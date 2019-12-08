@@ -1,4 +1,3 @@
-import { createMinSalesOrder } from "../services/jasmin";
 import { addProcessed } from "../services/db";
 import { RETURN_TYPES } from "./index";
 import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
@@ -9,9 +8,7 @@ export default {
   key: "create_PI",
   options,
   async handle({ data }, done) {
-      /**  companyID,
-  buyerCustomerParty,
-  documentLines, */
+
     try {
       const {
         companyID,

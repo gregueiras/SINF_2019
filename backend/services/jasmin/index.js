@@ -8,3 +8,4 @@ export { default as createSeries } from './createSeries';
 export { default as createMinSalesOrder } from './createMinSalesOrdes';
 export { default as createSellerParty } from './createSellerParty';
 export { default as createSalesOrder } from './createSalesOrder';
+export { default as getPurchasesInvoices } from './getPurchasesInvoices';

@@ -1,9 +1,8 @@
 import Queue from "../../../lib/Queue";
 import {
-  getPurchasesOrders
+  getPurchasesOrders,
+  getPurchasesInvoices
 } from "../../../services/jasmin";
-import { constants } from "../../../services/jasmin/constants";
-import getSalesInvoices from "../../../services/jasmin/getSalesInvoices";
 
 const TestController = {
   // eslint-disable-next-line no-unused-vars
@@ -27,14 +26,27 @@ const TestController = {
   async getSalesInvoicesTest(){
 
    await Queue.add("SI_PI", {
-      companyA: 1, // intercompany
-      companyB: 2, // feup
+      companyA: 1, // intercompany -> companyA: customer
+      companyB: 2, // feup -> companyB: supplier
       //companyB: 3, // ritaNorinho
     });
 
     const si = await getSalesInvoices({companyID: 2});
     return si.data;
-  }
+  },
+
+  async getPurchasesInvoicesTest(){
+
+    await Queue.add("PP_SR", {
+      companyA: 1, // intercompany -> companyA: customer
+      companyB: 2, // feup -> companyB: supplier
+      //companyB: 3, // ritaNorinho
+    });
+
+     const si = await getPurchasesInvoices({companyID: 1});
+     return si.data;
+   }
+
 };
 
 module.exports = TestController;
