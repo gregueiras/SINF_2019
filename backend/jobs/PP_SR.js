@@ -37,7 +37,7 @@ export default {
       companyB
     });
 
-    const company = await getCompanyKey({ companyID: companyA }); //FEUP-GX
+    const company = await getCompanyKey({ companyID: companyA }); 
 
     console.log(sellerParty);
 
@@ -76,7 +76,7 @@ export default {
 
     const purchasesInvoices = purchasesInvoicesData.filter(
       pi =>
-        pi.isActive && !pi.isDeleted && pi.sellerSupplierParty == sellerParty //0007
+        pi.isActive && !pi.isDeleted && pi.sellerSupplierParty == sellerParty
     );
 
     if (!purchasesInvoices) {
@@ -138,12 +138,6 @@ export default {
             console.log(abort);
             if (!abort) {
               console.log("no abort");
-              /*console.dir({
-                  company,
-                  buyerCustomerParty: customerParty,
-                  deliveryTerm: purchaseOrder.deliveryTerm,
-                  documentLines,
-                });*/
 
               /*Queue.add('create_PI', {
                   documentType: "VFA",
