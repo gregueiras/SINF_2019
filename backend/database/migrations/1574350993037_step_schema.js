@@ -8,10 +8,10 @@ class StepSchema extends Schema {
     this.create('steps', (table) => {
       table.increments()
       table.bigInteger('action_id').notNullable()
-      table.foreign('action_id').references('id').inTable('actions')
+      table.foreign('action_id').references('id').inTable('actions').onDelete('CASCADE')
       table.integer('step_no').notNullable()
       table.bigInteger('trigger_id').notNullable()
-      table.foreign('trigger_id').references('id').inTable('triggers')
+      table.foreign('trigger_id').references('id').inTable('triggers').onDelete('CASCADE')
 
       table.timestamps()
     })
