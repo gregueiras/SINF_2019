@@ -1,8 +1,10 @@
-import Queue from "../../../lib/Queue";
 import {
   getPurchasesOrders,
   getPurchasesInvoices
 } from "../../../services/jasmin";
+import getSalesInvoices from "../../../services/jasmin/getSalesInvoices";
+
+import Queue from "../../../lib/Queue";
 
 const TestController = {
   // eslint-disable-next-line no-unused-vars

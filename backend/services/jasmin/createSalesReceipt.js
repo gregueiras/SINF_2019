@@ -25,23 +25,23 @@ const createSalesReceipt = ({
   endPoint: endPoints.receipts,
   data: {
     documentType,
-    serie,
-    seriesNumber,
+    serie, ////INNVOICE
+    seriesNumber, ////INNVOICE
     accountingParty,
     company,
     documentDate,
     postingDate,
-    currency,
-    exchangeRate,
+    currency, //INNVOICE
+    exchangeRate, //invoice
     checkEndorsed,
     isPaymentMethodCheck,
-    allowanceChargeAmount,
-    grossValue,
-    payableAmount,
-    wTaxTotal,
-    taxTotal,
-    taxExclusiveAmount,
-    receiptLines,
+    allowanceChargeAmount, //INNVOICE
+    grossValue, //INNVOICE
+    payableAmount, //INNVOICE
+    wTaxTotal, //INNVOICE
+    taxTotal,  //INVOICE
+    taxExclusiveAmount, //invoice
+    receiptLines, //INVOICE
   },
   companyID,
 });
