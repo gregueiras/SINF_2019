@@ -12,12 +12,17 @@ class CompanySchema extends Schema {
       table.string('organization', 80).notNullable();
       table.string('clientId',80).notNullable();
       table.string('clientSecret',80).notNullable();
+      table.string('token', 1500);
+      table.bigInteger('expires');
       table.timestamps()
     })
   }
 
   down () {
-    this.drop('companies')
+    this.table('companies', (table) => {
+      table.dropColumn('token')
+      table.dropColumn('expires')
+    })
   }
 }
 

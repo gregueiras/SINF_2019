@@ -1,36 +1,51 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   Container, Form, Row, Col,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import CompanyService from '../../services/CompanyService';
+import ProcessTypeService from '../../services/ProcessTypeService';
 
 import './NewProcess.css';
 
 
-function NewProcess() {
-  const [companyAoptions] = useState([
-    { value: '1', name: 'MetroCarpetDistributor' },
-    { value: '2', name: 'MetroCarpetFactory' },
-    { value: '3', name: 'option3' },
-    { value: '4', name: 'option4' },
-  ]);
-  const [companyBoptions] = useState([
-    { value: '1', name: 'MetroCarpetFactory' },
-    { value: '2', name: 'MetroCarpetDistributor' },
-    { value: '3', name: 'option3' },
-    { value: '4', name: 'option4' },
-  ]);
-  const [processType] = useState([
-    { value: '1', name: 'Purchase' },
-    { value: '2', name: 'process2' },
-    { value: '3', name: 'process3' },
-    { value: '4', name: 'process4' },
-  ]);
+class  NewProcess extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      companyAoptions: [],
+      companyBoptions: [],
+      processType: [],
+    };
+    this.CompanyService = new CompanyService();
+    this.ProcessTypeService = new ProcessTypeService();
+  }
 
+  componentDidMount(){
+
+    this.CompanyService.getCompanies((response) => {
+      const reverse = response.data.slice().reverse();
+      this.setState({
+        companyAoptions: response.data,
+        companyBoptions: reverse
+
+      })
+    });
+    this.ProcessTypeService.getProcessTypes((response)=> {
+      const reverse = response.data.slice().reverse();
+      console.log("process type "+ JSON.stringify(reverse));
+    
+      this.setState({
+        processType: response.data
+    })
+    });
+  }
+
+render(){
   return (
     <Container>
       <Row>
@@ -43,9 +58,9 @@ function NewProcess() {
               className="selector process-selector pos-lt rel-text-white w-20"
               name="companyA"
             >
-              {processType.map((e, key) => (
+              {this.state.processType.map((e, key) => (
                 <option key={key} value={e.value}>
-                  {e.name}
+                  {e.type}
                 </option>
               ))}
             </select>
@@ -66,7 +81,7 @@ function NewProcess() {
               className="selector company-selector pos-lt rel-text-white"
               name="companyA"
             >
-              {companyAoptions.map((e, key) => (
+              {this.state.companyAoptions.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.name}
                 </option>
@@ -83,7 +98,7 @@ function NewProcess() {
               className="selector company-selector pos-rt rel-text-white"
               name="companyB"
             >
-              {companyBoptions.map((e, key) => (
+              {this.state.companyBoptions.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.name}
                 </option>
@@ -105,6 +120,7 @@ function NewProcess() {
       </div>
     </Container>
   );
+}
 }
 
 export default NewProcess;
