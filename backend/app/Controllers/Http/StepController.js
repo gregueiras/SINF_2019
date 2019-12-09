@@ -11,16 +11,9 @@ class StepController {
 
     async createStep({request}, response) {
 
-        console.log("shit1");
 
         const body = request.post();
-        const { action, flow, step, trigger} = body; 
-
-        let trigger_id, action_id;
-
-        ({id: trigger_id} = await Database.select('id').from('triggers').where('description', trigger).first());
-        ({id: action_id} = await Database.select('id').from('actions').where('description', action).first());
-        console.log("Here" + trigger_id + "," + action_id);
+        const { action_id, flow, step, trigger_id} = body; 
 
         const newStep = new Step();
         newStep.step_no = step;
@@ -39,16 +32,19 @@ class StepController {
         console.log(action_id);
         console.log(trigger_id);
 
-        const {rows} = await Step.query()
-        .where({step_no: step},{action: action_id},{trigger: trigger_id})
-        .fetch()
 
-        console.log(rows);
+        const result = await Database.select('id').from('steps')
+        .where('step_no', step).andWhere('action_id', action_id).andWhere('trigger_id', trigger_id).first();
+        
 
-        if(rows.length !== 0){
-            response.found();
-        }else
-            response.ok();
+        console.log(result);
+
+        if(typeof result == 'undefined'){
+            response.ok("Not Found");
+        }else{
+            const {id} = result;
+            response.ok(id);
+        }
     }
 
 }
