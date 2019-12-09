@@ -23,16 +23,13 @@ class ProcTypeController {
         const body = request.post();
         const { user, type } = body;
 
-       
-        console.log("U" + user);
-        console.log("T" + type);
-
-
         const newProcType = new ProcType();
         newProcType.user = user;
         newProcType.type = type;
 
         await newProcType.save();
+
+        return newProcType.id;
     }
 
 

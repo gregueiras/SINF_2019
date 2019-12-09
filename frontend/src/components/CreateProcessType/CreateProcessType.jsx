@@ -4,11 +4,9 @@ import ReactTable from 'react-table';
 import {
   Container, Row, Col, Button, Form,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import './CreateProcessType.css';
 
 
 
@@ -145,10 +143,29 @@ function ViewProcess() {
     setProcessName(e.target.value)
   }
 
-  const submitForm = (formData, stepNr) => {
+  const submitForm = (formData) => {
     let { steps, user, type } = formData;
 
-    axios.post('http://localhost:3335/proc-type',{user, type})
+
+    axios
+      .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
+        const { data } = response;
+      
+        steps.forEach(({ action, flow, step, trigger }) => {
+          console.log(data);
+          console.log(action);
+          console.log(flow);
+          console.log(step);
+          console.log(trigger);
+          axios
+            .post('http://localhost:3335/step', { action, data, flow, step, trigger })
+            .then((response) => {
+              console.log("Success" + response);
+            })
+        })
+      })
+
+
 
   }
 
@@ -203,6 +220,7 @@ function ViewProcess() {
                 setCompanyA(e.target.value);
                 setCompanyOptions(e.target.value, companyB);
               }}
+              value={companyA}
             >
               {companyAOptions && companyAOptions.map((e, key) => (
                 <option key={key} value={e.value}>
@@ -223,7 +241,9 @@ function ViewProcess() {
               onChange={(e) => {
                 setCompanyB(e.target.value);
                 setCompanyOptions(companyA, e.target.value);
+                
               }}
+              value={companyB}
             >
               {companyBOptions.map((e, key) => (
                 <option key={key} value={e.value}>
@@ -369,7 +389,7 @@ function ViewProcess() {
             steps: data,
             user: 1,
             type: processName
-          }; 
+          };
           submitForm(formData);
         }} type="submit" size="sm" className="blue-button rel-text-white">
           <FontAwesomeIcon icon={faCheck} className="iconCheck mt-2" />
