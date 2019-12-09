@@ -5,8 +5,8 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import AlertDismissible from '../Alert/Alert';
-/*import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';*/
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
  
 
 
@@ -40,6 +40,7 @@ export class Settings extends Component {
 
   componentDidMount() {
     this.CompanyService.getCompanies((response) => {
+     if(response !== undefined){
       const reverse = response.data.slice().reverse();
       const companies = reverse.map((data) => (
         {
@@ -54,11 +55,14 @@ export class Settings extends Component {
       ));
       const newState = { organizations: companies };
       this.setState(newState);
+     }
     });
+  
   }
 
 onClickDelete = idx => evt =>  {
-  /*confirmAlert({
+  this.onDeleteCompany(idx)
+  confirmAlert({
     title: 'Confirm to submit',
     message: 'Are you sure to delete this company?',
     buttons: [
@@ -71,7 +75,7 @@ onClickDelete = idx => evt =>  {
         onClick: () =>  {}
       }
     ]
-  });*/
+  });
 };
 
 onAddOrganization = () => {
@@ -126,6 +130,7 @@ onAddOrganization = () => {
   };
   
   onDeleteCompany = idx => () => {
+    console.log("delete company")
     let company;
 
     this.state.organizations.map((organization, sidx) => {
