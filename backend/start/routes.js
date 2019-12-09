@@ -52,7 +52,6 @@ Route.get(
   "ProductController.getCorrespondenceB"
 );
 
-
 Route.get("/company", "CompanyController.index");
 Route.get("/company/:id", "CompanyController.get");
 Route.get("/company/:id/token", "CompanyController.getToken");
@@ -61,6 +60,7 @@ Route.post("/company/token", "CompanyController.setToken");
 Route.get("/process", "ProcessController.get");
 Route.post("/process", "ProcessController.store");
 
+
 Route.get('/log', 'LogController.index');
 Route.get('/log/byId/:id', 'LogController.getById');
 Route.get('/log/byState/:state', 'LogController.getByState');
@@ -68,6 +68,7 @@ Route.get('/log/byProcId/:process_id', 'LogController.getByProcId');
 Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
 Route.post('/log', 'LogController.createLog');
 Route.post('/log/update', 'LogController.updateState');
+Route.get("/log/:companyA/:companyB", "LogController.getProcesses");
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");
