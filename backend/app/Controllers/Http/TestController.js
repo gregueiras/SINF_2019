@@ -7,14 +7,15 @@ import {
 const TestController = {
   // eslint-disable-next-line no-unused-vars
   async index({ request, response, view }) {
-    await Queue.add("PO_SO", {
+    const res = await Queue.add("PO_SO", {
       companyA: 1, // intercompany
       companyB: 2, // feup
       //companyB: 3, // ritaNorinho
+      processID: 2,
+      step: 1
     });
 
-    const sO = await getPurchasesOrders({ companyID: 1 });
-    return sO.data;
+    return res;
   },
 
   async reset() {

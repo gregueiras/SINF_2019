@@ -6,7 +6,9 @@ const Model = use('Model');
 const Hash = use('Hash');
 
 class Action extends Model {
-
+  step() {
+    return this.belongsTo("App/Models/Step");
+  }
 }
 
 module.exports = Action;

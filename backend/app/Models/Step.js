@@ -6,7 +6,18 @@ const Model = use('Model');
 const Hash = use('Hash');
 
 class Step extends Model {
+  action() {
+    return this.hasOne('App/Models/Action');
+  }
 
+  trigger() {
+    return this.hasOne("App/Models/Trigger");
+  }
+
+  processTypes() {
+    return this.hasMany("App/Models/ProcessType");
+  }
+  
 }
 
 module.exports = Step;
