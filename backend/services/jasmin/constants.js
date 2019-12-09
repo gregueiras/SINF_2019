@@ -96,8 +96,9 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
 
   const token = await getToken(companyID);
 
-  const url = makeUrl(endPoint, query, company);
+  console.log(data);
 
+  const url = makeUrl(endPoint, query, company);
   return axios({
     method,
     url,

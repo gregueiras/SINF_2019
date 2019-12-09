@@ -12,7 +12,6 @@ const createSalesReceipt = ({
   exchangeRate,
   checkEndorsed,
   isPaymentMethodCheck,
-  allowanceChargeAmount,
   grossValue,
   payableAmount,
   wTaxTotal,
@@ -33,13 +32,6 @@ const createSalesReceipt = ({
     currency, //INNVOICE
     exchangeRate, //invoice
     checkEndorsed, //false
-    isPaymentMethodCheck, //false
-    allowanceChargeAmount, //INNVOICE
-    grossValue, //INNVOICE
-    payableAmount, //INNVOICE
-    wTaxTotal, //INNVOICE
-    taxTotal,  //INVOICE
-    taxExclusiveAmount, //invoice
     receiptLines, //INVOICE
     financialAccount,
   },

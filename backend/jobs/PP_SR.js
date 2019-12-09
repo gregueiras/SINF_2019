@@ -221,8 +221,9 @@ export default {
 
               documentLines.push({
                 discount,
-                dueDate,
-                amount,
+                settled: true,
+
+                settledAmount: amount,
                 exchangeRate,
                 sourceDoc,
                 currency,
