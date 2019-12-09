@@ -61,7 +61,6 @@ export class Settings extends Component {
   }
 
 onClickDelete = idx => evt =>  {
-  this.onDeleteCompany(idx)
   confirmAlert({
     title: 'Confirm to submit',
     message: 'Are you sure to delete this company?',
