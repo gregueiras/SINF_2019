@@ -30,7 +30,6 @@ class Overview extends Component {
 
 
   componentDidMount(){
-
     this.CompanyService.getCompanies((response) => {
       const reverse = response.data.slice().reverse();
       this.setState({
@@ -51,12 +50,12 @@ class Overview extends Component {
       })
     }
   onChangeCompanyA = (event) => {
-  
-    this.setState({companyA: event.target.value },this.getLogs())
+    event.preventDefault();
+    this.setState({companyA: event.target.value },this.getLogs)
   }
   onChangeCompanyB = (event) => {
-  
-    this.setState({companyB: event.target.value}, this.getLogs());
+    event.preventDefault();
+    this.setState({companyB: event.target.value}, this.getLogs);
   }
 
 

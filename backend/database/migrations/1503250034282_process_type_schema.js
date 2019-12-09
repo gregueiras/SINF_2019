@@ -9,7 +9,7 @@ class ProcessTypeSchema extends Schema {
       table.increments()
       table.bigInteger('user').notNullable();
       table.foreign('user').references('id').inTable('users');
-      table.string('type',256)
+      table.string('type',256).notNullable();
       table.timestamps()
     })
   }
