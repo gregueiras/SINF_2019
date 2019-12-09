@@ -20,6 +20,7 @@ const createSalesReceipt = ({
   taxTotal,
   taxExclusiveAmount,
   receiptLines,
+  financialAccount,
 }) => makeRequest({
   method: 'POST',
   endPoint: endPoints.receipts,
@@ -27,14 +28,14 @@ const createSalesReceipt = ({
     documentType,
     serie, ////INNVOICE
     seriesNumber, ////INNVOICE
-    accountingParty,
-    company,
+    accountingParty, //0001
+    company, //FEUP
     documentDate,
     postingDate,
     currency, //INNVOICE
     exchangeRate, //invoice
-    checkEndorsed,
-    isPaymentMethodCheck,
+    checkEndorsed, //false
+    isPaymentMethodCheck, //false
     allowanceChargeAmount, //INNVOICE
     grossValue, //INNVOICE
     payableAmount, //INNVOICE
@@ -42,6 +43,7 @@ const createSalesReceipt = ({
     taxTotal,  //INVOICE
     taxExclusiveAmount, //invoice
     receiptLines, //INVOICE
+    financialAccount,
   },
   companyID,
 });

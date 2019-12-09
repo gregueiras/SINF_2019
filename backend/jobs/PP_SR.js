@@ -1,10 +1,10 @@
 import { RETURN_TYPES } from "./index";
-import { getCompanyKey } from "../services/jasmin";
+import { getCompanyKey, getCompanyName } from "../services/jasmin";
 import {
   isProcessed,
-  getCorrespondenceB,
+  getCorrespondence,
   getCustomerParty,
-  getSellerParty
+  getSellerParty,
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
@@ -24,22 +24,21 @@ export default {
   async handle({ data }, done) {
     const { companyA, companyB } = data;
 
-    console.log(companyB);
-    console.log(companyA);
     const customerParty = await getCustomerParty({
       companyA,
       companyB
     });
-    console.log(customerParty);
 
     const sellerParty = await getSellerParty({
       companyA,
       companyB
     });
 
-    const company = await getCompanyKey({ companyID: companyA }); 
+    const companyKey = await getCompanyKey({ companyID: companyA });           
+    const companyName = await getCompanyName({ companyID: companyB });
 
-    console.log(sellerParty);
+
+    console.log("companyName: " + companyName);
 
     const userID = 1;
 
@@ -55,7 +54,7 @@ export default {
         companyID: companyA,
         page: 1,
         pageSize: 200,
-        company,
+        company: companyKey,
         documentDate: "2029-12-12",
         documentExchangeRate: "1.0",
         party: sellerParty,
@@ -89,8 +88,17 @@ export default {
     }
     let areNewDocuments = false;
     for (const purchasesInvoice of purchasesInvoices) {
-      const { naturalKey } = purchasesInvoice;
-      console.log(naturalKey);
+      const { 
+        naturalKey,
+        currency,
+        allowanceChargeAmount,
+        grossValue,
+        payableAmount,
+        wTaxTotal,
+        taxTotal,
+        taxExclusiveAmount,
+       } = purchasesInvoice;
+
 
       const found = openItemsData.some(el => el.sourceDoc === naturalKey);
         console.log("found: " + found)
@@ -112,15 +120,16 @@ export default {
                 grossValue,
                 taxTotal,
                 lineExtensionAmount,
-                salesItem
+                purchasesItem
               } = line;
-              const purchasesItem = await getCorrespondenceB({
+              console.log(line);
+              const salesItem = await getCorrespondence({
                 companyA,
                 companyB,
-                product: salesItem //TAP1
+                product: purchasesItem,
               });
 
-              if (purchasesItem === undefined) {
+              if (salesItem === undefined) {
                 abort = true;
                 // LOG UNDEFINED CORRESPONDENCE done(RETURN_TYPES.END_ACTION_FAIL, {value: `There is no correspondence of ${purchasesItem} in ${companyA} and ${companyB}`})
               } else {
@@ -131,23 +140,39 @@ export default {
                   grossValue,
                   taxTotal,
                   lineExtensionAmount,
+                  exchangeRate: 1.000000,
                   purchasesItem
                 });
               }
             }
-            console.log(abort);
+            console.log("ABORT: " + abort);
             if (!abort) {
               console.log("no abort");
 
-              /*Queue.add('create_PI', {
-                  documentType: "VFA",
-                  purchasesInvoice,
-                  company, //FEUP-GX
-                  documentLines,
-                  sellerSupplierParty: sellerParty,
-                  userID,
-                  companyID: companyA,
-                });*/
+              Queue.add('create_SR', {
+                companyID: companyB,
+                documentType: 'REC',
+                serie: '2019',
+                seriesNumber: '1',
+                accountingParty: customerParty, //0001 -> customer
+                company: companyName, //FEUP -> company
+                documentDate: '2019-12-30T00:00:00',
+                postingDate: '2019-12-30T00:00:00',
+                currency,
+                exchangeRate: 1.000000,
+                checkEndorsed: false,
+                isPaymentMethodCheck: false,
+                allowanceChargeAmount,
+                grossValue,
+                payableAmount,
+                wTaxTotal,
+                taxTotal,
+                taxExclusiveAmount,
+                documentLines,
+                purchasesInvoice,
+                userID,
+                financialAccount: "01",
+                });
             }
           } catch (e) {
             if (e.response) {
