@@ -8,9 +8,9 @@ class ProcessStepSchema extends Schema {
     this.create('process_steps', (table) => {
       table.increments()
       table.bigInteger('process_id').notNullable()
-      table.foreign('process_id').references('id').inTable('processes')
+      table.foreign('process_id').references('id').inTable('processes').onDelete('CASCADE')
       table.bigInteger('step_id').notNullable()
-      table.foreign('step_id').references('id').inTable('steps')
+      table.foreign('step_id').references('id').inTable('steps').onDelete('CASCADE')
       table.timestamps()
     })
   }

@@ -8,9 +8,9 @@ class ProcessProductSchema extends Schema {
     this.create('process_products', (table) => {
       table.increments()
       table.bigInteger('process_id').notNullable()
-      table.foreign('process_id').references('id').inTable('processes')
+      table.foreign('process_id').references('id').inTable('processes').onDelete('CASCADE')
       table.bigInteger('product_id').notNullable()
-      table.foreign('product_id').references('id').inTable('products')
+      table.foreign('product_id').references('id').inTable('products').onDelete('CASCADE')
       table.timestamps()
     })
   }

@@ -20,11 +20,13 @@ Route.post('/register','UserController.register');
 Route.get('/test', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
 Route.get("/test/salesInvoices", "TestController.getSalesInvoicesTest");
+Route.get("/test/purchasesInvoices", "TestController.getPurchasesInvoicesTest");
+
 
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
 Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
-
+Route.get('/new-process',"ProcTypeController.index");
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');

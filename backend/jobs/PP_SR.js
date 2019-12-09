@@ -9,7 +9,7 @@ import {
   getSellerParty,
 } from '../services/db';
 import Queue from '../lib/Queue';
-import getSalesInvoices from '../services/jasmin/getSalesInvoices';
+import getPurchasesInvoices from '../services/jasmin/getPurchasesInvoices';
 
 const options = {
   /*
@@ -20,21 +20,25 @@ const options = {
 };
 
 export default {
-  key: 'SI_PI',
+  key: 'PP_SR',
   options,
   async handle({ data }, done) {
     const { companyA, companyB } = data;
 
+    console.log(companyB);
+    console.log(companyA)
     const customerParty = await getCustomerParty({
         companyA,
         companyB,
       });
+      console.log(customerParty)
   
       const sellerParty = await getSellerParty({
         companyA,
         companyB,
       });
 
+    console.log(sellerParty);
 
     const userID = 1;
 
@@ -47,45 +51,44 @@ export default {
 
 
     // get serie's purchase order
-    let salesInvoicesData;
+    let purchasesInvoicesData ;
     try {
-      salesInvoicesData = (await getSalesInvoices({ companyID: companyB })).data;
+      purchasesInvoicesData  = (await getPurchasesInvoices({ companyID: companyA })).data;
     } catch (e) {
       console.error(e.response.data);
     }
 
-
-    const salesInvoices = salesInvoicesData.filter(
-      (si) => 
-        si.isActive
-        && !si.isDeleted
-        && si.buyerCustomerParty == customerParty, //0001
+    const purchasesInvoices = purchasesInvoicesData.filter(
+      (pi) => 
+        pi.isActive
+        && !pi.isDeleted
+        && pi.sellerSupplierParty == sellerParty, //0007
     );
 
-    if (!salesInvoices) {
+    if (!purchasesInvoices) {
       done(null, {
         value: RETURN_TYPES.END_TRIGGER_FAIL,
-        msg: `No sales invoices found. Please check if you have defined it correctly.`,
+        msg: `No purchases invoices found. Please check if you have defined it correctly.`,
         ...info,
         options,
       });
     }
     let areNewDocuments = false;
-    for (const salesInvoice of salesInvoices) {
+    for (const purchasesInvoice of purchasesInvoices) {
       const replicated = await isProcessed({
         userID,
-        fileID: salesInvoice.id,
+        fileID: purchasesInvoice.id,
       });
       if (!replicated) {
-        console.log('NEW SI');
+        console.log('NEW PP');
         areNewDocuments = true;
         try {
           const company = await getCompanyKey({ companyID: companyA });
 
           const documentLines = [];
           let abort = false;
-          for (const line of salesInvoice.documentLines) {
-            const {
+          for (const line of purchasesInvoice.documentLines) {
+            /*const {
               quantity,
               unitPrice,
               grossValue,
@@ -112,10 +115,11 @@ export default {
                 lineExtensionAmount,
                 purchasesItem,
               });
-            }
+            }*/
           }
           console.log(abort);
           if (!abort) {
+              console.log('no abort')
             /*console.dir({
               company,
               buyerCustomerParty: customerParty,
@@ -123,15 +127,15 @@ export default {
               documentLines,
             });*/
 
-            Queue.add('create_PI', {
+           /*Queue.add('create_PI', {
               documentType: "VFA",
-              salesInvoice,
+              purchasesInvoice,
               company, //FEUP-GX
               documentLines,
               sellerSupplierParty: sellerParty,
               userID,
               companyID: companyA,
-            });
+            });*/
           }
         } catch (e) {
           if (e.response) {
