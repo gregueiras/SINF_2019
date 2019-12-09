@@ -4,7 +4,6 @@ const createSalesReceipt = ({
   companyID,
   documentType,
   serie,
-  seriesNumber,
   accountingParty,
   company,
   documentDate,
@@ -27,7 +26,6 @@ const createSalesReceipt = ({
   data: {
     documentType,
     serie, ////INNVOICE
-    seriesNumber, ////INNVOICE
     accountingParty, //0001
     company, //FEUP
     documentDate,

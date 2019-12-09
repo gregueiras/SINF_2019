@@ -8,7 +8,10 @@ import {
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
-import { getPayableOpenItems, getReceivableOpenItems } from "../services/jasmin/getOpenItems";
+import {
+  getPayableOpenItems,
+  getReceivableOpenItems
+} from "../services/jasmin/getOpenItems";
 import getSalesInvoices from "../services/jasmin/getSalesInvoices";
 
 const options = {
@@ -86,10 +89,8 @@ export default {
         await getPurchasesInvoices({ companyID: companyA })
       ).data;
 
-      salesInvoicesData = (
-        await getSalesInvoices({ companyID: companyB })
-      ).data;
-
+      salesInvoicesData = (await getSalesInvoices({ companyID: companyB }))
+        .data;
     } catch (e) {
       console.error(e.response.data);
     }
@@ -125,12 +126,9 @@ export default {
         taxExclusiveAmount
       } = purchasesInvoice;
 
-      console.log("pi natural key: " + naturalKey);
-
       const foundOpenItem = payableOpenItemsData.some(
         el => el.sourceDoc === naturalKey
       );
-      console.log("foundOpenItem: " + foundOpenItem);
       if (!foundOpenItem) {
         const replicated = await isProcessed({
           userID,
@@ -141,89 +139,111 @@ export default {
 
           let foundMatchingSI;
 
-
-          for( const si of salesInvoices){
+          for (const si of salesInvoices) {
             console.log(si.naturalKey);
 
-            if(si.isActive && !si.isDeleted && si.buyerCustomerParty === customerParty
-               && si.taxTotal.amount === purchasesInvoice.taxTotal.amount   
-                && si.taxTotal.baseAmount === purchasesInvoice.taxTotal.baseAmount 
-               && si.taxTotal.reportingAmount === purchasesInvoice.taxTotal.reportingAmount 
-               && si.totalLiability.amount === purchasesInvoice.totalLiability.amount   
-               && si.totalLiability.baseAmount === purchasesInvoice.totalLiability.baseAmount 
-              && si.totalLiability.reportingAmount === purchasesInvoice.totalLiability.reportingAmount)
-              {
-                let equal = true;
-                for (const line of si.documentLines){
-                  console.log('loop');
+            if (
+              si.isActive &&
+              !si.isDeleted &&
+              si.buyerCustomerParty === customerParty &&
+              si.taxTotal.amount === purchasesInvoice.taxTotal.amount &&
+              si.taxTotal.baseAmount === purchasesInvoice.taxTotal.baseAmount &&
+              si.taxTotal.reportingAmount ===
+                purchasesInvoice.taxTotal.reportingAmount &&
+              si.totalLiability.amount ===
+                purchasesInvoice.totalLiability.amount &&
+              si.totalLiability.baseAmount ===
+                purchasesInvoice.totalLiability.baseAmount &&
+              si.totalLiability.reportingAmount ===
+                purchasesInvoice.totalLiability.reportingAmount
+            ) {
+              let equal = true;
+              for (const line of si.documentLines) {
+                const found = purchasesInvoice.documentLines.some(
+                  el =>
+                    el.grossValue.reportingAmount ===
+                      line.grossValue.reportingAmount &&
+                    el.grossValue.amount === line.grossValue.amount &&
+                    el.grossValue.baseAmount === line.grossValue.baseAmount &&
+                    el.taxExclusiveAmount.reportingAmount ===
+                      line.taxExclusiveAmount.reportingAmount &&
+                    el.taxExclusiveAmount.amount ===
+                      line.taxExclusiveAmount.amount &&
+                    el.taxExclusiveAmount.baseAmount ===
+                      line.taxExclusiveAmount.baseAmount &&
+                    el.unitPrice.reportingAmount ===
+                      line.unitPrice.reportingAmount &&
+                    el.unitPrice.amount === line.unitPrice.amount &&
+                    el.unitPrice.baseAmount === line.unitPrice.baseAmount &&
+                    el.quantity === line.quantity &&
+                    el.lineExtensionAmount.reportingAmount ===
+                      line.lineExtensionAmount.reportingAmount &&
+                    el.lineExtensionAmount.amount ===
+                      line.lineExtensionAmount.amount &&
+                    el.lineExtensionAmount.baseAmount ===
+                      line.lineExtensionAmount.baseAmount
+                );
+                //&& el.purchasesItem ===
 
-                  const found = purchasesInvoice.documentLines.some(el => 
-                    el.grossValue.reportingAmount === line.grossValue.reportingAmount
-                    && el.grossValue.amount === line.grossValue.amount
-                    && el.grossValue.baseAmount === line.grossValue.baseAmount
-                    && el.taxExclusiveAmount.reportingAmount === line.taxExclusiveAmount.reportingAmount
-                    && el.taxExclusiveAmount.amount === line.taxExclusiveAmount.amount
-                    && el.taxExclusiveAmount.baseAmount === line.taxExclusiveAmount.baseAmount
-                    && el.unitPrice.reportingAmount === line.unitPrice.reportingAmount
-                    && el.unitPrice.amount === line.unitPrice.amount
-                    && el.unitPrice.baseAmount === line.unitPrice.baseAmount
-                    && el.quantity === line.quantity
-                    && el.lineExtensionAmount.reportingAmount === line.lineExtensionAmount.reportingAmount
-                    && el.lineExtensionAmount.amount === line.lineExtensionAmount.amount
-                    && el.lineExtensionAmount.baseAmount === line.lineExtensionAmount.baseAmount)
-                    //&& el.purchasesItem === 
-                    console.log("equal: " + equal);
-                    console.log("found: " + found);
-                  equal &= found;
-                }
-                if(equal){
-                  console.log('deuuu');
-                  foundMatchingSI = si;
-                  break;
-                }
+                equal &= found;
+              }
+              if (equal) {
+                foundMatchingSI = si;
+                break;
+              }
             }
           }
-
 
           areNewDocuments = true;
           try {
             const documentLines = [];
             let abort = true;
-     
-            if(foundMatchingSI !== undefined){
-              console.log("foundMatchingSI naturalKey: " + foundMatchingSI.naturalKey);
-              abort = false;
-            }
 
-            /*const {
-              settledAmount,
-              discount,
-              dueDate,
-              issueDate,
-              amount, 
-              openAmount,
-              settled,
-              withholdingTaxAmount,
-              openWithholdingTaxAmount,
-              nature,
-              currency,
-              exchangeRate,
-              settledOriginalAmount,
-              baseExchangeRate,
-              reportingExchangeRate,
-              originalExchangeRate,
-              sourceDoc,
-            } = ;*/
+            if (foundMatchingSI !== undefined) {
+              console.log(
+                "foundMatchingSI naturalKey: " + foundMatchingSI.naturalKey
+              );
+              abort = false;
+
+              const receivableOpenItem = receivableOpenItemsData.find(
+                rpi => rpi.sourceDoc === foundMatchingSI.naturalKey
+              );
+
+              console.log("sourceDoc: " + receivableOpenItem.sourceDoc);
+
+              const {
+                discount, //oi
+                dueDate, //oi
+                amount, //oi
+                exchangeRate, //oi
+                sourceDoc //oi
+              } = receivableOpenItem;
+
+              documentLines.push({
+                discount,
+                dueDate,
+                amount,
+                exchangeRate,
+                sourceDoc,
+                currency,
+              });
+
+              console.log(documentLines);
+            }
 
             console.log("ABORT: " + abort);
             if (!abort) {
               console.log("no abort");
-
+              console.log(allowanceChargeAmount.amount);
+              console.log(grossValue.amount);
+              console.log( payableAmount.amount);
+              console.log(wTaxTotal.amount);
+              console.log(taxTotal.amount);
+              console.log(taxExclusiveAmount.amount);
               Queue.add("create_SR", {
                 companyID: companyB,
                 documentType: "REC",
                 serie: "2019",
-                seriesNumber: "1",
                 accountingParty: customerParty, //0001 -> customer
                 company: companyName, //FEUP -> company
                 documentDate: "2019-12-30T00:00:00",
@@ -232,16 +252,16 @@ export default {
                 exchangeRate: 1.0,
                 checkEndorsed: false,
                 isPaymentMethodCheck: false,
-                allowanceChargeAmount,
-                grossValue,
-                payableAmount,
-                wTaxTotal,
-                taxTotal,
-                taxExclusiveAmount,
+                allowanceChargeAmount: allowanceChargeAmount.amount,
+                grossValue: grossValue.amount,
+                payableAmount: payableAmount.amount,
+                wTaxTotal: wTaxTotal.amount,
+                taxTotal: taxTotal.amount,
+                taxExclusiveAmount: taxExclusiveAmount.amount,
                 documentLines,
                 purchasesInvoice,
                 userID,
-                financialAccount: "01"
+                financialAccount: "02"
               });
             }
           } catch (e) {
