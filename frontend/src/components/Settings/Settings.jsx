@@ -40,6 +40,7 @@ export class Settings extends Component {
 
   componentDidMount() {
     this.CompanyService.getCompanies((response) => {
+     if(response !== undefined){
       const reverse = response.data.slice().reverse();
       const companies = reverse.map((data) => (
         {
@@ -54,7 +55,9 @@ export class Settings extends Component {
       ));
       const newState = { organizations: companies };
       this.setState(newState);
+     }
     });
+  
   }
 
 onClickDelete = idx => evt =>  {
@@ -126,6 +129,7 @@ onAddOrganization = () => {
   };
   
   onDeleteCompany = idx => () => {
+    console.log("delete company")
     let company;
 
     this.state.organizations.map((organization, sidx) => {
