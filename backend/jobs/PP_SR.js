@@ -4,11 +4,12 @@ import {
   isProcessed,
   getCorrespondence,
   getCustomerParty,
-  getSellerParty,
+  getSellerParty
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
-import { getOpenItems } from "../services/jasmin/getOpenItems";
+import { getPayableOpenItems, getReceivableOpenItems } from "../services/jasmin/getOpenItems";
+import getSalesInvoices from "../services/jasmin/getSalesInvoices";
 
 const options = {
   /*
@@ -34,11 +35,10 @@ export default {
       companyB
     });
 
-    const companyKey = await getCompanyKey({ companyID: companyA });           
+    const companyKeyA = await getCompanyKey({ companyID: companyA });
+    const companyKeyB = await getCompanyKey({ companyID: companyB });
+
     const companyName = await getCompanyName({ companyID: companyB });
-
-
-    console.log("companyName: " + companyName);
 
     const userID = 1;
 
@@ -49,26 +49,47 @@ export default {
       companyB
     };
 
-    let openItemsData = (
-      await getOpenItems({
-        companyID: companyA,
-        page: 1,
-        pageSize: 200,
-        company: companyKey,
-        documentDate: "2029-12-12",
-        documentExchangeRate: "1.0",
-        party: sellerParty,
-        currency: "EUR",
-        documentType: "PAG"
-      })
-    ).data;
-
-    // get serie's purchase order
+    let payableOpenItemsData;
+    let receivableOpenItemsData;
     let purchasesInvoicesData;
+    let salesInvoicesData;
     try {
+      payableOpenItemsData = (
+        await getPayableOpenItems({
+          companyID: companyA,
+          page: 1,
+          pageSize: 200,
+          company: companyKeyA,
+          documentDate: "2029-12-12",
+          documentExchangeRate: "1.0",
+          party: sellerParty,
+          currency: "EUR",
+          documentType: "PAG"
+        })
+      ).data;
+
+      receivableOpenItemsData = (
+        await getReceivableOpenItems({
+          companyID: companyB,
+          page: 1,
+          pageSize: 200,
+          company: companyKeyB,
+          documentDate: "2029-12-12",
+          documentExchangeRate: "1.0",
+          party: customerParty,
+          currency: "EUR",
+          documentType: "FA"
+        })
+      ).data;
+
       purchasesInvoicesData = (
         await getPurchasesInvoices({ companyID: companyA })
       ).data;
+
+      salesInvoicesData = (
+        await getSalesInvoices({ companyID: companyB })
+      ).data;
+
     } catch (e) {
       console.error(e.response.data);
     }
@@ -76,6 +97,11 @@ export default {
     const purchasesInvoices = purchasesInvoicesData.filter(
       pi =>
         pi.isActive && !pi.isDeleted && pi.sellerSupplierParty == sellerParty
+    );
+
+    const salesInvoices = salesInvoicesData.filter(
+      pi =>
+        pi.isActive && !pi.isDeleted && pi.buyerCustomerParty == customerParty
     );
 
     if (!purchasesInvoices) {
@@ -88,7 +114,7 @@ export default {
     }
     let areNewDocuments = false;
     for (const purchasesInvoice of purchasesInvoices) {
-      const { 
+      const {
         naturalKey,
         currency,
         allowanceChargeAmount,
@@ -96,70 +122,114 @@ export default {
         payableAmount,
         wTaxTotal,
         taxTotal,
-        taxExclusiveAmount,
-       } = purchasesInvoice;
+        taxExclusiveAmount
+      } = purchasesInvoice;
 
+      console.log("pi natural key: " + naturalKey);
 
-      const found = openItemsData.some(el => el.sourceDoc === naturalKey);
-        console.log("found: " + found)
-      if (!found) {
+      const foundOpenItem = payableOpenItemsData.some(
+        el => el.sourceDoc === naturalKey
+      );
+      console.log("foundOpenItem: " + foundOpenItem);
+      if (!foundOpenItem) {
         const replicated = await isProcessed({
           userID,
           fileID: purchasesInvoice.id
         });
         if (!replicated) {
           console.log("NEW PP");
+
+          let foundMatchingSI;
+
+
+          for( const si of salesInvoices){
+            console.log(si.naturalKey);
+
+            if(si.isActive && !si.isDeleted && si.buyerCustomerParty === customerParty
+               && si.taxTotal.amount === purchasesInvoice.taxTotal.amount   
+                && si.taxTotal.baseAmount === purchasesInvoice.taxTotal.baseAmount 
+               && si.taxTotal.reportingAmount === purchasesInvoice.taxTotal.reportingAmount 
+               && si.totalLiability.amount === purchasesInvoice.totalLiability.amount   
+               && si.totalLiability.baseAmount === purchasesInvoice.totalLiability.baseAmount 
+              && si.totalLiability.reportingAmount === purchasesInvoice.totalLiability.reportingAmount)
+              {
+                let equal = true;
+                for (const line of si.documentLines){
+                  console.log('loop');
+
+                  const found = purchasesInvoice.documentLines.some(el => 
+                    el.grossValue.reportingAmount === line.grossValue.reportingAmount
+                    && el.grossValue.amount === line.grossValue.amount
+                    && el.grossValue.baseAmount === line.grossValue.baseAmount
+                    && el.taxExclusiveAmount.reportingAmount === line.taxExclusiveAmount.reportingAmount
+                    && el.taxExclusiveAmount.amount === line.taxExclusiveAmount.amount
+                    && el.taxExclusiveAmount.baseAmount === line.taxExclusiveAmount.baseAmount
+                    && el.unitPrice.reportingAmount === line.unitPrice.reportingAmount
+                    && el.unitPrice.amount === line.unitPrice.amount
+                    && el.unitPrice.baseAmount === line.unitPrice.baseAmount
+                    && el.quantity === line.quantity
+                    && el.lineExtensionAmount.reportingAmount === line.lineExtensionAmount.reportingAmount
+                    && el.lineExtensionAmount.amount === line.lineExtensionAmount.amount
+                    && el.lineExtensionAmount.baseAmount === line.lineExtensionAmount.baseAmount)
+                    //&& el.purchasesItem === 
+                    console.log("equal: " + equal);
+                    console.log("found: " + found);
+                  equal &= found;
+                }
+                if(equal){
+                  console.log('deuuu');
+                  foundMatchingSI = si;
+                  break;
+                }
+            }
+          }
+
+
           areNewDocuments = true;
           try {
             const documentLines = [];
-            let abort = false;
-            for (const line of purchasesInvoice.documentLines) {
-              const {
-                quantity,
-                unitPrice,
-                grossValue,
-                taxTotal,
-                lineExtensionAmount,
-                purchasesItem
-              } = line;
-              console.log(line);
-              const salesItem = await getCorrespondence({
-                companyA,
-                companyB,
-                product: purchasesItem,
-              });
-
-              if (salesItem === undefined) {
-                abort = true;
-                // LOG UNDEFINED CORRESPONDENCE done(RETURN_TYPES.END_ACTION_FAIL, {value: `There is no correspondence of ${purchasesItem} in ${companyA} and ${companyB}`})
-              } else {
-                documentLines.push({
-                  quantity,
-                  unitPrice,
-                  deliveryDate: "2019-12-30T00:00:00",
-                  grossValue,
-                  taxTotal,
-                  lineExtensionAmount,
-                  exchangeRate: 1.000000,
-                  purchasesItem
-                });
-              }
+            let abort = true;
+     
+            if(foundMatchingSI !== undefined){
+              console.log("foundMatchingSI naturalKey: " + foundMatchingSI.naturalKey);
+              abort = false;
             }
+
+            /*const {
+              settledAmount,
+              discount,
+              dueDate,
+              issueDate,
+              amount, 
+              openAmount,
+              settled,
+              withholdingTaxAmount,
+              openWithholdingTaxAmount,
+              nature,
+              currency,
+              exchangeRate,
+              settledOriginalAmount,
+              baseExchangeRate,
+              reportingExchangeRate,
+              originalExchangeRate,
+              sourceDoc,
+            } = ;*/
+
             console.log("ABORT: " + abort);
             if (!abort) {
               console.log("no abort");
 
-              Queue.add('create_SR', {
+              Queue.add("create_SR", {
                 companyID: companyB,
-                documentType: 'REC',
-                serie: '2019',
-                seriesNumber: '1',
+                documentType: "REC",
+                serie: "2019",
+                seriesNumber: "1",
                 accountingParty: customerParty, //0001 -> customer
                 company: companyName, //FEUP -> company
-                documentDate: '2019-12-30T00:00:00',
-                postingDate: '2019-12-30T00:00:00',
+                documentDate: "2019-12-30T00:00:00",
+                postingDate: "2019-12-30T00:00:00",
                 currency,
-                exchangeRate: 1.000000,
+                exchangeRate: 1.0,
                 checkEndorsed: false,
                 isPaymentMethodCheck: false,
                 allowanceChargeAmount,
@@ -171,8 +241,8 @@ export default {
                 documentLines,
                 purchasesInvoice,
                 userID,
-                financialAccount: "01",
-                });
+                financialAccount: "01"
+              });
             }
           } catch (e) {
             if (e.response) {
