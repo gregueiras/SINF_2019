@@ -33,6 +33,7 @@ Route.get('/proc-type', 'ProcTypeController.index');
 Route.post('/proc-type', 'ProcTypeController.createProcType');
 
 Route.get('/step', 'StepController.index');
+Route.get('/step/check/:step/:action_id/:trigger_id', 'StepController.checkForCopy');
 Route.post('/step', 'StepController.createStep');
 
 Route.get("/user", "UserController.index");

@@ -150,13 +150,8 @@ function ViewProcess() {
     axios
       .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
         const { data } = response;
-      
+        //TODO: check if step already exists(done), if so associate it using process_step, if not create it (done) and associate it using process_step
         steps.forEach(({ action, flow, step, trigger }) => {
-          console.log(data);
-          console.log(action);
-          console.log(flow);
-          console.log(step);
-          console.log(trigger);
           axios
             .post('http://localhost:3335/step', { action, data, flow, step, trigger })
             .then((response) => {
@@ -164,9 +159,6 @@ function ViewProcess() {
             })
         })
       })
-
-
-
   }
 
   return (
@@ -241,7 +233,7 @@ function ViewProcess() {
               onChange={(e) => {
                 setCompanyB(e.target.value);
                 setCompanyOptions(companyA, e.target.value);
-                
+
               }}
               value={companyB}
             >

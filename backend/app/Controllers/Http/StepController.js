@@ -1,8 +1,6 @@
 'use strict'
 
 const Step = use('App/Models/Step')
-const Action = use('App/Models/Action')
-const Trigger = use('App/Models/Trigger')
 const Database = use('Database')
 
 class StepController {
@@ -32,6 +30,25 @@ class StepController {
         await newStep.save();
 
         return newStep.id;
+    }
+
+    async checkForCopy({request,response}){
+        const {params} = request;
+        const {step, action_id, trigger_id} = params;
+        console.log(step);
+        console.log(action_id);
+        console.log(trigger_id);
+
+        const {rows} = await Step.query()
+        .where({step_no: step},{action: action_id},{trigger: trigger_id})
+        .fetch()
+
+        console.log(rows);
+
+        if(rows.length !== 0){
+            response.found();
+        }else
+            response.ok();
     }
 
 }
