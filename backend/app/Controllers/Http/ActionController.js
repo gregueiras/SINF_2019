@@ -11,10 +11,14 @@ class ActionController {
     async getIdByDescription(request) {
         const { params } = request;
         const { description } = params;
+
+        //description = description.replace('%20', ' ');
+        const newDescription = decodeURI(description);
+
         const { id } = await Database
             .select('id')
             .from('actions')
-            .where('description', description).first();
+            .where('description', newDescription).first();
         return id;
     }
 };

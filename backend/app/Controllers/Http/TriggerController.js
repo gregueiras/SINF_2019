@@ -11,11 +11,15 @@ class TriggerController {
 
     async getIdByDescription(request) {
         const { params } = request;
-        const { description } = params;
+        let { description } = params;
+        //console.log(description.replace('/\%20/g', ' '));
+        const newDescription = decodeURI(description);
+
+
         const { id } = await Database
             .select('id')
             .from('triggers')
-            .where('description', description).first();
+            .where('description', newDescription).first();
         return id;
     }
 };
