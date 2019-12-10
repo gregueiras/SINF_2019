@@ -9,11 +9,11 @@ class ProcessType extends Model {
 
 
     processes() {
-        return this.hasMany('App/Model/Process');
+        return this.hasMany('App/Models/Process');
     }
 
     steps() {
-        return this.hasMany('App/Model/Process');
+        return this.hasMany('App/Models/Process');
     }
 
 }
