@@ -16,7 +16,6 @@ class ProcessTypeSeeder {
       step_no: 1,
       action_id: a1.id,
       trigger_id: t1.id,
-      active: true,
     });
 
     const t2 = await Factory.model("App/Models/Trigger").create({
@@ -31,7 +30,6 @@ class ProcessTypeSeeder {
       step_no: 2,
       action_id: a2.id,
       trigger_id: t2.id,
-      active: false
     });
 
     const pt1 = await Factory.model("App/Models/ProcessType").create({

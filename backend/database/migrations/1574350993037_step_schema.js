@@ -13,7 +13,6 @@ class StepSchema extends Schema {
       table.bigInteger("trigger_id").notNullable();
       table.foreign('trigger_id').references('id').inTable('triggers').onDelete('CASCADE')
       table.bigInteger("process_type_id").notNullable();
-      table.bool('active');
       table.timestamps()
     })
   }

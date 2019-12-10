@@ -73,12 +73,11 @@ Factory.blueprint("App/Models/Log", (faker, i, data) => {
 
 Factory.blueprint(
   "App/Models/Step",
-  (faker, i, { step_no, action_id, trigger_id, active }) => {
+  (faker, i, { step_no, action_id, trigger_id }) => {
     return {
       step_no,
       action_id,
       trigger_id,
-      active
     };
   }
 );
