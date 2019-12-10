@@ -16,6 +16,7 @@ class ProcessSchema extends Schema {
       table.foreign('company_a').references('id').inTable('companies').onDelete('CASCADE');
       table.foreign('company_b').references('id').inTable('companies').onDelete('CASCADE');
       table.foreign('process_type').references('id').inTable('process_types').onDelete('CASCADE');
+      table.integer('active_step').notNullable().defaultTo(1);
       table.timestamps();
     })
   }

@@ -3,3 +3,4 @@ export { getCompany, fetchToken, storeToken } from './company';
 export { getCorrespondence, getCorrespondenceB } from './product';
 export { isProcessed, addProcessed } from './processedFile';
 export { getSellerParty, getCustomerParty } from './party';
+export { isMyTurn, nextTurn } from './process';

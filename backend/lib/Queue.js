@@ -15,16 +15,21 @@ const queues = Object.values(jobs).map(job => ({
 
 export default {
   queues,
-  add(name, data) {
+  add(name, data, jobName) {
     const queue = this.queues.find(q => q.name === name);
-    
-    const n = Math.round(Math.random() * 1000);
-    return queue.bull.add(data, queue.options);
+
+    if (jobName)
+      return queue.bull.add(jobName, data, queue.options);
+    else
+      return queue.bull.add(data, queue.options);
   },
   process() {
     return this.queues.forEach(queue => {
-      queue.bull.process(queue.handle);
-
+      queue.bull.process("__default__", 100, queue.handle);
+      queue.bull.process(queue.name, 100, queue.handle);
+      queue.bull.process(`${queue.name}_0`, 100, queue.handle);
+      queue.bull.process(`${queue.name}_1`, 100, queue.handle);
+      
       queue.bull.on("completed", (job, result) => {
         console.log(`Job completed with result ${JSON.stringify(result)}`);
         const { value } = result;
@@ -56,6 +61,6 @@ export default {
     });
   },
   removeAll() {
-    return this.queues.map(({bull}) => bull.empty())
+    return this.queues.map(({ bull }) => bull.empty());
   }
 };

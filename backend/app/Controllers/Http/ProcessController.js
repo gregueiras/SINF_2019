@@ -36,15 +36,8 @@ class ProcessController {
     const { processID, step } = body;
 
     const process = await Process.find(processID);
-    const type = await ProcessType.find(process.process_type);
-    const steps = await Step.query()
-      .where({
-        process_type_id: type.id,
-        step_no: step
-      })
-      .first();
 
-    return steps.active;
+    return process.active_step === step;
   }
 
   async nextStep({ request }) {
@@ -54,37 +47,23 @@ class ProcessController {
     const process = await Process.find(processID);
     const type = await ProcessType.find(process.process_type);
 
-    const currentStep = await Step.query()
+    const activeStep = process.active_step;
+    const steps = await Step.query()
       .where({
-        process_type_id: type.id,
-        active: true
+        process_type_id: type.id
       })
-      .first();
+      .getCount();
 
-    let nextStep;
-    try {
-      nextStep = await Step.query()
-        .where({
-          process_type_id: type.id,
-          step_no: currentStep.step_no + 1
-        })
-        .firstOrFail();
-    } catch (e) {
-      nextStep = await Step.query()
-        .where({
-          process_type_id: type.id,
-          step_no: 1
-        })
-        .firstOrFail();
+    let nextStep = activeStep + 1;
+    if (nextStep > steps) {
+      nextStep = 1;
     }
+    
+    process.active_step = nextStep;
+    
+    process.save();
 
-    currentStep.active = false;
-    nextStep.active = true;
-
-    await currentStep.save();
-    await nextStep.save();
-
-    return true;
+    return process.active_step;
   }
 }
 
