@@ -159,7 +159,7 @@ function ViewProcess() {
       console.log(response)
       const { data: exists } = response;
 
-      if (exists.length != 0) {
+      if (exists.length !== 0) {
         setValidProcName(false);
         return;
       }

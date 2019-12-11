@@ -61,7 +61,7 @@ export default {
 
     if (serie === undefined) {
       console.log(`ERROR: NO SERIES ${serieKey}`);
-      console.error(e.response.data);
+      //console.error(e.response.data);
 
       done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
       return;

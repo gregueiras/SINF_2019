@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -13,7 +13,9 @@ import { Link, Redirect } from 'react-router-dom';
 import CompanyService from '../../services/CompanyService';
 import ProcessTypeService from '../../services/ProcessTypeService';
 import ProcessService from '../../services/ProcessService';
-
+import AlertDismissible from '../Alert/Alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+ 
 import './NewProcess.css';
 
 
@@ -31,12 +33,20 @@ class NewProcess extends Component {
       companyAdescription: '',
       companyBdescription: '',
       tableData: [],
+      
+      showMessage: false,
+      showText: '',
+      variantType: '',
     };
     this.CompanyService = new CompanyService();
     this.ProcessTypeService = new ProcessTypeService();
     this.ProcessService = new ProcessService();
 
     this.addNewProcess = this.addNewProcess.bind(this);
+    this.onChangeCompanyA = this.onChangeCompanyA.bind(this);
+    this.onChangeCompanyB = this.onChangeCompanyB.bind(this);
+    this.onChangeProcessType = this.onChangeProcessType.bind(this);
+    this.onChangeRedirect = this.onChangeRedirect.bind(this);
   };
 
 
@@ -142,7 +152,9 @@ class NewProcess extends Component {
       }
       else {
         console.log("failed");
-
+        this.setState({ showMessage: true,
+                        variantType:'danger', 
+                        showText:'Error while creating a new Process...' });
       }
     });
   }
@@ -152,12 +164,21 @@ class NewProcess extends Component {
     }
   }
 
+  onChangeRedirect = () =>{
+    console.log('here, ', this.state.redirect);
+    this.setState({redirect:true});
+    console.log('after, ', this.state.redirect); 
+    this.renderRedirect();
+  }
+
   render() {
     let processTypeId = 1;
+    const { showMessage, showText, variantType } = this.state;
     return (
       <Container>
-        {this.renderRedirect()}
-        < Row >
+         <AlertDismissible variant={variantType} alertId='settingsAlert' show={showMessage} setShow={() => { this.setState({ showMessage: false }); }} text={showText} />
+         {this.renderRedirect()}
+        <Row>
           <Col>
             <Form.Group>
               <Form.Label className="gray-label">
@@ -175,7 +196,7 @@ class NewProcess extends Component {
                   ))}
               </select>
 
-              <Link className="blue-button gen-button plus-button-icon rel-text-white w-5" size="sm" to="/create-process-type">
+              <Link className="add-button blue-button gen-button plus-button-icon rel-text-white w-5" size="sm" to="/create-process-type">
                 <FontAwesomeIcon icon={faPlus} className="iconPlus" />
               </Link>
             </Form.Group>
@@ -246,10 +267,10 @@ class NewProcess extends Component {
           <br />
         </div>
 
-
-        <div className="mt-5 mb-5">
-          <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm">
+ <div className="submitButtons mt-5 mb-5">
+          <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" onClick={this.onChangeRedirect}>
             <FontAwesomeIcon icon={faTimes} className="iconCheck" />
+       
             Cancel
         </Button>
           <Button className="blue-button gen-button rel-text-white w-20" size="sm" type="submit" onClick={this.addNewProcess}>

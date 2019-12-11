@@ -1,4 +1,5 @@
 const Company = use("App/Models/Company");
+const Database = use('Database')
 
 class CompanyController {
   async index() {

@@ -68,7 +68,7 @@ Route.get("/company/:id/token", "CompanyController.getToken");
 Route.post("/company/token", "CompanyController.setToken");
 
 Route.get("/process", "ProcessController.get");
-Route.post("/process/series", "ProcessController.getSeries");
+Route.get("/process/series/:id", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");
 Route.post("/process/steps/current", "ProcessController.canRun");
 Route.post("/process/steps/next", "ProcessController.nextStep");
