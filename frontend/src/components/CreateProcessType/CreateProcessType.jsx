@@ -145,38 +145,24 @@ function ViewProcess() {
 
   const submitForm = (formData) => {
     let { steps, user, type } = formData;
-
+    if (type === "")
+      return;
 
     axios
       .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
         const { data: proc_type_id } = response;
-        //TODO: check if step already exists(done), if so associate it using process_step, if not create it (done) and associate it using process_step
-
-
         steps.forEach(({ action, flow, step, trigger }) => {
 
           axios.get(`http://localhost:3335/trigger/getId/${trigger}`).then((response) => {
-            const {data: trigger_id} = response;
+            const { data: trigger_id } = response;
 
             axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
-              const {data: action_id} = response;
-
-              axios.get(`http://localhost:3335/step/check/${step}/${action_id}/${trigger_id}`).then((response) => {
-                if (response.data === "Not Found") {
-                  console.log("notFound");
-                  axios
-                    .post('http://localhost:3335/step', { action, flow, step, trigger })
-                    .then((response) => {
-                      console.log(response);
-                      const { data: step_id } = response;
-                      axios.post('http://localhost:3335/process-step', { step_id, proc_type_id })
-                    })
-                }
-                else {
-                  const {data: step_id} = response
-                  axios.post('http://localhost:3335/process-step', { step_id, proc_type_id })
-                }
-              })
+              const { data: action_id } = response;
+              axios
+                .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id })
+                .then((response) => {
+                  console.log(response);
+                })
             })
           })
         })

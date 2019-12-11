@@ -12,7 +12,6 @@ class TriggerController {
     async getIdByDescription(request) {
         const { params } = request;
         let { description } = params;
-        //console.log(description.replace('/\%20/g', ' '));
         const newDescription = decodeURI(description);
 
 
