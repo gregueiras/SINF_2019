@@ -36,8 +36,9 @@ export const endPoints = {
   companies: "corepatterns/companies",
   invoiceReceipt: "invoiceReceipt/invoices",
   billingInvoices: "billing/invoices",
-  openItems: "accountsPayable/processOpenItems",
-  receipts: "accountsReceivable/receipts"
+  payableOpenItems: "accountsPayable/processOpenItems", //intercompany
+  receipts: "accountsReceivable/receipts", //feup
+  receivebleOpenItems: "accountsReceivable/processOpenItems"
 };
 
 const makeUrl = (endPoint, query, company) => {
@@ -95,8 +96,9 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
 
   const token = await getToken(companyID);
 
-  const url = makeUrl(endPoint, query, company);
+  console.log(data);
 
+  const url = makeUrl(endPoint, query, company);
   return axios({
     method,
     url,

@@ -1,15 +1,17 @@
-import Queue from "../../../lib/Queue";
 import {
   getPurchasesOrders,
   getPurchasesInvoices
 } from "../../../services/jasmin";
+import getSalesInvoices from "../../../services/jasmin/getSalesInvoices";
+
+import Queue from "../../../lib/Queue";
 
 const TestController = {
   // eslint-disable-next-line no-unused-vars
   async index({ request, response, view }) {
     const { params } = request;
     const { id } = params;
-    /*
+    
     const res = await Queue.add("PO_SO", {
       companyA: 1, // intercompany
       companyB: 2, // feup
@@ -17,7 +19,8 @@ const TestController = {
       processID: 2,
       step: 1
     });
-    */
+    
+    return res;
     if (id == 1) {
       return await Queue.add(
         "Test",

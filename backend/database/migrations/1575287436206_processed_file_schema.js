@@ -11,7 +11,7 @@ class ProcessedFileSchema extends Schema {
         .integer("user_id")
         .unsigned()
         .references("id")
-        .inTable("users");
+        .inTable("users").onDelete('CASCADE');
 
       table.uuid("file_id").unique();
       table.timestamps();

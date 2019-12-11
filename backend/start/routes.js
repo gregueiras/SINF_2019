@@ -27,6 +27,7 @@ Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAl
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
 Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
 Route.get('/new-process',"ProcTypeController.index");
+Route.post('/new-process',"ProcessController.addProcess");
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');
@@ -66,6 +67,7 @@ Route.get("/company/:id/token", "CompanyController.getToken");
 Route.post("/company/token", "CompanyController.setToken");
 
 Route.get("/process", "ProcessController.get");
+Route.post("/process/series", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");
 Route.post("/process/steps/current", "ProcessController.canRun");
 Route.post("/process/steps/next", "ProcessController.nextStep");

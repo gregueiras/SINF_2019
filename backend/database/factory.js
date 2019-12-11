@@ -46,29 +46,32 @@ Factory.blueprint("App/Models/Process", (faker, i, data) => {
     company_a: data.companyA,
     user: data.user,
     process_type: data.proc_type,
-    company_b: data.companyB
+    company_b: data.companyB,
+    series: data.series
   };
 });
 
-Factory.blueprint("App/Models/Trigger", (faker, i, {description}) => {
+Factory.blueprint("App/Models/Trigger", (faker, i, {description,type}) => {
   return {
-    description
+    description,
+    type
   };
 });
 
-Factory.blueprint("App/Models/Action", (faker, i, {description}) => {
+Factory.blueprint("App/Models/Action", (faker, i, {description, type}) => {
   return {
-    description
+    description, 
+    type
   };
 });
 
-Factory.blueprint("App/Models/Log", (faker, i, data) => {
+Factory.blueprint("App/Models/Log", (faker, i, { processID }) => {
   let enu = ["Completed", "Pending", "In Progress", "Failed"];
   let type = enu[Math.floor(Math.random() * 4)];
   return {
     description: faker.sentence({ words: 10 }),
     date: faker.date(),
-    process_id: "1",
+    process_id: processID,
     state: type
   };
 });

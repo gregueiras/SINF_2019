@@ -19,3 +19,12 @@ export const nextTurn = async ({ processID }) => {
   const { data } = req;
   return data;
 };
+
+export const getSeries = async ({ processID }) => {
+  const req = await axios.post(`http://0.0.0.0:3335/process/series`, {
+    processID
+  });
+
+  const { data } = req;
+  return data;
+}

@@ -8,6 +8,7 @@ class ActionSchema extends Schema {
     this.create("actions", table => {
       table.increments();
       table.string("description", 256);
+      table.string("type",256);
       table.timestamps();
     });
   }
