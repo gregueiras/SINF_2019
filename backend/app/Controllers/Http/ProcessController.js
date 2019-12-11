@@ -35,6 +35,15 @@ class ProcessController {
     return await Process.find(processID);
   }
 
+  async getSeries({ request }) {
+    const body = request.post();
+    const { processID } = body;
+
+    const process = await Process.find(processID);
+
+    return process.series;
+  }
+
   async canRun({ request }) {
     const body = request.post();
     const { processID, step } = body;

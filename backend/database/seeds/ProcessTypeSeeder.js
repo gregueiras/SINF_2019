@@ -39,6 +39,7 @@ class ProcessTypeSeeder {
     const pt1 = await Factory.model("App/Models/ProcessType").create({
       type: "Rent"
     });
+    
     pt1.steps().save(s1);
     pt1.steps().save(s2);
 
