@@ -40,6 +40,36 @@ class NewProcess extends Component {
   };
 
 
+  changeSteps(index){
+    axios.get(`http://localhost:3335/step/getByProcType/${this.state.processTypes[index -1].id}`).then((response) => {
+      response.data.forEach(element => {
+        const { step_no, trigger_id, action_id, flow } = element;
+
+        axios.get(`http://localhost:3335/trigger/getById/${trigger_id}`).then((response) => {
+          const { data } = response;
+          const { description: trigger_description } = data;
+          {
+            axios.get(`http://localhost:3335/action/getById/${action_id}`).then((response) => {
+              const { data } = response;
+              const { description: action_description } = data;
+              {
+                const newStep = {
+                  step: step_no,
+                  trigger: trigger_description,
+                  action: action_description,
+                  flow: flow,
+                };
+                this.setState({ tableData: [...this.state.tableData, newStep] });
+              }
+            });
+          }
+        })
+        console.log(this.state.tableData);
+      })
+
+    });
+  }
+
 
   componentDidMount() {
 
@@ -74,26 +104,12 @@ class NewProcess extends Component {
         companyBdescIndex: 0,
 
       })
-    
+
       console.log(response.data[0].id)
-      axios.get(`http://localhost:3335/step/getByProcType/${response.data[0].id}`).then((response) =>{
-        response.data.forEach(element =>{
-          const {step_no, trigger_id, action_id, flow} = element;
-          
-          const newStep = {
-            step: step_no,
-            trigger: "hello",
-            action: "action_id",
-            flow: flow,
-          };
-          this.setState({tableData: [...this.state.tableData, newStep]}); 
-        });
-        console.log(this.state.tableData);
-      })
+      
+      this.changeSteps(1);
 
     });
-
-    
   }
   onChangeCompanyA = (event) => {
     event.preventDefault();
@@ -104,27 +120,15 @@ class NewProcess extends Component {
     this.setState({ companyB: parseInt(event.target.value) });
   }
   onChangeProcessType = (event) => {
-    this.setState({tableData: []});  
+    this.setState({ tableData: [] });
     event.preventDefault();
     this.setState({ processType: parseInt(event.target.value) });
     this.setState({ companyAdescIndex: parseInt(event.target.value) - 1 });
     this.setState({ companyBdescIndex: parseInt(event.target.value) - 1 });
 
 
-    axios.get(`http://localhost:3335/step/getByProcType/${this.state.processTypes[parseInt(event.target.value) - 1].id}`).then((response) =>{
-      response.data.forEach(element =>{
-        const {step_no, trigger_id, action_id, flow} = element;
-        
-        const newStep = {
-          step: step_no,
-          trigger: "hello",
-          action: "action_id",
-          flow: flow,
-        };
-        this.setState({tableData: [...this.state.tableData, newStep]}); 
-      });
-      console.log(this.state.tableData);
-    })
+
+    this.changeSteps(parseInt(event.target.value));
   }
 
   addNewProcess() {
@@ -153,7 +157,7 @@ class NewProcess extends Component {
     return (
       <Container>
         {this.renderRedirect()}
-        <Row>
+        < Row >
           <Col>
             <Form.Group>
               <Form.Label className="gray-label">
@@ -176,7 +180,7 @@ class NewProcess extends Component {
               </Link>
             </Form.Group>
           </Col>
-        </Row>
+        </Row >
         <Row>
           <Col md={4}>
             <Form.Group>
@@ -215,33 +219,33 @@ class NewProcess extends Component {
         </Row>
 
         <div className="reactTable">
-        <ReactTable
-          data={this.state.tableData}
-          columns={[
-            {
-              Header: 'Step#',
-              accessor: 'step',
-            },
-            {
-              Header: 'Trigger',
-              accessor: 'trigger',
-            },
-            {
-              Header: 'Action',
-              accessor: 'action',
-            },
-            {
-              Header: 'Flow',
-              accessor: 'flow',
-            },
+          <ReactTable
+            data={this.state.tableData}
+            columns={[
+              {
+                Header: 'Step#',
+                accessor: 'step',
+              },
+              {
+                Header: 'Trigger',
+                accessor: 'trigger',
+              },
+              {
+                Header: 'Action',
+                accessor: 'action',
+              },
+              {
+                Header: 'Flow',
+                accessor: 'flow',
+              },
 
-          ]}
-          defaultPageSize={10}
-          className="-striped -highlight"
-        />
-        <br />
-      </div>
-     
+            ]}
+            defaultPageSize={10}
+            className="-striped -highlight"
+          />
+          <br />
+        </div>
+
 
         <div className="mt-5 mb-5">
           <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm">
@@ -254,8 +258,8 @@ class NewProcess extends Component {
         </Button>
         </div>
 
-       
-      </Container>
+
+      </Container >
     );
   }
 }

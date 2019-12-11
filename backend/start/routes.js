@@ -93,9 +93,12 @@ Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get('/trigger', 'TriggerController.index');
 Route.get('/trigger/getId/:description', 'TriggerController.getIdByDescription');
+Route.get('/trigger/getById/:id', 'TriggerController.getById');
+
 
 Route.get('/action', 'ActionController.index');
 Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
+Route.get('/action/getById/:id', 'ActionController.getById');
 
 
 Route.get("/entity", "EntityController.index");
