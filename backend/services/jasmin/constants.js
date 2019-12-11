@@ -36,8 +36,8 @@ export const endPoints = {
   companies: "corepatterns/companies",
   invoiceReceipt: "invoiceReceipt/invoices",
   billingInvoices: "billing/invoices",
-  payableOpenItems: "accountsPayable/processOpenItems",
-  receipts: "accountsReceivable/receipts",
+  payableOpenItems: "accountsPayable/processOpenItems", //intercompany
+  receipts: "accountsReceivable/receipts", //feup
   receivebleOpenItems: "accountsReceivable/processOpenItems"
 };
 

@@ -182,6 +182,7 @@ export default {
                       line.lineExtensionAmount.amount &&
                     el.lineExtensionAmount.baseAmount ===
                       line.lineExtensionAmount.baseAmount
+                      //TODO IGUALAR OS PRODUTOS
                 );
                 //&& el.purchasesItem ===
 
@@ -195,6 +196,10 @@ export default {
           }
 
           areNewDocuments = true;
+
+          let discount;
+          let amount;
+          let sourceDoc;
           try {
             const documentLines = [];
             let abort = true;
@@ -209,60 +214,27 @@ export default {
                 rpi => rpi.sourceDoc === foundMatchingSI.naturalKey
               );
 
-              console.log("sourceDoc: " + receivableOpenItem.sourceDoc);
-
-              const {
-                discount, //oi
-                dueDate, //oi
-                amount, //oi
-                exchangeRate, //oi
-                sourceDoc //oi
-              } = receivableOpenItem;
-
-              documentLines.push({
-                discount,
-                settled: true,
-
-                settledAmount: amount,
-                exchangeRate,
-                sourceDoc,
-                currency,
-              });
-
-              console.log(documentLines);
+              if(receivableOpenItem !== undefined){
+                console.log("sourceDoc: " + receivableOpenItem.sourceDoc);
+                discount = receivableOpenItem.discount;
+                amount = receivableOpenItem.amount;
+                sourceDoc = receivableOpenItem.sourceDoc;
+              }else{
+                abort = true;
+              }
             }
 
             console.log("ABORT: " + abort);
             if (!abort) {
               console.log("no abort");
-              console.log(allowanceChargeAmount.amount);
-              console.log(grossValue.amount);
-              console.log( payableAmount.amount);
-              console.log(wTaxTotal.amount);
-              console.log(taxTotal.amount);
-              console.log(taxExclusiveAmount.amount);
+              console.log(sourceDoc)
               Queue.add("create_SR", {
                 companyID: companyB,
-                documentType: "REC",
-                serie: "2019",
-                accountingParty: customerParty, //0001 -> customer
-                company: companyName, //FEUP -> company
-                documentDate: "2019-12-30T00:00:00",
-                postingDate: "2019-12-30T00:00:00",
-                currency,
-                exchangeRate: 1.0,
-                checkEndorsed: false,
-                isPaymentMethodCheck: false,
-                allowanceChargeAmount: allowanceChargeAmount.amount,
-                grossValue: grossValue.amount,
-                payableAmount: payableAmount.amount,
-                wTaxTotal: wTaxTotal.amount,
-                taxTotal: taxTotal.amount,
-                taxExclusiveAmount: taxExclusiveAmount.amount,
-                documentLines,
+                companyKey: companyKeyB,
+                discount, 
+                sourceDoc,
+                settled: amount,
                 purchasesInvoice,
-                userID,
-                financialAccount: "02"
               });
             }
           } catch (e) {

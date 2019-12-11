@@ -1,6 +1,6 @@
 import { addProcessed } from "../services/db";
 import { RETURN_TYPES } from "./index";
-import createSalesReceipt from "../services/jasmin/createSalesReceipt";
+import processOpenItems from "../services/jasmin/processOpenItems";
 
 const options = {};
 
@@ -12,50 +12,23 @@ export default {
     try {
       const {
         companyID,
-        documentType,
-        serie,
-        accountingParty,
-        company,
-        documentDate,
-        postingDate,
-        currency,
-        exchangeRate,
-        checkEndorsed,
-        isPaymentMethodCheck,
-        allowanceChargeAmount,
-        grossValue,
-        payableAmount,
-        wTaxTotal,
-        taxTotal,
-        taxExclusiveAmount,
-        documentLines,
-        purchasesInvoice,
-        financialAccount,
+        sourceDoc,
+        discount,
+        settled,
+        companyKey,
         userID,
+        purchasesInvoice,
       } = data;
 
       const fileID = purchasesInvoice.id;
-      
-      const res = await createSalesReceipt({
+      console.log("sourcedoc: " + sourceDoc);
+      const res = await processOpenItems({
         companyID,
-        documentType,
-        serie,
-        accountingParty,
-        company,
-        documentDate,
-        postingDate,
-        currency,
-        exchangeRate,
-        checkEndorsed,
-        isPaymentMethodCheck,
-        allowanceChargeAmount,
-        grossValue,
-        payableAmount,
-        wTaxTotal,
-        taxTotal,
-        taxExclusiveAmount,
-        receiptLines: documentLines,
-        financialAccount,
+        sourceDoc,
+        discount,
+        settled,
+        companyKey,
+        userID,
       });
 
       const { status } = res;
