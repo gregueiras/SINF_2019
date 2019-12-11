@@ -27,25 +27,20 @@ export default {
   options,
   async handle({ data }, done) {
     const { companyA, companyB, processID, step } = data;
-    console.log('here');
     const customerParty = await getCustomerParty({
         companyA,
         companyB,
       });
   
-      console.log("processID:" + processID);
-      console.log("customer party: " + customerParty);
       const sellerParty = await getSellerParty({
         companyA,
         companyB,
       });
-      console.log("seller party: " + sellerParty);
 
     const company = await getCompanyKey({ companyID: companyA });
 
     const userID = 1;
 
-    console.log("company:" + company);
 
     const info = {
       userID,
@@ -63,12 +58,9 @@ export default {
       console.log("ERROR SERIES");
       console.error(error.response.data);
     }
-    console.log("s:" );
     const serieKey = await getProcessSeries({ processID });
-    console.log("serieKey:" + serieKey);
 
     const serie = series.find(({ serieKey: sK }) => sK === serieKey);
-    console.log("serie:" + serie);
     if (serie === undefined) {
       console.log(`ERROR: NO SERIES ${serieKey}`);
       //console.error(e.response.data);
@@ -85,7 +77,6 @@ export default {
       console.error(e.response.data);
     }
 
-    console.log("got hiere")
 
     const salesInvoices = salesInvoicesData.filter(
       (si) => 
@@ -95,7 +86,6 @@ export default {
         && si.buyerCustomerParty == customerParty, //0001
     );
 
-    console.log("got hiere1")
 
     if (!salesInvoices) {
       done(null, {
@@ -111,7 +101,6 @@ export default {
         userID,
         fileID: salesInvoice.id,
       });
-      console.log("replicated:" + resplicated)
       if (!replicated) {
         console.log('NEW SI');
         areNewDocuments = true;
