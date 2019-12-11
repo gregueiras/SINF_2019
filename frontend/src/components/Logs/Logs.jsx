@@ -1,4 +1,4 @@
-import React, { useState,Component } from 'react';
+import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import { Container } from 'react-bootstrap';
 import setIcon from '../../Utilities/SetIcon';
