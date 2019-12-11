@@ -42,7 +42,6 @@ class Overview extends Component {
   }
 
   getLogs(){
-    console.log("get logs");
     this.LogService.getLogsBetween2Companies(this.state.companyA,
       this.state.companyB, (response)=>{
         console.log(response);
@@ -67,7 +66,7 @@ class Overview extends Component {
         <Row>
           <Col md={4}>
             <Link
-              className="blue-button gen-button plus-button rel-text-white"
+              className="addNewProcess blue-button gen-button plus-button rel-text-white"
               size="sm"
               to="/new-process"
             >
