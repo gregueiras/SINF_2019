@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export default class LogService {
   constructor() {
     this.logsBasePath = 'http://localhost:3335/log';

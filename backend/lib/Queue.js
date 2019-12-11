@@ -27,9 +27,10 @@ export default {
     return this.queues.forEach(queue => {
       queue.bull.process("__default__", 100, queue.handle);
       queue.bull.process(queue.name, 100, queue.handle);
-      queue.bull.process(`${queue.name}_0`, 100, queue.handle);
-      queue.bull.process(`${queue.name}_1`, 100, queue.handle);
-      
+      for (let i = 0; i < 100; i++) {
+        queue.bull.process(`${queue.name}_${i}`, 100, queue.handle);
+
+      }
       queue.bull.on("completed", (job, result) => {
         console.log(`Job completed with result ${JSON.stringify(result)}`);
         const { value } = result;
