@@ -128,46 +128,48 @@ function ViewProcess() {
   }
 
 
-  function handleProcessNameChange(e) {
-    axios
-      .get(`http://localhost:3335/proc-type`)
-      .then((response) => {
-        console.log("Success!\n" + response)
-        if (response.includes(e.target.value))
-          setValidProcName(false);
-      })
-      .catch((error) => {
-        console.log("Error:" + error)
-      });
-
-    setProcessName(e.target.value)
-  }
-
   const submitForm = (formData) => {
     let { steps, user, type } = formData;
-    if (type === "")
+
+
+    if (type === "") {
+      setValidProcName(false);
       return;
+    }
 
-    axios
-      .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
-        const { data: proc_type_id } = response;
-        steps.forEach(({ action, flow, step, trigger }) => {
+    axios.get(`http://localhost:3335/proc-type/${type}`).then((response) => {
+      console.log(response)
+      const { data: exists } = response;
 
-          axios.get(`http://localhost:3335/trigger/getId/${trigger}`).then((response) => {
-            const { data: trigger_id } = response;
+      if (exists.length != 0) {
+        setValidProcName(false);
+        return;
+      }
 
-            axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
-              const { data: action_id } = response;
-              axios
-                .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id })
-                .then((response) => {
-                  console.log(response);
-                })
+      setValidProcName(true);
+
+      axios
+        .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
+          const { data: proc_type_id } = response;
+          steps.forEach(({ action, flow, step, trigger }) => {
+
+            axios.get(`http://localhost:3335/trigger/getId/${trigger}`).then((response) => {
+              const { data: trigger_id } = response;
+
+              axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
+                const { data: action_id } = response;
+                axios
+                  .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id })
+                  .then((response) => {
+                    console.log(response);
+                  })
+              })
             })
           })
         })
-      })
+    });
   }
+
 
   return (
     <Container>
@@ -178,8 +180,9 @@ function ViewProcess() {
               Process Name
             </Form.Label>
             <Form.Control
-              onChange={(e) => handleProcessNameChange(e)}
+              style = {validProcName ? {}: { borderColor: 'red'}}
               placeholder="required"
+              onChange = {(e) => setProcessName(e.target.value)}
             //TODO isValid/isInvalid depending handleProcessNameChange/validProcName
             />
           </Form.Group>

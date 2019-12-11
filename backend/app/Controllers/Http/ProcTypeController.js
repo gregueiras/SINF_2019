@@ -20,17 +20,21 @@ class ProcTypeController {
             return await Database
             .select('*')
             .from('process_types')
-            .where('name', nameSpaces);
+            .where('type', nameSpaces);
     }
 
     async createProcType({request}, response) {
         const body = request.post();
-        const { user, type } = body;
+        const { user, type, descriptionA, descriptionB } = body;
 
+        
 
         const newProcType = new ProcType();
         newProcType.user = user;
         newProcType.type = type;
+        newProcType.descriptionA = descriptionA;
+        newProcType.descriptionB = descriptionB;
+
 
         await newProcType.save();
 

@@ -21,6 +21,7 @@ class StepController {
         newStep.action_id = action_id;
         newStep.trigger_id = trigger_id;
         newStep.process_type_id = proc_type_id;
+        newStep.flow = flow;
 
 
         await newStep.save();
@@ -32,14 +33,9 @@ class StepController {
         const {params} = request;
         const {step, process_type_id, action_id, trigger_id} = params;
        
-
-
         const result = await Database.select('id').from('steps')
         .where('step_no', step).andWhere('action_id', action_id).andWhere('trigger_id', trigger_id).andWhere('process_type_id', process_type_id).first();
-        
-
-        
-
+    
         if(typeof result == 'undefined'){
             response.ok("Not Found");
         }else{
