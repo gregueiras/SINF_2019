@@ -29,6 +29,7 @@ class NewProcess extends Component {
     this.CompanyService = new CompanyService();
     this.ProcessTypeService = new ProcessTypeService();
     this.ProcessService = new ProcessService();
+
     this.addNewProcess = this.addNewProcess.bind(this);
   }
 
@@ -39,8 +40,8 @@ class NewProcess extends Component {
       this.setState({
         companyAoptions: response.data,
         companyBoptions: reverse,
-        companyA: response.data[0],
-        companyB: reverse[0],
+        companyA: response.data[0].id,
+        companyB: reverse[0].id,
         redirect:false
 
       })
@@ -51,34 +52,30 @@ class NewProcess extends Component {
 
       this.setState({
         processTypes: response.data,
-        processType: response.data[0]
+        processType: response.data[0].id
       })
     });
   }
   onChangeCompanyA = (event) => {
     event.preventDefault();
-    this.setState({ companyA: event.target.value });
+    this.setState({ companyA: parseInt(event.target.value) });
   }
   onChangeCompanyB = (event) => {
     event.preventDefault();
-    this.setState({ companyB: event.target.value });
+    this.setState({ companyB: parseInt(event.target.value )});
   }
   onChangeProcessType = (event) => {
-
     event.preventDefault();
-    this.setState({ processType: event.target.value });
+    this.setState({ processType: parseInt(event.target.value)});
   }
 
-  addNewProcess(event) {
-    event.preventDefault();
-    //console.log("state " + JSON.stringify(this.state));
-    console.log(JSON.stringify(this.state.companyA) + " " + JSON.stringify(this.state.companyB));
+  addNewProcess() {
+  
     this.ProcessService.addProcess({
-      companyA: this.state.companyA.id, companyB: this.state.companyB.id, processType: this.state.processType.id
+      companyA: this.state.companyA, companyB: this.state.companyB, processType: this.state.processType
     }, (response) => {
-      console.log(response);
       if (response.status === 200) {
-        console.log("success");
+        console.log(response.data);
         this.setState({ redirect: true });
       }
       else {
@@ -86,7 +83,6 @@ class NewProcess extends Component {
 
       }
     });
-
   }
   renderRedirect = () => {
     if (this.state.redirect) {
@@ -163,7 +159,7 @@ class NewProcess extends Component {
             <FontAwesomeIcon icon={faTimes} className="iconCheck" />
             Cancel
         </Button>
-          <Button className="blue-button gen-button rel-text-white w-20" size="sm" onClick={this.addNewProcess}>
+          <Button className="blue-button gen-button rel-text-white w-20" size="sm" type ="submit" onClick={this.addNewProcess}>
             <FontAwesomeIcon icon={faCheck} className="iconCheck" />
             Confirm
         </Button>
