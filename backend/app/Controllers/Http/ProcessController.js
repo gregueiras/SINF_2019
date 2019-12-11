@@ -31,6 +31,15 @@ class ProcessController {
     return await Process.find(processID);
   }
 
+  async getSeries({ request }) {
+    const body = request.post();
+    const { processID } = body;
+
+    const process = await Process.find(processID);
+
+    return process.series;
+  }
+
   async canRun({ request }) {
     const body = request.post();
     const { processID, step } = body;
@@ -58,9 +67,9 @@ class ProcessController {
     if (nextStep > steps) {
       nextStep = 1;
     }
-    
+
     process.active_step = nextStep;
-    
+
     process.save();
 
     return process.active_step;

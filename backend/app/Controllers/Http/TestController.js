@@ -9,7 +9,7 @@ const TestController = {
   async index({ request, response, view }) {
     const { params } = request;
     const { id } = params;
-    /*
+    
     const res = await Queue.add("PO_SO", {
       companyA: 1, // intercompany
       companyB: 2, // feup
@@ -17,7 +17,8 @@ const TestController = {
       processID: 2,
       step: 1
     });
-    */
+    
+    return res;
     if (id == 1) {
       return await Queue.add(
         "Test",
