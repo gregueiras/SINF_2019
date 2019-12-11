@@ -36,9 +36,9 @@ class ProcessController {
   }
 
   async getSeries({ request }) {
-    const body = request.post();
-    const { processID } = body;
-
+    const { params } = request;
+    const { id } = params;
+    const processID = id;
     const process = await Process.find(processID);
 
     return process.series;

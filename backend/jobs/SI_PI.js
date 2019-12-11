@@ -1,12 +1,14 @@
 import { RETURN_TYPES } from './index';
 import {
   getCompanyKey,
+  getSeries as getJasminSeries
 } from '../services/jasmin';
 import {
   isProcessed,
   getCorrespondenceB,
   getCustomerParty,
   getSellerParty,
+  getSeries as getProcessSeries
 } from '../services/db';
 import getSalesInvoices from '../services/jasmin/getSalesInvoices';
 
@@ -24,21 +26,26 @@ export default {
   key: 'SI_PI',
   options,
   async handle({ data }, done) {
-    const { companyA, companyB } = data;
-
+    const { companyA, companyB, processID, step } = data;
+    console.log('here');
     const customerParty = await getCustomerParty({
         companyA,
         companyB,
       });
   
+      console.log("processID:" + processID);
+      console.log("customer party: " + customerParty);
       const sellerParty = await getSellerParty({
         companyA,
         companyB,
       });
+      console.log("seller party: " + sellerParty);
 
     const company = await getCompanyKey({ companyID: companyA });
 
     const userID = 1;
+
+    console.log("company:" + company);
 
     const info = {
       userID,
@@ -48,6 +55,28 @@ export default {
     };
 
 
+
+    let series;
+    try {
+      series = (await getJasminSeries({ companyID: companyB })).data;
+    } catch (error) {
+      console.log("ERROR SERIES");
+      console.error(error.response.data);
+    }
+    console.log("s:" );
+    const serieKey = await getProcessSeries({ processID });
+    console.log("serieKey:" + serieKey);
+
+    const serie = series.find(({ serieKey: sK }) => sK === serieKey);
+    console.log("serie:" + serie);
+    if (serie === undefined) {
+      console.log(`ERROR: NO SERIES ${serieKey}`);
+      //console.error(e.response.data);
+
+      done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
+      return;
+    }
+
     // get serie's purchase order
     let salesInvoicesData;
     try {
@@ -56,18 +85,22 @@ export default {
       console.error(e.response.data);
     }
 
+    console.log("got hiere")
 
     const salesInvoices = salesInvoicesData.filter(
       (si) => 
+        si.serie === serieKey &&
         si.isActive
         && !si.isDeleted
         && si.buyerCustomerParty == customerParty, //0001
     );
 
+    console.log("got hiere1")
+
     if (!salesInvoices) {
       done(null, {
         value: RETURN_TYPES.END_TRIGGER_FAIL,
-        msg: `No sales invoices found. Please check if you have defined it correctly.`,
+        msg: `No purchases orders found with series ${serieKey}. Please check if you have defined it correctly.`,
         ...info,
         options,
       });
@@ -78,6 +111,7 @@ export default {
         userID,
         fileID: salesInvoice.id,
       });
+      console.log("replicated:" + resplicated)
       if (!replicated) {
         console.log('NEW SI');
         areNewDocuments = true;
@@ -117,12 +151,6 @@ export default {
           }
           console.log(abort);
           if (!abort) {
-            /*console.dir({
-              company,
-              buyerCustomerParty: customerParty,
-              deliveryTerm: purchaseOrder.deliveryTerm,
-              documentLines,
-            });*/
 
             Queue.add('create_PI', {
               documentType: "VFA",
