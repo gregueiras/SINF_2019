@@ -27,6 +27,7 @@ Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAl
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
 Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
 Route.get('/new-process',"ProcTypeController.index");
+Route.post('/new-process',"ProcessController.addProcess");
 
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');

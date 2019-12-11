@@ -8,6 +8,7 @@ class TriggerSchema extends Schema {
     this.create('triggers', (table) => {
       table.increments()
       table.string('description', 256)
+      table.string('type',256);
       table.timestamps()
     })
   }

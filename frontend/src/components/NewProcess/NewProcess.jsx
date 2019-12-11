@@ -3,11 +3,12 @@ import React, { useState, Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
-  Container, Form, Row, Col,
+  Container, Form, Row, Col, Button
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CompanyService from '../../services/CompanyService';
 import ProcessTypeService from '../../services/ProcessTypeService';
+import ProcessService from '../../services/ProcessService';
 
 import './NewProcess.css';
 
@@ -19,10 +20,16 @@ class  NewProcess extends Component {
     this.state = {
       companyAoptions: [],
       companyBoptions: [],
-      processType: [],
+      processTypes: [],
+      companyA:'',
+      companyB: '',
+      processType:'',
+    
     };
     this.CompanyService = new CompanyService();
     this.ProcessTypeService = new ProcessTypeService();
+    this.ProcessService = new ProcessService();
+    this.addNewProcess = this.addNewProcess.bind(this);
   }
 
   componentDidMount(){
@@ -31,7 +38,9 @@ class  NewProcess extends Component {
       const reverse = response.data.slice().reverse();
       this.setState({
         companyAoptions: response.data,
-        companyBoptions: reverse
+        companyBoptions: reverse,
+        companyA: response.data[0],
+        companyB: reverse[0]
 
       })
     });
@@ -40,9 +49,42 @@ class  NewProcess extends Component {
       console.log("process type "+ JSON.stringify(reverse));
     
       this.setState({
-        processType: response.data
+        processTypes: response.data,
+        processType: response.data[0]
     })
     });
+  }
+  onChangeCompanyA = (event) => {
+    event.preventDefault();
+    this.setState({companyA: event.target.value });
+  }
+  onChangeCompanyB = (event) => {
+    event.preventDefault();
+    this.setState({companyB: event.target.value});
+  }
+  onChangeProcessType = (event) => {
+
+    event.preventDefault();
+    this.setState({processType: event.target.value});
+  }
+
+  addNewProcess(event){
+    event.preventDefault();
+    //console.log("state " + JSON.stringify(this.state));
+    console.log(JSON.stringify(this.state.companyA)+" "+JSON.stringify(this.state.companyB));
+    this.ProcessService.addProcess({
+        companyA: this.state.companyA.id, companyB: this.state.companyB.id, processType: this.state.processType.id
+    }, (response) => {
+        console.log(response);
+        if (response.status === 200)
+        console.log("success");
+           // this.setState({ redirect: true });
+        else {
+            console.log("failed");
+           
+        }
+    });
+
   }
 
 render(){
@@ -56,9 +98,9 @@ render(){
             </Form.Label>
             <select
               className="selector process-selector pos-lt rel-text-white w-20"
-              name="companyA"
+              name="typeOfProcess" onChange = {this.onChangeProcessType} 
             >
-              {this.state.processType.map((e, key) => (
+              {this.state.processTypes.map((e, key) => (
                 <option key={key} value={e.value}>
                   {e.type}
                 </option>
@@ -79,10 +121,10 @@ render(){
             </Form.Label>
             <select
               className="selector company-selector pos-lt rel-text-white"
-              name="companyA"
+              name="companyA" onChange = {this.onChangeCompanyA}
             >
               {this.state.companyAoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id} >
                   {e.name}
                 </option>
               ))}
@@ -96,10 +138,10 @@ render(){
             </Form.Label>
             <select
               className="selector company-selector pos-rt rel-text-white"
-              name="companyB"
+              name="companyB" onChange = {this.onChangeCompanyB}
             >
               {this.state.companyBoptions.map((e, key) => (
-                <option key={key} value={e.value}>
+                <option key={key} value={e.id}>
                   {e.name}
                 </option>
               ))}
@@ -109,14 +151,14 @@ render(){
       </Row>
 
       <div className="mt-5 mb-5">
-        <Link className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" to="/">
+        <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" to="/">
           <FontAwesomeIcon icon={faTimes} className="iconCheck" />
           Cancel
-        </Link>
-        <Link className="blue-button gen-button rel-text-white w-20" size="sm" to="/">
+        </Button>
+        <Button className="blue-button gen-button rel-text-white w-20" size="sm" onClick={this.addNewProcess}>
           <FontAwesomeIcon icon={faCheck} className="iconCheck" />
           Confirm
-        </Link>
+        </Button>
       </div>
     </Container>
   );

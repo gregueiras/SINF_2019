@@ -5,11 +5,13 @@ const Database = use("Database");
 class ProcessTypeSeeder {
   async run() {
     const t1 = await Factory.model("App/Models/Trigger").create({
-      description: "Wait for PurchaseOrder"
+      description: "Wait for PurchaseOrder",
+      type: "PO"
     });
 
     const a1 = await Factory.model("App/Models/Action").create({
-      description: "Create SalesOrder"
+      description: "Create SalesOrder",
+      type: "SO"
     });
 
     const s1 = await Factory.model("App/Models/Step").make({
@@ -19,11 +21,13 @@ class ProcessTypeSeeder {
     });
 
     const t2 = await Factory.model("App/Models/Trigger").create({
-      description: "Wait for seller receipt"
+      description: "Wait for seller payment",
+      type: "PP"
     });
 
     const a2 = await Factory.model("App/Models/Action").create({
-      description: "Create supplier receipt"
+      description: "Create supplier receipt",
+      type:"SR"
     });
 
     const s2 = await Factory.model("App/Models/Step").make({
