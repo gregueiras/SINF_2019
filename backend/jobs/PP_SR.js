@@ -41,8 +41,6 @@ export default {
     const companyKeyA = await getCompanyKey({ companyID: companyA });
     const companyKeyB = await getCompanyKey({ companyID: companyB });
 
-    const companyName = await getCompanyName({ companyID: companyB });
-
     const userID = 1;
 
     const info = {
@@ -117,13 +115,6 @@ export default {
     for (const purchasesInvoice of purchasesInvoices) {
       const {
         naturalKey,
-        currency,
-        allowanceChargeAmount,
-        grossValue,
-        payableAmount,
-        wTaxTotal,
-        taxTotal,
-        taxExclusiveAmount
       } = purchasesInvoice;
 
       const foundOpenItem = payableOpenItemsData.some(
@@ -184,7 +175,6 @@ export default {
                       line.lineExtensionAmount.baseAmount
                       //TODO IGUALAR OS PRODUTOS
                 );
-                //&& el.purchasesItem ===
 
                 equal &= found;
               }
@@ -201,7 +191,6 @@ export default {
           let amount;
           let sourceDoc;
           try {
-            const documentLines = [];
             let abort = true;
 
             if (foundMatchingSI !== undefined) {
