@@ -44,11 +44,6 @@ function ViewProcess() {
   }, [setCompanyAOptions, setCompanyBOptions, setTriggerCompanyOptions, setActionCompanyOptions])
 
 
-
-
-
-
-
   const [triggerOptions, setTriggerOptions] = useState([]);
 
   useEffect(() => {
@@ -98,7 +93,10 @@ function ViewProcess() {
   const [companyB, setCompanyB] = useState("2");
 
   const [processName, setProcessName] = useState('');
+
   const [validProcName, setValidProcName] = useState(true);
+  const [validDescriptionA, setValidDescriptionA] = useState(true);
+  const [validDescriptionB, setValidDescriptionB] = useState(true);
 
   const [companyAType, setCompanyAType] = useState('');
 
@@ -128,46 +126,69 @@ function ViewProcess() {
   }
 
 
-  function handleProcessNameChange(e) {
-    axios
-      .get(`http://localhost:3335/proc-type`)
-      .then((response) => {
-        console.log("Success!\n" + response)
-        if (response.includes(e.target.value))
-          setValidProcName(false);
-      })
-      .catch((error) => {
-        console.log("Error:" + error)
-      });
-
-    setProcessName(e.target.value)
-  }
-
   const submitForm = (formData) => {
-    let { steps, user, type } = formData;
-    if (type === "")
+    let { steps, user, type, descriptionA, descriptionB } = formData;
+
+
+    if (!type.match(/[A-Za-z]+/g)) {
+      console.log("invalid");
+      setValidProcName(false);
       return;
+    }
+    setValidProcName(true);
 
-    axios
-      .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
-        const { data: proc_type_id } = response;
-        steps.forEach(({ action, flow, step, trigger }) => {
 
-          axios.get(`http://localhost:3335/trigger/getId/${trigger}`).then((response) => {
-            const { data: trigger_id } = response;
+    if (!descriptionA.match(/[A-Za-z]+/g)) {
+      console.log("invalid1");
+      setValidDescriptionA(false);
+      return;
+    }
+    setValidDescriptionA(true);
 
-            axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
-              const { data: action_id } = response;
-              axios
-                .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id })
-                .then((response) => {
-                  console.log(response);
-                })
+
+    if (!descriptionB.match(/[A-Za-z]+/g)) {
+      console.log("invalid2");
+      setValidDescriptionB(false);
+      return;
+    }
+    setValidDescriptionB(true);
+
+
+
+    axios.get(`http://localhost:3335/proc-type/${type}`).then((response) => {
+      console.log(response)
+      const { data: exists } = response;
+
+      if (exists.length !== 0) {
+        setValidProcName(false);
+        return;
+      }
+
+      setValidProcName(true);
+      
+
+      axios
+        .post('http://localhost:3335/proc-type', { user, type, descriptionA, descriptionB}).then((response) => {
+          const { data: proc_type_id } = response;
+          steps.forEach(({ action, flow, step, trigger }) => {
+
+            axios.get(`http://localhost:3335/trigger/getId/${trigger}`).then((response) => {
+              const { data: trigger_id } = response;
+
+              axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
+                const { data: action_id } = response;
+                axios
+                  .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id, descriptionA, descriptionB })
+                  .then((response) => {
+                    console.log(response);
+                  })
+              })
             })
           })
         })
-      })
+    });
   }
+
 
   return (
     <Container>
@@ -178,8 +199,9 @@ function ViewProcess() {
               Process Name
             </Form.Label>
             <Form.Control
-              onChange={(e) => handleProcessNameChange(e)}
+              style = {validProcName ? {}: { borderColor: 'red'}}
               placeholder="required"
+              onChange = {(e) => setProcessName(e.target.value)}
             //TODO isValid/isInvalid depending handleProcessNameChange/validProcName
             />
           </Form.Group>
@@ -190,6 +212,7 @@ function ViewProcess() {
               Company A type
             </Form.Label>
             <Form.Control
+              style = {validDescriptionA ? {}: { borderColor: 'red'}}
               onChange={(e) => setCompanyAType(e.target.value)}
               placeholder="required"
             />
@@ -201,6 +224,7 @@ function ViewProcess() {
               Company B type
             </Form.Label>
             <Form.Control
+              style = {validDescriptionB ? {}: { borderColor: 'red'}}
               onChange={(e) => setCompanyBType(e.target.value)}
               placeholder="required"
             />
@@ -388,7 +412,9 @@ function ViewProcess() {
           const formData = {
             steps: data,
             user: 1,
-            type: processName
+            type: processName,
+            descriptionA: companyAType,
+            descriptionB: companyBType,
           };
           submitForm(formData);
         }} type="submit" size="sm" className="blue-button rel-text-white">

@@ -2,3 +2,7 @@
     float: left;  
     width: 50%;
 }
+
+.addNewProcess{
+    border-radius: 0.2rem;
+}
