@@ -6,6 +6,7 @@ const ProcessType = use("App/Models/ProcessType");
 const Step = use("App/Models/Step");
 const Trigger = use("App/Models/Trigger");
 const Action = use("App/Models/Action");
+const Log = use("App/Models/Log");
 const Database = use('Database');
 
 class ProcessController {
@@ -115,6 +116,14 @@ class ProcessController {
        process.updated_at = Database.fn.now();
        process.series = processTypeJob;
        await process.save();
+       const log = new Log();
+       log.state = "Pending";
+       log.description = getProcessType.type;
+       log.date = process.created_at;
+       log.process_id = process.id;
+       log.created_at = Database.fn.now();
+       log.updated_at = Database.fn.now();
+       await log.save();
  
        console.log("serie " + process.series);
        for (const step of steps) {
@@ -128,6 +137,7 @@ class ProcessController {
          console.log("job " + job);
          await Queue.add(job, { companyA, companyB, processID: process.id, step: step.step_no }, jobName);
        }
+
        return true;
      } else return false;
   }

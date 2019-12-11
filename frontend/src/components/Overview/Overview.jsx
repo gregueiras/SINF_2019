@@ -42,8 +42,10 @@ class Overview extends Component {
   }
 
   getLogs(){
+    console.log("get logs");
     this.LogService.getLogsBetween2Companies(this.state.companyA,
       this.state.companyB, (response)=>{
+        console.log(response);
         this.setState({
           data: response.data
         })
