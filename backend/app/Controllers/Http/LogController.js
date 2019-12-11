@@ -9,15 +9,16 @@ class LogController {
   async index() {
     const logs = await Log.all();
     const processes = await Process.all();
-
-    logs.rows.map((log) => {
-      let { process_id } = log;
-      processes.rows.map((process) => {
-        if (process.id == process_id) {
-          log.descriptionProcess = process.description;
-        }
+    if (logs !== undefined) {
+      logs.rows.map((log) => {
+        let { process_id } = log;
+        processes.rows.map((process) => {
+          if (process.id == process_id) {
+            log.descriptionProcess = process.description;
+          }
+        });
       });
-    });
+    }
 
 
     return logs;
@@ -28,9 +29,6 @@ class LogController {
     this.curr = res;
 
   }
-
-
-
   async getById(request, response) {
     const { params } = request;
     const { id } = params;
@@ -115,6 +113,31 @@ class LogController {
     return affectedRows;
 
   }
+  async getProcesses(request) {
+    const { params } = request;
+    const { companyA, companyB } = params;
+    const data =
+      (await Process.query()
+        .where({
+          company_a: companyA,
+          company_b: companyB
+        })
+        .fetch()).toJSON();
+
+    const logs = await Log.all();
+    let logsBetween2Companies = [];
+    if (data[0] !== undefined) {
+      logs.rows.map((log) => {
+
+        if (log.process_id == data[0].id) {
+          logsBetween2Companies.push(log);
+        }
+      });
+    }
+    return logsBetween2Companies;
+  }
 };
+
+
 
 module.exports = LogController;

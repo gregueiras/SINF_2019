@@ -1,22 +1,40 @@
 'use strict'
 
-const Proc_Type = use('App/Models/ProcessType')
+const ProcType = use('App/Models/ProcessType')
 const Database = use('Database');
 
 class ProcTypeController {
 
     async index() {
-        return Proc_Type.all();
+        return ProcType.all();
     }
 
+   
 
     async getByName(request, response) {
         const { params } = request;
         const { name } = params;
-        return await Database
+
+        const nameSpaces = decodeURI(name);
+
+            return await Database
             .select('*')
             .from('process_types')
-            .where('name', name);
+            .where('name', nameSpaces);
+    }
+
+    async createProcType({request}, response) {
+        const body = request.post();
+        const { user, type } = body;
+
+
+        const newProcType = new ProcType();
+        newProcType.user = user;
+        newProcType.type = type;
+
+        await newProcType.save();
+
+        return newProcType.id;
     }
 
 

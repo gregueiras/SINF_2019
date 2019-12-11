@@ -17,12 +17,8 @@ class CompanySchema extends Schema {
       table.timestamps()
     })
   }
-
   down () {
-    this.table('companies', (table) => {
-      table.dropColumn('token')
-      table.dropColumn('expires')
-    })
+    this.drop('companies');
   }
 }
 

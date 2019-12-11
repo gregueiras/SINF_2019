@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-export default class CompanyService {
+export default class ProcessTypeService {
     constructor() {
       this.processTypeBasePath = 'http://localhost:3335/new-process';
     }

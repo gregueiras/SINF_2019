@@ -7,7 +7,8 @@ class TriggerSchema extends Schema {
   up () {
     this.create('triggers', (table) => {
       table.increments()
-      table.string('description',256)
+      table.string('description', 256)
+      table.string('type',256);
       table.timestamps()
     })
   }
