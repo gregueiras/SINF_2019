@@ -11,21 +11,17 @@ class StepController {
 
     async createStep({request}, response) {
 
-        console.log("shit1");
 
         const body = request.post();
-        const { action, flow, step, trigger} = body; 
-
-        let trigger_id, action_id;
-
-        ({id: trigger_id} = await Database.select('id').from('triggers').where('description', trigger).first());
-        ({id: action_id} = await Database.select('id').from('actions').where('description', action).first());
-        console.log("Here" + trigger_id + "," + action_id);
+        const { action_id, flow, step, trigger_id, proc_type_id } = body; 
+     
 
         const newStep = new Step();
         newStep.step_no = step;
         newStep.action_id = action_id;
         newStep.trigger_id = trigger_id;
+        newStep.process_type_id = proc_type_id;
+
 
         await newStep.save();
 
@@ -34,21 +30,22 @@ class StepController {
 
     async checkForCopy({request,response}){
         const {params} = request;
-        const {step, action_id, trigger_id} = params;
-        console.log(step);
-        console.log(action_id);
-        console.log(trigger_id);
+        const {step, process_type_id, action_id, trigger_id} = params;
+       
 
-        const {rows} = await Step.query()
-        .where({step_no: step},{action: action_id},{trigger: trigger_id})
-        .fetch()
 
-        console.log(rows);
+        const result = await Database.select('id').from('steps')
+        .where('step_no', step).andWhere('action_id', action_id).andWhere('trigger_id', trigger_id).andWhere('process_type_id', process_type_id).first();
+        
 
-        if(rows.length !== 0){
-            response.found();
-        }else
-            response.ok();
+        
+
+        if(typeof result == 'undefined'){
+            response.ok("Not Found");
+        }else{
+            const {id} = result;
+            response.ok(id);
+        }
     }
 
 }

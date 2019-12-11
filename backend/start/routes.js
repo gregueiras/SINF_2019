@@ -37,6 +37,9 @@ Route.get('/step', 'StepController.index');
 Route.get('/step/check/:step/:action_id/:trigger_id', 'StepController.checkForCopy');
 Route.post('/step', 'StepController.createStep');
 
+Route.get('/process-step','ProcessStepController.index');
+Route.post('/process-step', 'ProcessStepController.createProcessStep');
+
 Route.get("/user", "UserController.index");
 Route.get("/user/:id", "UserController.get");
 
@@ -87,8 +90,11 @@ Route.post('/settings', "CompanyController.addCompany");
 Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get('/trigger', 'TriggerController.index');
+Route.get('/trigger/getId/:description', 'TriggerController.getIdByDescription');
 
 Route.get('/action', 'ActionController.index');
+Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
+
 
 Route.get("/entity", "EntityController.index");
 Route.get("/entity/:companyA/:companyB/all", "EntityController.getAllCorrespondences");
