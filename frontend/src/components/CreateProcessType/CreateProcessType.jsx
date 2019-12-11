@@ -44,11 +44,6 @@ function ViewProcess() {
   }, [setCompanyAOptions, setCompanyBOptions, setTriggerCompanyOptions, setActionCompanyOptions])
 
 
-
-
-
-
-
   const [triggerOptions, setTriggerOptions] = useState([]);
 
   useEffect(() => {
@@ -98,7 +93,10 @@ function ViewProcess() {
   const [companyB, setCompanyB] = useState("2");
 
   const [processName, setProcessName] = useState('');
+
   const [validProcName, setValidProcName] = useState(true);
+  const [validDescriptionA, setValidDescriptionA] = useState(true);
+  const [validDescriptionB, setValidDescriptionB] = useState(true);
 
   const [companyAType, setCompanyAType] = useState('');
 
@@ -129,13 +127,33 @@ function ViewProcess() {
 
 
   const submitForm = (formData) => {
-    let { steps, user, type } = formData;
+    let { steps, user, type, descriptionA, descriptionB } = formData;
 
 
-    if (type === "") {
+    if (!type.match(/[A-Za-z]+/g)) {
+      console.log("invalid");
       setValidProcName(false);
       return;
     }
+    setValidProcName(true);
+
+
+    if (!descriptionA.match(/[A-Za-z]+/g)) {
+      console.log("invalid1");
+      setValidDescriptionA(false);
+      return;
+    }
+    setValidDescriptionA(true);
+
+
+    if (!descriptionB.match(/[A-Za-z]+/g)) {
+      console.log("invalid2");
+      setValidDescriptionB(false);
+      return;
+    }
+    setValidDescriptionB(true);
+
+
 
     axios.get(`http://localhost:3335/proc-type/${type}`).then((response) => {
       console.log(response)
@@ -147,9 +165,10 @@ function ViewProcess() {
       }
 
       setValidProcName(true);
+      
 
       axios
-        .post('http://localhost:3335/proc-type', { user, type }).then((response) => {
+        .post('http://localhost:3335/proc-type', { user, type, descriptionA, descriptionB}).then((response) => {
           const { data: proc_type_id } = response;
           steps.forEach(({ action, flow, step, trigger }) => {
 
@@ -159,7 +178,7 @@ function ViewProcess() {
               axios.get(`http://localhost:3335/action/getId/${action}`).then((response) => {
                 const { data: action_id } = response;
                 axios
-                  .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id })
+                  .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id, descriptionA, descriptionB })
                   .then((response) => {
                     console.log(response);
                   })
@@ -193,6 +212,7 @@ function ViewProcess() {
               Company A type
             </Form.Label>
             <Form.Control
+              style = {validDescriptionA ? {}: { borderColor: 'red'}}
               onChange={(e) => setCompanyAType(e.target.value)}
               placeholder="required"
             />
@@ -204,6 +224,7 @@ function ViewProcess() {
               Company B type
             </Form.Label>
             <Form.Control
+              style = {validDescriptionB ? {}: { borderColor: 'red'}}
               onChange={(e) => setCompanyBType(e.target.value)}
               placeholder="required"
             />
@@ -391,7 +412,9 @@ function ViewProcess() {
           const formData = {
             steps: data,
             user: 1,
-            type: processName
+            type: processName,
+            descriptionA: companyAType,
+            descriptionB: companyBType,
           };
           submitForm(formData);
         }} type="submit" size="sm" className="blue-button rel-text-white">
