@@ -5,6 +5,10 @@ import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   Container, Form, Row, Col, Button
 } from 'react-bootstrap';
+import ReactTable from 'react-table';
+import axios from 'axios';
+
+
 import { Link, Redirect } from 'react-router-dom';
 import CompanyService from '../../services/CompanyService';
 import ProcessTypeService from '../../services/ProcessTypeService';
@@ -26,6 +30,7 @@ class NewProcess extends Component {
       processType: '',
       companyAdescription: '',
       companyBdescription: '',
+      tableData: [],
     };
     this.CompanyService = new CompanyService();
     this.ProcessTypeService = new ProcessTypeService();
@@ -69,10 +74,26 @@ class NewProcess extends Component {
         companyBdescIndex: 0,
 
       })
-      console.log(this.state.companyAdescription);
-      console.log(this.state.companyBdescription);
+    
+      console.log(response.data[0].id)
+      axios.get(`http://localhost:3335/step/getByProcType/${response.data[0].id}`).then((response) =>{
+        response.data.forEach(element =>{
+          const {step_no, trigger_id, action_id, flow} = element;
+          
+          const newStep = {
+            step: step_no,
+            trigger: "hello",
+            action: "action_id",
+            flow: flow,
+          };
+          this.setState({tableData: [...this.state.tableData, newStep]}); 
+        });
+        console.log(this.state.tableData);
+      })
 
     });
+
+    
   }
   onChangeCompanyA = (event) => {
     event.preventDefault();
@@ -83,11 +104,27 @@ class NewProcess extends Component {
     this.setState({ companyB: parseInt(event.target.value) });
   }
   onChangeProcessType = (event) => {
+    this.setState({tableData: []});  
     event.preventDefault();
     this.setState({ processType: parseInt(event.target.value) });
     this.setState({ companyAdescIndex: parseInt(event.target.value) - 1 });
     this.setState({ companyBdescIndex: parseInt(event.target.value) - 1 });
 
+
+    axios.get(`http://localhost:3335/step/getByProcType/${this.state.processTypes[parseInt(event.target.value) - 1].id}`).then((response) =>{
+      response.data.forEach(element =>{
+        const {step_no, trigger_id, action_id, flow} = element;
+        
+        const newStep = {
+          step: step_no,
+          trigger: "hello",
+          action: "action_id",
+          flow: flow,
+        };
+        this.setState({tableData: [...this.state.tableData, newStep]}); 
+      });
+      console.log(this.state.tableData);
+    })
   }
 
   addNewProcess() {
@@ -177,6 +214,35 @@ class NewProcess extends Component {
           </Col>
         </Row>
 
+        <div className="reactTable">
+        <ReactTable
+          data={this.state.tableData}
+          columns={[
+            {
+              Header: 'Step#',
+              accessor: 'step',
+            },
+            {
+              Header: 'Trigger',
+              accessor: 'trigger',
+            },
+            {
+              Header: 'Action',
+              accessor: 'action',
+            },
+            {
+              Header: 'Flow',
+              accessor: 'flow',
+            },
+
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+        />
+        <br />
+      </div>
+     
+
         <div className="mt-5 mb-5">
           <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm">
             <FontAwesomeIcon icon={faTimes} className="iconCheck" />
@@ -187,6 +253,8 @@ class NewProcess extends Component {
             Confirm
         </Button>
         </div>
+
+       
       </Container>
     );
   }
