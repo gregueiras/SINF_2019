@@ -8,8 +8,9 @@ import {
   getCustomerParty,
   getSellerParty,
 } from '../services/db';
-import Queue from '../lib/Queue';
 import getSalesInvoices from '../services/jasmin/getSalesInvoices';
+
+import Queue from '../lib/Queue';
 
 const options = {
   /*
@@ -35,6 +36,7 @@ export default {
         companyB,
       });
 
+    const company = await getCompanyKey({ companyID: companyA });
 
     const userID = 1;
 
@@ -80,7 +82,6 @@ export default {
         console.log('NEW SI');
         areNewDocuments = true;
         try {
-          const company = await getCompanyKey({ companyID: companyA });
 
           const documentLines = [];
           let abort = false;

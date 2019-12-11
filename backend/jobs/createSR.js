@@ -1,40 +1,41 @@
 import { addProcessed } from "../services/db";
 import { RETURN_TYPES } from "./index";
-import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
+import processOpenItems from "../services/jasmin/processOpenItems";
 
 const options = {};
 
 export default {
-  key: "create_PI",
+  key: "create_SR",
   options,
   async handle({ data }, done) {
-
+    console.log("CREATE SR");
     try {
       const {
         companyID,
-        documentType,
-        company,
-        sellerSupplierParty,
-        documentLines,
-        salesInvoice,
+        sourceDoc,
+        discount,
+        settled,
+        companyKey,
         userID,
+        purchasesInvoice,
       } = data;
 
-      const fileID = salesInvoice.id;
-      
-      const res = await createMinPurchaseInvoice({
+      const fileID = purchasesInvoice.id;
+      console.log("sourcedoc: " + sourceDoc);
+      const res = await processOpenItems({
         companyID,
-        documentType,
-        company: company,
-        sellerSupplierParty,
-        documentLines,
+        sourceDoc,
+        discount,
+        settled,
+        companyKey,
+        userID,
       });
 
       const { status } = res;
-      console.log("SI CREATION STATUS\t", status);
+      console.log("SR CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
-        console.log("SUCCESS");
+        console.log("SUCCESS!");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           userID,
