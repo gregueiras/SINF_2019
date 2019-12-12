@@ -9,6 +9,18 @@ class TriggerController {
         return Trigger.all();
     }
 
+    async getById(request){
+        const { params } = request;
+        let { id } = params;
+      
+
+
+        return await Database
+            .select('*')
+            .from('triggers')
+            .where('id', id).first();
+    }
+
     async getIdByDescription(request) {
         const { params } = request;
         let { description } = params;

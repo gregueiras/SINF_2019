@@ -34,6 +34,7 @@ Route.get('/proc-type', 'ProcTypeController.index');
 Route.post('/proc-type', 'ProcTypeController.createProcType');
 
 Route.get('/step', 'StepController.index');
+Route.get('/step/getByProcType/:process_type_id', 'StepController.getAllFromProcessType')
 Route.get('/step/check/:step/:action_id/:trigger_id', 'StepController.checkForCopy');
 Route.post('/step', 'StepController.createStep');
 
@@ -92,9 +93,12 @@ Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get('/trigger', 'TriggerController.index');
 Route.get('/trigger/getId/:description', 'TriggerController.getIdByDescription');
+Route.get('/trigger/getById/:id', 'TriggerController.getById');
+
 
 Route.get('/action', 'ActionController.index');
 Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
+Route.get('/action/getById/:id', 'ActionController.getById');
 
 
 Route.get("/entity", "EntityController.index");

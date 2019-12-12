@@ -9,6 +9,16 @@ class StepController {
         return Step.all();
     }
 
+    async getAllFromProcessType({request},response){
+        const {params} = request;
+        const {process_type_id} = params;
+       
+        const result = await Database.select('*').from('steps')
+        .where('process_type_id', process_type_id);
+
+        return result;
+    }
+
     async createStep({request}, response) {
 
 

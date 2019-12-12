@@ -5,6 +5,10 @@ import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   Container, Form, Row, Col, Button
 } from 'react-bootstrap';
+import ReactTable from 'react-table';
+import axios from 'axios';
+
+
 import { Link, Redirect } from 'react-router-dom';
 import CompanyService from '../../services/CompanyService';
 import ProcessTypeService from '../../services/ProcessTypeService';
@@ -28,6 +32,7 @@ class NewProcess extends Component {
       processType: '',
       companyAdescription: '',
       companyBdescription: '',
+      tableData: [],
       
       showMessage: false,
       showText: '',
@@ -43,6 +48,38 @@ class NewProcess extends Component {
     this.onChangeProcessType = this.onChangeProcessType.bind(this);
     this.onChangeRedirect = this.onChangeRedirect.bind(this);
   };
+
+
+  changeSteps(index){
+    axios.get(`http://localhost:3335/step/getByProcType/${this.state.processTypes[index -1].id}`).then((response) => {
+      response.data.forEach(element => {
+        const { step_no, trigger_id, action_id, flow } = element;
+
+        axios.get(`http://localhost:3335/trigger/getById/${trigger_id}`).then((response) => {
+          const { data } = response;
+          const { description: trigger_description } = data;
+          {
+            axios.get(`http://localhost:3335/action/getById/${action_id}`).then((response) => {
+              const { data } = response;
+              const { description: action_description } = data;
+              {
+                const newStep = {
+                  step: step_no,
+                  trigger: trigger_description,
+                  action: action_description,
+                  flow: flow,
+                };
+                this.setState({ tableData: [...this.state.tableData, newStep] });
+              }
+            });
+          }
+        })
+        console.log(this.state.tableData);
+      })
+
+    });
+  }
+
 
   componentDidMount() {
 
@@ -77,8 +114,10 @@ class NewProcess extends Component {
         companyBdescIndex: 0,
 
       })
-      console.log(this.state.companyAdescription);
-      console.log(this.state.companyBdescription);
+
+      console.log(response.data[0].id)
+      
+      this.changeSteps(1);
 
     });
   }
@@ -91,11 +130,15 @@ class NewProcess extends Component {
     this.setState({ companyB: parseInt(event.target.value) });
   }
   onChangeProcessType = (event) => {
+    this.setState({ tableData: [] });
     event.preventDefault();
     this.setState({ processType: parseInt(event.target.value) });
     this.setState({ companyAdescIndex: parseInt(event.target.value) - 1 });
     this.setState({ companyBdescIndex: parseInt(event.target.value) - 1 });
 
+
+
+    this.changeSteps(parseInt(event.target.value));
   }
 
   addNewProcess() {
@@ -158,7 +201,7 @@ class NewProcess extends Component {
               </Link>
             </Form.Group>
           </Col>
-        </Row>
+        </Row >
         <Row>
           <Col md={4}>
             <Form.Group>
@@ -196,9 +239,38 @@ class NewProcess extends Component {
           </Col>
         </Row>
 
-        <div className="submitButtons mt-5 mb-5">
+        <div className="reactTable">
+          <ReactTable
+            data={this.state.tableData}
+            columns={[
+              {
+                Header: 'Step#',
+                accessor: 'step',
+              },
+              {
+                Header: 'Trigger',
+                accessor: 'trigger',
+              },
+              {
+                Header: 'Action',
+                accessor: 'action',
+              },
+              {
+                Header: 'Flow',
+                accessor: 'flow',
+              },
+
+            ]}
+            defaultPageSize={10}
+            className="-striped -highlight"
+          />
+          <br />
+        </div>
+
+ <div className="submitButtons mt-5 mb-5">
           <Button className="gray-button gen-button rel-text-blue mr-5 w-20" size="sm" onClick={this.onChangeRedirect}>
-            <FontAwesomeIcon icon={faTimes} className="iconCheck"/>
+            <FontAwesomeIcon icon={faTimes} className="iconCheck" />
+       
             Cancel
         </Button>
           <Button className="blue-button gen-button rel-text-white w-20" size="sm" type="submit" onClick={this.addNewProcess}>
@@ -206,7 +278,9 @@ class NewProcess extends Component {
             Confirm
         </Button>
         </div>
-      </Container>
+
+
+      </Container >
     );
   }
 }

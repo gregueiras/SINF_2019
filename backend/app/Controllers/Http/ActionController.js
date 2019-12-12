@@ -8,6 +8,19 @@ class ActionController {
     }
 
 
+    async getById(request){
+        const { params } = request;
+        let { id } = params;
+      
+
+
+        return await Database
+            .select('*')
+            .from('actions')
+            .where('id', id).first();
+    }
+
+
     async getIdByDescription(request) {
         const { params } = request;
         const { description } = params;
