@@ -1,10 +1,11 @@
 import { RETURN_TYPES } from "./index";
-import { getCompanyKey, getCompanyName } from "../services/jasmin";
+import { getCompanyKey, getCompanyName, getSeries as getJasminSeries } from "../services/jasmin";
 import {
   isProcessed,
   getCorrespondence,
   getCustomerParty,
-  getSellerParty
+  getSellerParty,
+  getSeries as getProcessSeries
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
@@ -50,6 +51,29 @@ export default {
       companyB
     };
 
+
+    let series;
+    try {
+      series = (await getJasminSeries({ companyID: companyB, processID })).data;
+    } catch (error) {
+      console.log("ERROR SERIES");
+      console.error(error.response.data);
+    }
+    const serieKey = await getProcessSeries({ processID });
+
+    const serie = series.find(({ serieKey: sK }) => sK === serieKey);
+    if (serie === undefined) {
+      console.log(`ERROR: NO SERIES ${serieKey}`);
+      //console.error(e.response.data);
+
+      done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
+      return;
+    }
+
+    const processType = serieKey.substring(2).charAt(0);
+
+    console.log("PROCESS TYPE: " + processType);
+
     let payableOpenItemsData;
     let receivableOpenItemsData;
     let purchasesInvoicesData;
@@ -65,7 +89,7 @@ export default {
           documentExchangeRate: "1.0",
           party: sellerParty,
           currency: "EUR",
-          documentType: "PAG",
+          documentType: "PAG_IC_" + processType,
           processID,
         })
       ).data;
@@ -80,7 +104,7 @@ export default {
           documentExchangeRate: "1.0",
           party: customerParty,
           currency: "EUR",
-          documentType: "FA",
+          documentType: "SIIC" + processType,
           processID,
         })
       ).data;
@@ -97,12 +121,12 @@ export default {
 
     const purchasesInvoices = purchasesInvoicesData.filter(
       pi =>
-        pi.isActive && !pi.isDeleted && pi.sellerSupplierParty == sellerParty
+        pi.isActive && !pi.isDeleted && pi.sellerSupplierParty == sellerParty && pi.serie === serieKey
     );
 
     const salesInvoices = salesInvoicesData.filter(
       pi =>
-        pi.isActive && !pi.isDeleted && pi.buyerCustomerParty == customerParty
+        pi.isActive && !pi.isDeleted && pi.buyerCustomerParty == customerParty && pi.serie === serieKey
     );
 
     if (!purchasesInvoices) {
@@ -221,6 +245,7 @@ export default {
                 sourceDoc,
                 settled: amount,
                 purchasesInvoice,
+                processID,
               });
             }
           } catch (e) {

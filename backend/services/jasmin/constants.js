@@ -53,7 +53,7 @@ export const endPoints = {
 
 const makeUrl = (endPoint, query, company) => {
   let url = `${constants.url}/api/${company.tenant}/${company.organization}/${endPoint}?`;
-  console.log("URL "+url);
+  //console.log("URL "+url);
 
   if (query) {
     Object.keys(query).forEach(key => {
