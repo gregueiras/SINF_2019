@@ -9,3 +9,6 @@ export { default as createMinSalesOrder } from './createMinSalesOrdes';
 export { default as createSellerParty } from './createSellerParty';
 export { default as createSalesOrder } from './createSalesOrder';
 export { default as getPurchasesInvoices } from './getPurchasesInvoices';
+export { default as createProcessOrder } from './createProcessOrder';
+export { default as getProcessOrder } from './getProcessOrder';
+export { default as getShippingDeliveries } from './getShippingDeliveries';

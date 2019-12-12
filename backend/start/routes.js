@@ -21,7 +21,7 @@ Route.get('/test/create/:id?', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
 Route.get("/test/salesInvoices", "TestController.getSalesInvoicesTest");
 Route.get("/test/purchasesInvoices", "TestController.getPurchasesInvoicesTest");
-
+Route.get("/test/shippingDeliveries", "TestController.getShippingDeliveries");
 
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');

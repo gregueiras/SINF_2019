@@ -45,11 +45,15 @@ export const endPoints = {
   billingInvoices: "billing/invoices",
   payableOpenItems: "accountsPayable/processOpenItems", //intercompany
   receipts: "accountsReceivable/receipts", //feup
-  receivebleOpenItems: "accountsReceivable/processOpenItems"
+  receivebleOpenItems: "accountsReceivable/processOpenItems",
+  goodsReceipt: "goodsReceipt/processOrders",
+  shippingProcessOrder: "shipping/processOrders",
+  getShippingDeliveries: "shipping/deliveries"
 };
 
 const makeUrl = (endPoint, query, company) => {
   let url = `${constants.url}/api/${company.tenant}/${company.organization}/${endPoint}?`;
+  console.log("URL "+url);
 
   if (query) {
     Object.keys(query).forEach(key => {
