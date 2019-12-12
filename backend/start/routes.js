@@ -80,8 +80,10 @@ Route.get('/log/byState/:state', 'LogController.getByState');
 Route.get('/log/byProcId/:process_id', 'LogController.getByProcId');
 Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
 Route.post('/log', 'LogController.createLog');
-Route.post('/log/update', 'LogController.updateState');
 Route.get("/log/:companyA/:companyB", "LogController.getProcesses");
+Route.post('/log/updateState', 'LogController.updateLogState');
+
+
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");

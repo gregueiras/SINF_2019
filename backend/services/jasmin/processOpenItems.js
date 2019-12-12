@@ -6,6 +6,7 @@ const processOpenItems = ({
     settled,
     companyKey,
     companyID,
+    processID,
 }) => makeRequest({
   method: 'POST',
   endPoint: endPoints.receivebleOpenItems + "/" + companyKey,
@@ -19,6 +20,8 @@ const processOpenItems = ({
     ]
   ,
   companyID,
+  description: "Process Open Items",
+  processID,
 });
 
 export default processOpenItems;

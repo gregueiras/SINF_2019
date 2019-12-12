@@ -26,7 +26,7 @@ export default {
   key: "PP_SR",
   options,
   async handle({ data }, done) {
-    const { companyA, companyB } = data;
+    const { companyA, companyB, processID, step } = data;
 
     const customerParty = await getCustomerParty({
       companyA,
@@ -38,8 +38,8 @@ export default {
       companyB
     });
 
-    const companyKeyA = await getCompanyKey({ companyID: companyA });
-    const companyKeyB = await getCompanyKey({ companyID: companyB });
+    const companyKeyA = await getCompanyKey({ companyID: companyA, processID });
+    const companyKeyB = await getCompanyKey({ companyID: companyB, processID });
 
     const userID = 1;
 
@@ -65,7 +65,8 @@ export default {
           documentExchangeRate: "1.0",
           party: sellerParty,
           currency: "EUR",
-          documentType: "PAG"
+          documentType: "PAG",
+          processID,
         })
       ).data;
 
@@ -79,15 +80,16 @@ export default {
           documentExchangeRate: "1.0",
           party: customerParty,
           currency: "EUR",
-          documentType: "FA"
+          documentType: "FA",
+          processID,
         })
       ).data;
 
       purchasesInvoicesData = (
-        await getPurchasesInvoices({ companyID: companyA })
+        await getPurchasesInvoices({ companyID: companyA, processID })
       ).data;
 
-      salesInvoicesData = (await getSalesInvoices({ companyID: companyB }))
+      salesInvoicesData = (await getSalesInvoices({ companyID: companyB, processID }))
         .data;
     } catch (e) {
       console.error(e.response.data);

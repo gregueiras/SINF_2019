@@ -37,7 +37,7 @@ export default {
         companyB,
       });
 
-    const company = await getCompanyKey({ companyID: companyA });
+    const company = await getCompanyKey({ companyID: companyA, processID });
 
     const userID = 1;
 
@@ -53,7 +53,7 @@ export default {
 
     let series;
     try {
-      series = (await getJasminSeries({ companyID: companyB })).data;
+      series = (await getJasminSeries({ companyID: companyB, processID })).data;
     } catch (error) {
       console.log("ERROR SERIES");
       console.error(error.response.data);
@@ -72,7 +72,7 @@ export default {
     // get serie's purchase order
     let salesInvoicesData;
     try {
-      salesInvoicesData = (await getSalesInvoices({ companyID: companyB })).data;
+      salesInvoicesData = (await getSalesInvoices({ companyID: companyB, processID })).data;
     } catch (e) {
       console.error(e.response.data);
     }

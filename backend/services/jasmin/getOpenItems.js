@@ -1,7 +1,7 @@
 import makeRequest, { endPoints } from './constants';
 
 export const getPayableOpenItems = ({ 
-    companyID, page, pageSize, company, documentDate, documentExchangeRate, party, currency, documentType}) => makeRequest({
+    companyID, page, pageSize, company, documentDate, documentExchangeRate, party, currency, documentType, processID}) => makeRequest({
   method: 'GET',
   endPoint: endPoints.payableOpenItems + "/" + page + "/" + pageSize,
   companyID,
@@ -13,11 +13,13 @@ export const getPayableOpenItems = ({
     currency, //EUR
     documentType //PAG
   },
+  processID,
+  description: "Get Payable Open Items"
 });
 
 
 export const getReceivableOpenItems = ({ 
-  companyID, page, pageSize, company, documentDate, documentExchangeRate, party, currency, documentType}) => makeRequest({
+  companyID, page, pageSize, company, documentDate, documentExchangeRate, party, currency, documentType, processID}) => makeRequest({
 method: 'GET',
 endPoint: endPoints.receivebleOpenItems + "/" + page + "/" + pageSize,
 companyID,
@@ -29,6 +31,8 @@ query: {
   currency, //EUR
   documentType //FA
 },
+processID,
+description: "Get Receivable Open Items"
 });
 
 

@@ -37,6 +37,7 @@
           documentLines,
           companyID,
           documentType,
+          processID,
         });
 
         const { status } = res;

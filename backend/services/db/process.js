@@ -21,11 +21,9 @@ export const nextTurn = async ({ processID }) => {
 };
 
 export const getSeries = async ({ processID }) => {
-  console.log('getSeriesss')
   const req = await axios.get(`http://0.0.0.0:3335/process/series/${processID}`);
 
   const { data } = req;
-  console.log('getSeriesss: ' + data);
 
   return data;
 }
