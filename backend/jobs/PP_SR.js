@@ -59,7 +59,7 @@ export default {
         await getPayableOpenItems({
           companyID: companyA,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyA,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
@@ -73,7 +73,7 @@ export default {
         await getReceivableOpenItems({
           companyID: companyB,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyB,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
@@ -130,6 +130,9 @@ export default {
 
           let foundMatchingSI;
 
+
+          //PURCHASES INVOICE: purchasesItem
+
           for (const si of salesInvoices) {
             console.log(si.naturalKey);
 
@@ -151,7 +154,7 @@ export default {
               let equal = true;
               for (const line of si.documentLines) {
                 const found = purchasesInvoice.documentLines.some(
-                  el =>
+                  async el =>
                     el.grossValue.reportingAmount ===
                       line.grossValue.reportingAmount &&
                     el.grossValue.amount === line.grossValue.amount &&
@@ -172,8 +175,8 @@ export default {
                     el.lineExtensionAmount.amount ===
                       line.lineExtensionAmount.amount &&
                     el.lineExtensionAmount.baseAmount ===
-                      line.lineExtensionAmount.baseAmount
-                      //TODO IGUALAR OS PRODUTOS
+                      line.lineExtensionAmount.baseAmount &&
+                      el.purchasesItem === (await getCorrespondence({ companyA, companyB, product:line.salesItem }))
                 );
 
                 equal &= found;
