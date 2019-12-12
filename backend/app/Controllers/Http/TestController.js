@@ -54,8 +54,9 @@ const TestController = {
   async getSalesInvoicesTest() {
     await Queue.add("SI_PI", {
       companyA: 1, // intercompany -> companyA: customer
-      companyB: 2 // feup -> companyB: supplier
+      companyB: 2, // feup -> companyB: supplier
       //companyB: 3, // ritaNorinho
+      processID: 2,
     });
 
     const si = await getSalesInvoices({ companyID: 2 });
@@ -65,8 +66,10 @@ const TestController = {
   async getPurchasesInvoicesTest() {
     await Queue.add("PP_SR", {
       companyA: 1, // intercompany -> companyA: customer
-      companyB: 2 // feup -> companyB: supplier
+      companyB: 2, // feup -> companyB: supplier
       //companyB: 3, // ritaNorinho
+      processID: 2,
+      step: 1
     });
 
     const si = await getPurchasesInvoices({ companyID: 1 });

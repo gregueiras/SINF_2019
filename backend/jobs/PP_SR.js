@@ -26,7 +26,7 @@ export default {
   key: "PP_SR",
   options,
   async handle({ data }, done) {
-    const { companyA, companyB } = data;
+    const { companyA, companyB, processID, step } = data;
 
     const customerParty = await getCustomerParty({
       companyA,
@@ -38,8 +38,8 @@ export default {
       companyB
     });
 
-    const companyKeyA = await getCompanyKey({ companyID: companyA });
-    const companyKeyB = await getCompanyKey({ companyID: companyB });
+    const companyKeyA = await getCompanyKey({ companyID: companyA, processID });
+    const companyKeyB = await getCompanyKey({ companyID: companyB, processID });
 
     const userID = 1;
 
@@ -59,13 +59,14 @@ export default {
         await getPayableOpenItems({
           companyID: companyA,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyA,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
           party: sellerParty,
           currency: "EUR",
-          documentType: "PAG"
+          documentType: "PAG",
+          processID,
         })
       ).data;
 
@@ -73,21 +74,22 @@ export default {
         await getReceivableOpenItems({
           companyID: companyB,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyB,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
           party: customerParty,
           currency: "EUR",
-          documentType: "FA"
+          documentType: "FA",
+          processID,
         })
       ).data;
 
       purchasesInvoicesData = (
-        await getPurchasesInvoices({ companyID: companyA })
+        await getPurchasesInvoices({ companyID: companyA, processID })
       ).data;
 
-      salesInvoicesData = (await getSalesInvoices({ companyID: companyB }))
+      salesInvoicesData = (await getSalesInvoices({ companyID: companyB, processID }))
         .data;
     } catch (e) {
       console.error(e.response.data);
@@ -130,6 +132,9 @@ export default {
 
           let foundMatchingSI;
 
+
+          //PURCHASES INVOICE: purchasesItem
+
           for (const si of salesInvoices) {
             console.log(si.naturalKey);
 
@@ -151,7 +156,7 @@ export default {
               let equal = true;
               for (const line of si.documentLines) {
                 const found = purchasesInvoice.documentLines.some(
-                  el =>
+                  async el =>
                     el.grossValue.reportingAmount ===
                       line.grossValue.reportingAmount &&
                     el.grossValue.amount === line.grossValue.amount &&
@@ -172,8 +177,8 @@ export default {
                     el.lineExtensionAmount.amount ===
                       line.lineExtensionAmount.amount &&
                     el.lineExtensionAmount.baseAmount ===
-                      line.lineExtensionAmount.baseAmount
-                      //TODO IGUALAR OS PRODUTOS
+                      line.lineExtensionAmount.baseAmount &&
+                      el.purchasesItem === (await getCorrespondence({ companyA, companyB, product:line.salesItem }))
                 );
 
                 equal &= found;

@@ -20,6 +20,14 @@
         } = data;
 
         const fileID = purchaseOrder.id;
+
+        //get document type -> TODO create aux function
+
+        let { documentType} = purchaseOrder;
+        
+        const arrs = documentType.split("_");
+
+        documentType = "EC_" + arrs[1] + "_" + arrs[2];
         
         const res = await createMinSalesOrder({
           ...purchaseOrder,
@@ -27,7 +35,9 @@
           buyerCustomerParty,
           sellerCompany,
           documentLines,
-          companyID
+          companyID,
+          documentType,
+          processID,
         });
 
         const { status } = res;

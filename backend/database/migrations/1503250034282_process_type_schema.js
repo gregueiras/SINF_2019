@@ -9,7 +9,9 @@ class ProcessTypeSchema extends Schema {
       table.increments()
       table.bigInteger('user').notNullable();
       table.foreign('user').references('id').inTable('users').onDelete('CASCADE');
-      table.string('type',256).notNullable();
+      table.string('type',256).unique().notNullable();
+      table.string('descriptionA',256).notNullable();
+      table.string('descriptionB',256).notNullable();
       table.timestamps()
     })
   }

@@ -7,3 +7,34 @@
     width: 20%;
     margin-left: 0.8em;
 }
+
+button.blue-button.gen-button:focus, button.blue-button.gen-button:active,
+button.gray-button.gen-button:focus, button.gray-button.gen-button:active{
+    outline: none !important;
+    border: none !important;
+}
+
+.iconCheck{
+    margin-top:0.5em !important;
+}
+
+.add-button{
+    border-radius:0.25rem;
+    margin-top:0.1em;
+}
+
+@media (max-width: 574px) {
+
+     .add-button{
+        width: 2em !important;
+    }
+    button.blue-button.gen-button, button.gray-button.gen-button{
+        width: 25%;
+    }
+
+    .process-selector{
+        width: 50% !important;
+    }
+
+
+}

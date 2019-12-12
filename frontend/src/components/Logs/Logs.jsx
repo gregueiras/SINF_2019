@@ -1,4 +1,4 @@
-import React, { useState,Component } from 'react';
+import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import { Container } from 'react-bootstrap';
 import setIcon from '../../Utilities/SetIcon';
@@ -25,6 +25,7 @@ class Logs extends Component {
         state: data.state,
         description: data.description,
         timestamp: data.date,
+        processType: data.processType + "-" + data.process_id,
       }
 
     ));
@@ -42,7 +43,7 @@ class Logs extends Component {
           columns={[
             {
               Header: 'Process',
-              accessor: 'process',
+              accessor: 'processType',
             },
             {
               Header: 'State',

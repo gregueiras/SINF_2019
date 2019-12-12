@@ -1,6 +1,13 @@
 import axios from "axios";
 import FormData from "form-data";
-import { fetchToken, storeToken, getCompany } from "../db";
+import {
+  fetchToken,
+  storeToken,
+  getCompany,
+  storeLog,
+  updateStateLog
+} from "../db";
+import { getProcessTypeName } from "../db/process";
 
 export const constants = {
   url: "https://my.jasminsoftware.com",
@@ -63,7 +70,7 @@ const getTokenFromJasmin = async company => {
   formData.append("client_id", company.clientId);
   formData.append("client_secret", company.clientSecret);
   formData.append("scope", constants.scope);
-  
+
   const { data } = await axios.post(
     "https://identity.primaverabss.com/connect/token",
     formData,
@@ -72,9 +79,9 @@ const getTokenFromJasmin = async company => {
         ...formData.getHeaders()
       }
     }
-    );
-    const { access_token, expires_in } = data;
-    
+  );
+  const { access_token, expires_in } = data;
+
   return { token: access_token, expires: expires_in };
 };
 
@@ -82,9 +89,8 @@ const getToken = async companyID => {
   const db = await fetchToken(companyID);
 
   if (db.id) {
-
     const { token, expires } = await getTokenFromJasmin(db);
-    
+
     const newExpire = Date.now() + expires;
 
     await storeToken({ companyID, token, expires: newExpire });
@@ -95,7 +101,15 @@ const getToken = async companyID => {
   return db;
 };
 
-const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
+const makeRequest = async ({
+  endPoint,
+  method,
+  data,
+  query,
+  companyID,
+  processID,
+  description
+}) => {
   const company = await getCompany(companyID);
 
   const token = await getToken(companyID);
@@ -103,7 +117,7 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
   console.log(data);
 
   const url = makeUrl(endPoint, query, company);
-  return axios({
+  const res = await axios({
     method,
     url,
     data,
@@ -112,6 +126,20 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
       "Content-Type": "application/json"
     }
   });
+
+  if (processID !== undefined && description !== undefined) {
+    let state = "Failed";
+    if (res.status === 200 || res.status === 201 || res.status === 204) {
+      state = "Completed";
+    }
+    await storeLog({
+      state,
+      description,
+      process_id: processID
+    });
+  }
+
+  return res;
 };
 
 export default makeRequest;

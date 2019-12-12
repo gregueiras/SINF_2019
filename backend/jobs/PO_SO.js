@@ -50,7 +50,7 @@ export default {
 
     let series;
     try {
-      series = (await getJasminSeries({ companyID: companyA })).data;
+      series = (await getJasminSeries({ companyID: companyA, processID })).data;
     } catch (error) {
       console.log("ERROR SERIES");
       console.error(error.response.data);
@@ -61,7 +61,7 @@ export default {
 
     if (serie === undefined) {
       console.log(`ERROR: NO SERIES ${serieKey}`);
-      console.error(e.response.data);
+      //console.error(e.response.data);
 
       done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
       return;
@@ -70,7 +70,7 @@ export default {
     // get serie's purchase order
     let purchasesOrdersData;
     try {
-      purchasesOrdersData = (await getPurchasesOrders({ companyID: companyA }))
+      purchasesOrdersData = (await getPurchasesOrders({ companyID: companyA, processID }))
         .data;
     } catch (e) {
       console.error(e.response.data);
@@ -106,7 +106,7 @@ export default {
 
         try {
           // GET SELLER CUSTOM PARTY
-          const company = await getCompanyName({ companyID: companyB });
+          const company = await getCompanyName({ companyID: companyB, processID });
           /* let key = await getSellerPartyKey({ company: cB, party });
 
           if (key === undefined) {

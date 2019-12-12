@@ -32,10 +32,12 @@ Factory.blueprint("App/Models/Product", (faker, i, data) => {
   };
 });
 
-Factory.blueprint("App/Models/ProcessType", (faker, i, { type }) => {
+Factory.blueprint("App/Models/ProcessType", (faker, i, { type, descriptionA, descriptionB }) => {
   return {
     user: "1",
-    type
+    type,
+    descriptionA,
+    descriptionB
   };
 });
 
@@ -56,10 +58,11 @@ Factory.blueprint("App/Models/Trigger", (faker, i, {description,type}) => {
   };
 });
 
-Factory.blueprint("App/Models/Action", (faker, i, {description, type}) => {
+Factory.blueprint("App/Models/Action", (faker, i, {description, type, trigger_id}) => {
   return {
     description, 
-    type
+    type,
+    trigger_id
   };
 });
 
@@ -76,11 +79,12 @@ Factory.blueprint("App/Models/Log", (faker, i, { processID }) => {
 
 Factory.blueprint(
   "App/Models/Step",
-  (faker, i, { step_no, action_id, trigger_id }) => {
+  (faker, i, { step_no, action_id, trigger_id, flow}) => {
     return {
       step_no,
       action_id,
       trigger_id,
+      flow
     };
   }
 );

@@ -9,6 +9,7 @@ class ActionSchema extends Schema {
       table.increments();
       table.string("description", 256);
       table.string("type",256);
+      table.bigInteger("trigger_id").notNullable();
       table.timestamps();
     });
   }

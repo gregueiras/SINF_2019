@@ -6,16 +6,21 @@ const createMinSalesOrder = ({
   deliveryTerm,
   documentLines,
   sellerCompany,
+  documentType,
+  processID,
 }) => makeRequest({
   method: 'POST',
   endPoint: endPoints.salesOrders,
   data: {
+    documentType,
     company: sellerCompany,
     buyerCustomerParty,
     deliveryTerm,
     documentLines,
   },
   companyID,
+  description: "Create Sales Order",
+  processID,
 });
 
 export default createMinSalesOrder;

@@ -1,12 +1,14 @@
 import { RETURN_TYPES } from './index';
 import {
   getCompanyKey,
+  getSeries as getJasminSeries
 } from '../services/jasmin';
 import {
   isProcessed,
   getCorrespondenceB,
   getCustomerParty,
   getSellerParty,
+  getSeries as getProcessSeries
 } from '../services/db';
 import getSalesInvoices from '../services/jasmin/getSalesInvoices';
 
@@ -24,8 +26,7 @@ export default {
   key: 'SI_PI',
   options,
   async handle({ data }, done) {
-    const { companyA, companyB } = data;
-
+    const { companyA, companyB, processID, step } = data;
     const customerParty = await getCustomerParty({
         companyA,
         companyB,
@@ -36,9 +37,10 @@ export default {
         companyB,
       });
 
-    const company = await getCompanyKey({ companyID: companyA });
+    const company = await getCompanyKey({ companyID: companyA, processID });
 
     const userID = 1;
+
 
     const info = {
       userID,
@@ -48,10 +50,29 @@ export default {
     };
 
 
+
+    let series;
+    try {
+      series = (await getJasminSeries({ companyID: companyB, processID })).data;
+    } catch (error) {
+      console.log("ERROR SERIES");
+      console.error(error.response.data);
+    }
+    const serieKey = await getProcessSeries({ processID });
+
+    const serie = series.find(({ serieKey: sK }) => sK === serieKey);
+    if (serie === undefined) {
+      console.log(`ERROR: NO SERIES ${serieKey}`);
+      //console.error(e.response.data);
+
+      done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
+      return;
+    }
+
     // get serie's purchase order
     let salesInvoicesData;
     try {
-      salesInvoicesData = (await getSalesInvoices({ companyID: companyB })).data;
+      salesInvoicesData = (await getSalesInvoices({ companyID: companyB, processID })).data;
     } catch (e) {
       console.error(e.response.data);
     }
@@ -59,15 +80,17 @@ export default {
 
     const salesInvoices = salesInvoicesData.filter(
       (si) => 
+        si.serie === serieKey &&
         si.isActive
         && !si.isDeleted
         && si.buyerCustomerParty == customerParty, //0001
     );
 
+
     if (!salesInvoices) {
       done(null, {
         value: RETURN_TYPES.END_TRIGGER_FAIL,
-        msg: `No sales invoices found. Please check if you have defined it correctly.`,
+        msg: `No purchases orders found with series ${serieKey}. Please check if you have defined it correctly.`,
         ...info,
         options,
       });
@@ -117,12 +140,6 @@ export default {
           }
           console.log(abort);
           if (!abort) {
-            /*console.dir({
-              company,
-              buyerCustomerParty: customerParty,
-              deliveryTerm: purchaseOrder.deliveryTerm,
-              documentLines,
-            });*/
 
             Queue.add('create_PI', {
               documentType: "VFA",

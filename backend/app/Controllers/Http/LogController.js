@@ -3,18 +3,25 @@
 const Log = use('App/Models/Log');
 const Process = use("App/Models/Process");
 const Database = use('Database');
+const ProcType = use('App/Models/ProcessType')
 
 class LogController {
 
   async index() {
     const logs = await Log.all();
     const processes = await Process.all();
+    const types = await ProcType.all();
     if (logs !== undefined) {
       logs.rows.map((log) => {
         let { process_id } = log;
         processes.rows.map((process) => {
           if (process.id == process_id) {
             log.descriptionProcess = process.description;
+            types.rows.map((type) => {
+              if(type.id == process.process_type){
+                log.processType = type.type;
+              }
+            })
           }
         });
       });
@@ -73,14 +80,14 @@ class LogController {
   /*One of these is redundant either use createLog or store*/
   async createLog({ request }) {
     const body = request.post();
-    const { state, description, date, process_id } = body;
-    return await Database.table('logs')
-      .insert({
-        state: state,
-        description: description,
-        date: date,
-        process_id: process_id
-      });
+    const { state, description, process_id } = body;
+    const log = new Log();
+    log.state = state;
+    log.description = description;
+    log.date = Database.fn.now();
+    log.process_id = process_id;
+    await log.save();
+    return log.toJSON().id;
   }
 
 
@@ -100,19 +107,16 @@ class LogController {
   }
 
 
-  async updateState({ request }) {
-
-
+  async updateLogState({ request }) {
+    console.log('here1');
     const body = request.post();
-    const { id, new_state } = body;
-    console.log(new_state);
-    const affectedRows = Database
-      .table('logs')
-      .where('id', id)
-      .update('state', new_state);
-    return affectedRows;
-
+    const { id, state } = body;
+    console.log("state: " + state);
+    const log = await Log.find(id);
+    log.state = state;
+    return await log.save();
   }
+
   async getProcesses(request) {
     const { params } = request;
     const { companyA, companyB } = params;

@@ -34,6 +34,7 @@ Route.get('/proc-type', 'ProcTypeController.index');
 Route.post('/proc-type', 'ProcTypeController.createProcType');
 
 Route.get('/step', 'StepController.index');
+Route.get('/step/getByProcType/:process_type_id', 'StepController.getAllFromProcessType')
 Route.get('/step/check/:step/:action_id/:trigger_id', 'StepController.checkForCopy');
 Route.post('/step', 'StepController.createStep');
 
@@ -67,7 +68,7 @@ Route.get("/company/:id/token", "CompanyController.getToken");
 Route.post("/company/token", "CompanyController.setToken");
 
 Route.get("/process", "ProcessController.get");
-Route.post("/process/series", "ProcessController.getSeries");
+Route.get("/process/series/:id", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");
 Route.post("/process/steps/current", "ProcessController.canRun");
 Route.post("/process/steps/next", "ProcessController.nextStep");
@@ -79,8 +80,10 @@ Route.get('/log/byState/:state', 'LogController.getByState');
 Route.get('/log/byProcId/:process_id', 'LogController.getByProcId');
 Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
 Route.post('/log', 'LogController.createLog');
-Route.post('/log/update', 'LogController.updateState');
 Route.get("/log/:companyA/:companyB", "LogController.getProcesses");
+Route.post('/log/updateState', 'LogController.updateLogState');
+
+
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");
@@ -92,9 +95,13 @@ Route.delete('/settings', "CompanyController.deleteCompany");
 
 Route.get('/trigger', 'TriggerController.index');
 Route.get('/trigger/getId/:description', 'TriggerController.getIdByDescription');
+Route.get('/trigger/getById/:id', 'TriggerController.getById');
+
 
 Route.get('/action', 'ActionController.index');
 Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
+Route.get('/action/getById/:id', 'ActionController.getById');
+Route.get('/action/getByTriggerId/:id', 'ActionController.getByTriggerId');
 
 
 Route.get("/entity", "EntityController.index");
