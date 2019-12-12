@@ -12,15 +12,23 @@ export default {
     try {
       const {
         companyID,
-        documentType,
         company,
         sellerSupplierParty,
         documentLines,
         salesInvoice,
         userID,
+        processID,
       } = data;
 
       const fileID = salesInvoice.id;
+
+      let { documentType} = salesInvoice;
+        
+      const arrs = documentType.substring(4);
+
+      documentType = "PI_IC_" + arrs;
+
+      console.log("DOCUMENT TYPE: " + documentType);
       
       const res = await createMinPurchaseInvoice({
         companyID,

@@ -21,7 +21,6 @@ export default {
       } = data;
 
       const fileID = purchasesInvoice.id;
-      console.log("sourcedoc: " + sourceDoc);
       const res = await processOpenItems({
         companyID,
         sourceDoc,

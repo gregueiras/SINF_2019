@@ -132,9 +132,6 @@ export default {
 
           let foundMatchingSI;
 
-
-          //PURCHASES INVOICE: purchasesItem
-
           for (const si of salesInvoices) {
             console.log(si.naturalKey);
 
@@ -209,7 +206,6 @@ export default {
               );
 
               if(receivableOpenItem !== undefined){
-                console.log("sourceDoc: " + receivableOpenItem.sourceDoc);
                 discount = receivableOpenItem.discount;
                 amount = receivableOpenItem.amount;
                 sourceDoc = receivableOpenItem.sourceDoc;
@@ -217,11 +213,7 @@ export default {
                 abort = true;
               }
             }
-
-            console.log("ABORT: " + abort);
             if (!abort) {
-              console.log("no abort");
-              console.log(sourceDoc)
               Queue.add("create_SR", {
                 companyID: companyB,
                 companyKey: companyKeyB,
