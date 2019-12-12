@@ -89,7 +89,7 @@ function ViewProcess() {
           let i = 0;
           data.forEach((element) =>
           {
-            newActionOptions.push({value: ++i, name: element.description});
+            newActionOptions.push({value: ++i +'', name: element.description});
             
           })
           console.log(newActionOptions);
@@ -117,7 +117,7 @@ function ViewProcess() {
           let i = 0;
           data.forEach((element) =>
           {
-            newActionOptions.push({value: ++i, name: element.description});
+            newActionOptions.push({value: ++i +'', name: element.description});
           })
           setActionOptions(newActionOptions);
         })
