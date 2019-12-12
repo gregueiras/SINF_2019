@@ -59,7 +59,7 @@ export default {
         await getPayableOpenItems({
           companyID: companyA,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyA,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
@@ -73,7 +73,7 @@ export default {
         await getReceivableOpenItems({
           companyID: companyB,
           page: 1,
-          pageSize: 200,
+          pageSize: 500,
           company: companyKeyB,
           documentDate: "2029-12-12",
           documentExchangeRate: "1.0",
