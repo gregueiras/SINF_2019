@@ -67,6 +67,38 @@ function ViewProcess() {
 
   const [actionOptions, setActionOptions] = useState([]);
 
+  const changeActionsByTrigger = (triggers, index) =>{
+    const newTriggers = triggers.slice();
+    const ind = index -1;
+    const trigger = newTriggers[ind];
+    console.log(index);
+    console.log(newTriggers);
+    console.log(trigger);
+    
+    const {name} = trigger;
+    console.log(name);
+
+      axios.get(`http://localhost:3335/trigger/getId/${name}`).then((response) =>{
+        console.log(response);
+        const {data} = response;
+
+        axios.get(`http://localhost:3335/action/getByTriggerId/${data}`).then((response) =>{
+     
+          const {data} = response;
+          let newActionOptions =[];
+          let i = 0;
+          data.forEach((element) =>
+          {
+            newActionOptions.push({value: ++i, name: element.description});
+            
+          })
+          console.log(newActionOptions);
+          setActionOptions(newActionOptions);
+        })
+        
+      })
+  }
+
   useEffect(() => {
     async function getActions() {
       let i = 0;
@@ -78,7 +110,17 @@ function ViewProcess() {
         return { value: i + '', name: description }
       })
 
-      setActionOptions(options)
+      axios.get(`http://localhost:3335/action/getByTriggerId/1`).then((response) =>{
+     
+          const {data} = response;
+          let newActionOptions =[];
+          let i = 0;
+          data.forEach((element) =>
+          {
+            newActionOptions.push({value: ++i, name: element.description});
+          })
+          setActionOptions(newActionOptions);
+        })
     }
 
     getActions()
@@ -126,12 +168,13 @@ function ViewProcess() {
   }
 
 
+
+
   const submitForm = (formData) => {
     let { steps, user, type, descriptionA, descriptionB } = formData;
 
 
     if (!type.match(/[A-Za-z]+/g)) {
-      console.log("invalid");
       setValidProcName(false);
       return;
     }
@@ -139,7 +182,6 @@ function ViewProcess() {
 
 
     if (!descriptionA.match(/[A-Za-z]+/g)) {
-      console.log("invalid1");
       setValidDescriptionA(false);
       return;
     }
@@ -147,7 +189,6 @@ function ViewProcess() {
 
 
     if (!descriptionB.match(/[A-Za-z]+/g)) {
-      console.log("invalid2");
       setValidDescriptionB(false);
       return;
     }
@@ -156,7 +197,6 @@ function ViewProcess() {
 
 
     axios.get(`http://localhost:3335/proc-type/${type}`).then((response) => {
-      console.log(response)
       const { data: exists } = response;
 
       if (exists.length !== 0) {
@@ -180,7 +220,6 @@ function ViewProcess() {
                 axios
                   .post('http://localhost:3335/step', { action_id, flow, step, trigger_id, proc_type_id, descriptionA, descriptionB })
                   .then((response) => {
-                    console.log(response);
                   })
               })
             })
@@ -189,7 +228,7 @@ function ViewProcess() {
     });
   }
 
-
+  console.log(triggerOptions);
   return (
     <Container>
       <Row>
@@ -209,7 +248,7 @@ function ViewProcess() {
         <Col>
           <Form.Group>
             <Form.Label className="gray-label">
-              Company A type
+              Company A description
             </Form.Label>
             <Form.Control
               style = {validDescriptionA ? {}: { borderColor: 'red'}}
@@ -221,7 +260,7 @@ function ViewProcess() {
         <Col>
           <Form.Group>
             <Form.Label className="gray-label">
-              Company B type
+              Company B description
             </Form.Label>
             <Form.Control
               style = {validDescriptionB ? {}: { borderColor: 'red'}}
@@ -287,7 +326,7 @@ function ViewProcess() {
             <select
               className="selector company-selector rel-text-white"
               name="trigger"
-              onChange={(e) => setTrigger(e.target.value)}
+              onChange={(e) => {setTrigger(e.target.value); changeActionsByTrigger(triggerOptions,e.target.value)}}
               value={trigger}
             >
               {triggerOptions.map((e, key) => (
@@ -368,7 +407,6 @@ function ViewProcess() {
               };
               setStepNr(stepNr + 1);
               setData([...data, newStep]);
-              console.log(data);
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="iconPlus" />

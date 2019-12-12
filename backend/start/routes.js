@@ -99,6 +99,7 @@ Route.get('/trigger/getById/:id', 'TriggerController.getById');
 Route.get('/action', 'ActionController.index');
 Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
 Route.get('/action/getById/:id', 'ActionController.getById');
+Route.get('/action/getByTriggerId/:id', 'ActionController.getByTriggerId');
 
 
 Route.get("/entity", "EntityController.index");

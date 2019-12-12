@@ -11,7 +11,8 @@ class ProcessTypeSeeder {
 
     const a1 = await Factory.model("App/Models/Action").create({
       description: "Create SalesOrder",
-      type: "SO"
+      type: "SO",
+      trigger_id: 1
     });
 
     const s1 = await Factory.model("App/Models/Step").make({
@@ -28,7 +29,8 @@ class ProcessTypeSeeder {
 
     const a2 = await Factory.model("App/Models/Action").create({
       description: "Create supplier receipt",
-      type:"SR"
+      type:"SR",
+      trigger_id: 2
     });
 
     const s2 = await Factory.model("App/Models/Step").make({
@@ -39,7 +41,8 @@ class ProcessTypeSeeder {
     });
 
     const a3 = await Factory.model("App/Models/Action").create({
-      description: "Wait"
+      description: "Wait",
+      trigger_id: 0
     });
 
     const s3 = await Factory.model("App/Models/Step").make({

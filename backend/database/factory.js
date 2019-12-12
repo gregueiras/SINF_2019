@@ -58,10 +58,11 @@ Factory.blueprint("App/Models/Trigger", (faker, i, {description,type}) => {
   };
 });
 
-Factory.blueprint("App/Models/Action", (faker, i, {description, type}) => {
+Factory.blueprint("App/Models/Action", (faker, i, {description, type, trigger_id}) => {
   return {
     description, 
-    type
+    type,
+    trigger_id
   };
 });
 
