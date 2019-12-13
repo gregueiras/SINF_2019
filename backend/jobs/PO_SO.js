@@ -163,8 +163,8 @@ export default {
               sellerCompany: company,
               documentLines,
               userID,
+              companyID: companyB,
               processID,
-              companyID: companyB
             });
           }
         } catch (e) {
