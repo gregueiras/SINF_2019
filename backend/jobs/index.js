@@ -6,7 +6,7 @@ import SG_RG from './SG_RG';
 import createSO from './createSO';
 import createPI from './createPI';
 import createSR from './createSR';
-
+import createRG from './createRG';
 
 export const RETURN_TYPES = {
   END_SUCCESS: 'END_SUCCESS',
@@ -15,4 +15,4 @@ export const RETURN_TYPES = {
   END_NO_NEW_DOCUMENTS: 'END_NO_NEW_DOCUMENTS',
 };
 
-export default { Test, PO_SO, createSO, SI_PI, createPI, PP_SR, createSR, createSO, SG_RG };
+export default { Test, PO_SO, createSO, SI_PI, createPI, PP_SR, createSR, createSO, createRG, SG_RG };

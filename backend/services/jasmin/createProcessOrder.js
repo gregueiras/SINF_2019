@@ -1,14 +1,16 @@
 import makeRequest, { endPoints } from './constants';
 
-const createProcessOrder = async ({ companyID,companyKey, list }) => {
-  await makeRequest({
+const createProcessOrder =  ({ companyID,sourceDocKey,sourceDocLineNumber, quantity, companyKey}) => 
+   makeRequest({
     method: 'POST',
     endPoint: endPoints.goodsReceipt+"/"+companyKey,
     companyID,
-    data: {
-      list
-    },
+    data: [
+      {
+      SourceDocKey: sourceDocKey,
+      SourceDocLineNumber: sourceDocLineNumber,
+      quantity
+    }]
   });
-};
 
 export default createProcessOrder;

@@ -114,10 +114,10 @@ const makeRequest = async ({
 
   const token = await getToken(companyID);
 
-  console.log(data);
+  console.log(" data constant " +data);
 
   const url = makeUrl(endPoint, query, company);
-  const res = await axios({
+ const res = await axios({
     method,
     url,
     data,
