@@ -104,7 +104,8 @@ class ProcessController {
       })
       .getCount();
 
-    if (true) {
+    if (processExist === 0
+      ) {
       const getProcessType = await ProcessType.findOrFail(processType);
       let processTypeJob = "IC" + getProcessType.type.charAt(0) + "1";
       const lastProcessId = await Process.last();
@@ -112,8 +113,6 @@ class ProcessController {
      /* if (lastProcessId === null) processTypeJob += "" + 0;
       else processTypeJob += "" + lastProcessId.id;*/
 
-      console.log(companyA);
-      console.log(companyB);
       const process = new Process();
       process.process_type = processType;
       process.company_a = companyA;
