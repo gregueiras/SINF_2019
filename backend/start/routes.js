@@ -67,6 +67,9 @@ Route.get("/company/:id", "CompanyController.get");
 Route.get("/company/:id/token", "CompanyController.getToken");
 Route.post("/company/token", "CompanyController.setToken");
 
+Route.post("/order/addCorrespondence", "OrderCorrespondenceController.addCorrespondence");
+Route.get("/order/getCorrespondence/:salesOrder", "OrderCorrespondenceController.getCorrespondence");
+
 Route.get("/process", "ProcessController.get");
 Route.get("/process/series/:id", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");

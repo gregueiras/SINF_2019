@@ -17,6 +17,7 @@ import {
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
+import { getPurchaseOrderCorrespondence } from "../services/db/order";
 
 const options = {
   /*
@@ -101,58 +102,17 @@ export default {
               so =>
                 so.naturalKey == line.sourceDoc
             )[0];
-            console.log("sales order filter");
-            let foundMatchingSI;
-            for (const si of purchaseOrders) {
-              console.log("sales order  "+JSON.stringify(si.grossValue.amount)+" "+JSON.stringify(salesOrder.grossValue.amount));
+            console.log("SALES ORDER ID "+salesOrder.id);
+            const purchaseOrderId = await getPurchaseOrderCorrespondence({salesOrder: salesOrder.id});
+            console.log("PURCHASE ORDER ID " +purchaseOrderId);
+            for(const purchaseOrder of purchaseOrders){
+              if (purchaseOrder.id === purchaseOrderId){
+                //
 
-              if (si.payableAmount.amount === salesOrder.grossValue.amount){
-                let equal = true;
-                console.log("purchase filter");
-
-                for (const line1 of si.documentLines) {
-                  console.log("line1 filter");
-                  const found = salesOrder.documentLines.some(
-                    async el =>
-                      el.grossValue.reportingAmount ===
-                      line1.grossValue.reportingAmount &&
-                      el.grossValue.amount === line1.grossValue.amount &&
-                      el.grossValue.baseAmount === line1.grossValue.baseAmount &&
-                      el.taxExclusiveAmount.reportingAmount ===
-                      line1.taxExclusiveAmount.reportingAmount &&
-                      el.taxExclusiveAmount.amount ===
-                      line1.taxExclusiveAmount.amount &&
-                      el.taxExclusiveAmount.baseAmount ===
-                      line1.taxExclusiveAmount.baseAmount &&
-                      el.unitPrice.reportingAmount ===
-                      line1.unitPrice.reportingAmount &&
-                      el.unitPrice.amount === line1.unitPrice.amount &&
-                      el.unitPrice.baseAmount === line1.unitPrice.baseAmount &&
-                      el.quantity === line1.quantity &&
-                      el.lineExtensionAmount.reportingAmount ===
-                      line1.lineExtensionAmount.reportingAmount &&
-                      el.lineExtensionAmount.amount ===
-                      line1.lineExtensionAmount.amount &&
-                      el.lineExtensionAmount.baseAmount ===
-                      line1.lineExtensionAmount.baseAmount &&
-                      el.salesItem === (await getCorrespondenceB({ companyA, companyB, product: line1.purchasesItem }))
-                  );
-
-                  equal &= found;
-                }
-                if (equal) {
-                  foundMatchingSI = si;
-                  console.log("FOUND   "+ foundMatchingSI);
-                  break;
-                }
               }
-
             }
           }
-          /*const {
-            sourceDocKey: line.sourceDoc,
-            sourceDocLineNumber: 
-          } = data;*/
+          
 
           let sourceDocKey = "ECF.2019.3";
           let sourceDocLineNumber = 1;
