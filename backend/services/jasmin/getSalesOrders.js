@@ -4,7 +4,7 @@ const getSalesOrders = ({ companyID, page, pageSize, processID }) => makeRequest
   method: 'GET',
   endPoint: endPoints.salesOrders,
   companyID,
-  description: "Process Open Items",
+  description: "Get Sales Orders",
   processID,
   query: {
     page,
