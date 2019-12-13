@@ -40,8 +40,9 @@ class Login extends Component {
     onValidateLogin(event){
         event.preventDefault();
         this.UserService.login({username: this.state.username,password: this.state.password}, (response)=> {
+           
            if(response.status === 200)
-            this.setState({redirect: true});
+           this.setState({redirect: true});
             else {
                 console.log("failed");
                 const text = 'Login failed, username or password invalid.'

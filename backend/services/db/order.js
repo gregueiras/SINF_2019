@@ -8,12 +8,11 @@ export const addCorrespondence = ({ purchaseOrder, salesOrder }) => axios.post(`
     }
 });
 
-export const getPurchaseOrderCorrespondence = ({ salesOrder }) => {
+export const getPurchaseOrderCorrespondence =async ({ salesOrder }) => {
     
-    const req = axios.get(`http://0.0.0.0:3335/order/getCorrespondence/${salesOrder}`);
-    
+    const req = await axios.get(`http://0.0.0.0:3335/order/getCorrespondence/${salesOrder}`);
     const { data } = req;
-    console.log("getPurchaseOrderCorrespondence "+data);
+    if (data == undefined) return null;
     const { purchase_order } = data;
     return purchase_order;
 };

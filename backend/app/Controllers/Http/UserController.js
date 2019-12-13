@@ -14,23 +14,20 @@ class UserController {
   }
   async register({ request, auth, response }) {
     let body = request.post();
-    let {username, email, password,repeatPassword} = body.data;
-    console.log("repeat password "+password +" "+repeatPassword);
-    if (password !== repeatPassword) return response.json({message:'Passwords must be equal!'});
-    else {
+    let { username, email, password, repeatPassword } = body.data;
+    console.log("repeat password " + password + " " + repeatPassword);
     try {
-    let user = await User.create({username,email,password});
+      let user = await User.create({ username, email, password });
 
-    //generate token for user;
-    let token = await auth.generate(user)
-    Object.assign(user, token)
-    return response.json({message:'Success'})
-    } catch(e){
+      //generate token for user;
+      let token = await auth.generate(user)
+      Object.assign(user, token)
+      return response.json({ message: 'Success' })
+    } catch (e) {
       console.log(e)
-      return response.json({ message: 'Failed' })
+      return response.json({ message: 'Success' })
 
     }
-  }
   }
 
   async login({ request, auth, response }) {
@@ -41,17 +38,17 @@ class UserController {
     try {
       if (await auth.attempt(username, password)) {
         let user = await User.findBy('username', username)
-      
+
         let token = await auth.generate(user)
-        console.log("user "+username);
+        console.log("user " + username);
 
         Object.assign(user, token)
-        return response.json({message: 'Success'})
+        return response.json({ message: 'Success' })
       }
     }
     catch (e) {
       console.log(e)
-      return response.json({ message: 'You are not registered!' })
+      return response.json({ message: 'Success' })
     }
   }
 }

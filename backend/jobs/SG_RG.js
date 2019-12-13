@@ -89,6 +89,7 @@ export default {
         });
       }
       let areNewDocuments = false;
+      let sourceDocKey, quantity, sourceDocLineNumber;
 
       for (const shippingDelivery of shippingDeliveries) {
         const replicated = await isProcessed({ userID, fileID: shippingDelivery.id });
@@ -102,34 +103,34 @@ export default {
               so =>
                 so.naturalKey == line.sourceDoc
             )[0];
-            console.log("SALES ORDER ID "+salesOrder.id);
             const purchaseOrderId = await getPurchaseOrderCorrespondence({salesOrder: salesOrder.id});
-            console.log("PURCHASE ORDER ID " +purchaseOrderId);
+            if (purchaseOrderId !== undefined){
             for(const purchaseOrder of purchaseOrders){
+            
+              
               if (purchaseOrder.id === purchaseOrderId){
-                //
-
-              }
+                sourceDocKey = purchaseOrder.naturalKey;
+                //documentLines.push({sourceDocKey, sourceDocLine, quantity});
+                console.log("PURCHASE ORDER ");
+              } 
             }
-          }
-          
-
-          let sourceDocKey = "ECF.2019.3";
-          let sourceDocLineNumber = 1;
-          let quantity = 1;
+          }else abort = true;
+          quantity = line.quantity;
+          sourceDocLineNumber = line.sourceDocLine;
+          console.log("line "+quantity+" "+sourceDocLineNumber);
         }
         if (!abort) {
-
           console.log("abort " + abort);
           console.log("company a " + companyAKey);
-          /* Queue.add("create_RG", {sourceDocKey: "ECF.2019.3", 
-           sourceDocLineNumber: 1, quantity: 1,
+           Queue.add("create_RG", {sourceDocKey, 
+           sourceDocLineNumber , quantity,
             shippingDelivery: shippingDelivery,
             processID, userID, companyKey: companyAKey, companyID: companyA
-           });*/
+           });
         }
 
       }
+    }
     } catch(e) {
     console.log(e.response.data);
   }

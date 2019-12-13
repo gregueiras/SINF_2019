@@ -17,13 +17,17 @@ class OrderCorrespondenceController {
         
         const { params } = request;
         const { salesOrder } = params;
+        console.log("sales order "+salesOrder);
         const correspondence = (
           await OrderCorrespondence.query()
             .where({ sales_order: salesOrder })
             .fetch()
         ).toJSON();
-        if (correspondence.length > 0)
+        console.log("correspondence "+JSON.stringify(correspondence[0])+" "+correspondence.length);
+        if (correspondence.length > 0){
+            console.log("correspondence maior que 0");
             return correspondence[0];
+        }
         else return null;
       }
 
