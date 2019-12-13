@@ -77,7 +77,7 @@ export default {
       console.error(e.response.data);
     }
 
-
+    console.log("seriekey: " + serieKey)
     const salesInvoices = salesInvoicesData.filter(
       (si) => 
         si.serie === serieKey &&
@@ -95,6 +95,8 @@ export default {
         options,
       });
     }
+
+
     let areNewDocuments = false;
     for (const salesInvoice of salesInvoices) {
       const replicated = await isProcessed({
@@ -142,13 +144,13 @@ export default {
           if (!abort) {
 
             Queue.add('create_PI', {
-              documentType: "VFA",
               salesInvoice,
               company, //FEUP-GX
               documentLines,
               sellerSupplierParty: sellerParty,
               userID,
               companyID: companyA,
+              processID,
             });
           }
         } catch (e) {

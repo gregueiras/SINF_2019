@@ -18,10 +18,18 @@ export default {
         companyKey,
         userID,
         purchasesInvoice,
+        processID,
       } = data;
 
+      let { documentType} = purchasesInvoice;
+        
+      const arrs = documentType.substring(4);
+
+      documentType = "REC_IC_" + arrs;
+
+      console.log("DOCUMENT TYPE: " + documentType);
+
       const fileID = purchasesInvoice.id;
-      console.log("sourcedoc: " + sourceDoc);
       const res = await processOpenItems({
         companyID,
         sourceDoc,
