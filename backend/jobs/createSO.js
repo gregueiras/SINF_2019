@@ -17,6 +17,7 @@
           purchaseOrder,
           userID,
           companyID,
+          processID,
         } = data;
 
         const fileID = purchaseOrder.id;

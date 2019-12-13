@@ -161,7 +161,8 @@ export default {
               sellerCompany: company,
               documentLines,
               userID,
-              companyID: companyB
+              companyID: companyB,
+              processID,
             });
           }
         } catch (e) {
