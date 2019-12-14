@@ -3,7 +3,9 @@ import {
   createSeries,
   getPurchasesOrders,
   getCompanyName,
-  getSeries as getJasminSeries
+  getSeries as getJasminSeries,
+  createSalesInvoiceType,
+  createPurchasesInvoiceType
 } from "../services/jasmin";
 import {
   isProcessed,
@@ -29,25 +31,64 @@ export default {
   async handle({ data }, done) {
     const { companyA, companyB, processID, step } = data;
 
+    const types = ["R", "G"];
+    const companies = [companyA, companyB];
     // create series -> as 4, 2 de cada lado
 
-    const promises = [];
-    //promises.push(createSeries())
+    for (const company of companies) {
+      for (const type of types) {
+        try {
+          await createSeries({
+            companyID: company,
+            serieKey: `IC${type}`,
+            description: `Series to use for Intercompany Documents of type ${type}`
+          });
+        } catch (e) {
+          console.error("REPEATED SERIES");
+        }
+      }
+    }
 
     // invoice types
-        //sales
-        //order
+    //sales
+    for (const type of types) {
+      try {
+        await createSalesInvoiceType({
+          companyID: companyB,
+          typeKey: `IC${type}SI`,
+          serie: `IC${type}`,
+          description: `Sales Invoice to use for Intercompany Documents of type ${type}`,
+        });
+      } catch (e) {
+        console.error(e.response.data)
+        console.error("REPEATED SALES INVOICE");
+      }
+    }
+    
+    //order
+    for (const type of types) {
+      try {
+        await createPurchasesInvoiceType({
+          companyID: companyA,
+          typeKey: `IC${type}PI`,
+          serie: `IC${type}`,
+          description: `Purchases Invoice to use for Intercompany Documents of type ${type}`,
+        });
+      } catch (e) {
+        console.error(e.response.data)
+        console.error("REPEATED PURCHASE INVOICE");
+      }
+    }
 
-//goods
+    done(null, {end: "END"})
+    
+    //goods
     //good receipt type
-
 
     // order type
 
     // payment types
 
-
     //receipts types
-    
   }
 };

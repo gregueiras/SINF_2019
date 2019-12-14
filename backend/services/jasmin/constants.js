@@ -46,9 +46,11 @@ export const endPoints = {
   payableOpenItems: "accountsPayable/processOpenItems", //intercompany
   receipts: "accountsReceivable/receipts", //feup
   receivebleOpenItems: "accountsReceivable/processOpenItems",
+  salesInvoiceTypes: "salesCore/invoiceTypes",
+  purchasesInvoiceTypes: "purchasesCore/invoiceTypes",
   goodsReceipt: "goodsReceipt/processOrders",
   shippingProcessOrder: "shipping/processOrders",
-  getShippingDeliveries: "shipping/deliveries"
+  getShippingDeliveries: "shipping/deliveries",
 };
 
 const makeUrl = (endPoint, query, company) => {
