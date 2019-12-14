@@ -7,6 +7,8 @@ const Step = use("App/Models/Step");
 const Trigger = use("App/Models/Trigger");
 const Action = use("App/Models/Action");
 const Log = use("App/Models/Log");
+const ProcessLogStep = use("App/Models/ProcessLogStep");
+const ProcessLog = use("App/Models/ProcessLog");
 const Database = use("Database");
 
 class ProcessController {
@@ -59,17 +61,61 @@ class ProcessController {
 
     const process = await Process.find(processID);
     const type = await ProcessType.find(process.process_type);
+    const processLog = await ProcessLog.find(process.current_log);
+    const processLogID = processLog.id;
 
     const activeStep = process.active_step;
-    const steps = await Step.query()
-      .where({
-        process_type_id: type.id
-      })
-      .getCount();
+    let logStep;
+
+    try {
+      logStep = (
+        await ProcessLogStep.query()
+          .where({
+            process_log_id: processLogID,
+            step_no: activeStep,
+          })
+          .fetch()
+      ).toJSON()[0];
+    } catch (e) {
+      console.log(e);
+    }
+
+    const logStepID = logStep.id;
+    const updatedProcessLogStep= await ProcessLogStep.find(logStepID);
+    updatedProcessLogStep.state = "Completed";
+    await updatedProcessLogStep.save();
+
+
+    let steps;
+
+      try {
+        steps = (
+          await Step.query()
+            .where({
+              process_type_id: type.id
+            })
+            .fetch()
+        ).toJSON();
+      } catch (e) {
+        console.log(e);
+      }
 
     let nextStep = activeStep + 1;
-    if (nextStep > steps) {
+
+
+   if (nextStep > steps.length) {
       nextStep = 1;
+      const newProcessLog = new ProcessLog();
+      await newProcessLog.save();
+      const newProcessLogID = processLog.toJSON().id;
+      process.current_log = newProcessLogID;
+      for (const step of steps) {
+        const processLogStep = new ProcessLogStep();
+        processLogStep.step_no = step.step_no;
+        processLogStep.process_log_id = newProcessLogID;
+        processLogStep.state = "Pending";
+        processLogStep.save();
+      }
     }
 
     process.active_step = nextStep;
@@ -104,14 +150,19 @@ class ProcessController {
       })
       .getCount();
 
-    if (processExist === 0
-      ) {
+      console.log("PR: " + processExist);
+    if (true) {
+      //adiciona um novo log ja com os steps
+      console.log("here1");
+      const processLog = new ProcessLog();
+      await processLog.save();
+      const processLogID = processLog.toJSON().id;
+
+
       const getProcessType = await ProcessType.findOrFail(processType);
       let processTypeJob = "IC" + getProcessType.type.charAt(0) + "1";
       const lastProcessId = await Process.last();
       console.log("last process 2 " + JSON.stringify(lastProcessId));
-     /* if (lastProcessId === null) processTypeJob += "" + 0;
-      else processTypeJob += "" + lastProcessId.id;*/
 
       const process = new Process();
       process.process_type = processType;
@@ -122,16 +173,8 @@ class ProcessController {
       process.created_at = Database.fn.now();
       process.updated_at = Database.fn.now();
       process.series = processTypeJob;
+      process.current_log = processLogID;
       await process.save();
-      
-      /*const log = new Log();
-      log.state = "Pending";
-      log.description = getProcessType.type;
-      log.date = process.created_at;
-      log.process_id = process.id;
-      log.created_at = Database.fn.now();
-      log.updated_at = Database.fn.now();
-      await log.save();*/
 
       console.log("serie " + process.series);
       for (const step of steps) {
@@ -141,12 +184,18 @@ class ProcessController {
         const actionType = action.type;
         const job = triggerType + "_" + actionType;
         const jobName = job + "_" + process.id;
-        console.log("job " + job);
+        console.log("job " + job + " step: " + step.step_no);
         await Queue.add(
           job,
           { companyA, companyB, processID: process.id, step: step.step_no },
           jobName
         );
+        //create all the steps for the process log
+        const processLogStep = new ProcessLogStep();
+        processLogStep.step_no = step.step_no;
+        processLogStep.process_log_id = processLogID;
+        processLogStep.state = "Pending";
+        processLogStep.save();
       }
 
       return true;

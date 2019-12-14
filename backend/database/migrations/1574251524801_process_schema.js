@@ -19,9 +19,7 @@ class ProcessSchema extends Schema {
       table.integer('active_step').notNullable().defaultTo(1);
       table.string('series', 10).notNullable();
       table.string('current_log');
-      table.foreign('current_log').references('id').inTable('process_log').onDelete('CASCADE');
-
-
+      //table.foreign('current_log').references('id').inTable('process_logs').onDelete('CASCADE');
       table.timestamps();
     })
   }
