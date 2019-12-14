@@ -17,6 +17,7 @@ import {
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
+import { getPurchaseOrderCorrespondence } from "../services/db/order";
 
 const options = {
   /*
@@ -88,6 +89,7 @@ export default {
         });
       }
       let areNewDocuments = false;
+      let sourceDocKey, quantity, sourceDocLineNumber;
 
       for (const shippingDelivery of shippingDeliveries) {
         const replicated = await isProcessed({ userID, fileID: shippingDelivery.id });
@@ -101,75 +103,34 @@ export default {
               so =>
                 so.naturalKey == line.sourceDoc
             )[0];
-            console.log("sales order filter");
-            let foundMatchingSI;
-            for (const si of purchaseOrders) {
-              console.log("sales order  "+JSON.stringify(si.grossValue.amount)+" "+JSON.stringify(salesOrder.grossValue.amount));
-
-              if (si.payableAmount.amount === salesOrder.grossValue.amount){
-                let equal = true;
-                console.log("purchase filter");
-
-                for (const line1 of si.documentLines) {
-                  console.log("line1 filter");
-                  const found = salesOrder.documentLines.some(
-                    async el =>
-                      el.grossValue.reportingAmount ===
-                      line1.grossValue.reportingAmount &&
-                      el.grossValue.amount === line1.grossValue.amount &&
-                      el.grossValue.baseAmount === line1.grossValue.baseAmount &&
-                      el.taxExclusiveAmount.reportingAmount ===
-                      line1.taxExclusiveAmount.reportingAmount &&
-                      el.taxExclusiveAmount.amount ===
-                      line1.taxExclusiveAmount.amount &&
-                      el.taxExclusiveAmount.baseAmount ===
-                      line1.taxExclusiveAmount.baseAmount &&
-                      el.unitPrice.reportingAmount ===
-                      line1.unitPrice.reportingAmount &&
-                      el.unitPrice.amount === line1.unitPrice.amount &&
-                      el.unitPrice.baseAmount === line1.unitPrice.baseAmount &&
-                      el.quantity === line1.quantity &&
-                      el.lineExtensionAmount.reportingAmount ===
-                      line1.lineExtensionAmount.reportingAmount &&
-                      el.lineExtensionAmount.amount ===
-                      line1.lineExtensionAmount.amount &&
-                      el.lineExtensionAmount.baseAmount ===
-                      line1.lineExtensionAmount.baseAmount &&
-                      el.salesItem === (await getCorrespondenceB({ companyA, companyB, product: line1.purchasesItem }))
-                  );
-
-                  equal &= found;
-                }
-                if (equal) {
-                  foundMatchingSI = si;
-                  console.log("FOUND   "+ foundMatchingSI);
-                  break;
-                }
-              }
-
+            const purchaseOrderId = await getPurchaseOrderCorrespondence({salesOrder: salesOrder.id});
+            if (purchaseOrderId !== undefined){
+            for(const purchaseOrder of purchaseOrders){
+            
+              
+              if (purchaseOrder.id === purchaseOrderId){
+                sourceDocKey = purchaseOrder.naturalKey;
+                //documentLines.push({sourceDocKey, sourceDocLine, quantity});
+                console.log("PURCHASE ORDER ");
+              } 
             }
-          }
-          /*const {
-            sourceDocKey: line.sourceDoc,
-            sourceDocLineNumber: 
-          } = data;*/
-
-          let sourceDocKey = "ECF.2019.3";
-          let sourceDocLineNumber = 1;
-          let quantity = 1;
+          }else abort = true;
+          quantity = line.quantity;
+          sourceDocLineNumber = line.sourceDocLine;
+          console.log("line "+quantity+" "+sourceDocLineNumber);
         }
         if (!abort) {
-
           console.log("abort " + abort);
           console.log("company a " + companyAKey);
-          /* Queue.add("create_RG", {sourceDocKey: "ECF.2019.3", 
-           sourceDocLineNumber: 1, quantity: 1,
+           Queue.add("create_RG", {sourceDocKey, 
+           sourceDocLineNumber , quantity,
             shippingDelivery: shippingDelivery,
             processID, userID, companyKey: companyAKey, companyID: companyA
-           });*/
+           });
         }
 
       }
+    }
     } catch(e) {
     console.log(e.response.data);
   }

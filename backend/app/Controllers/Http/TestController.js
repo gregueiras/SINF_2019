@@ -17,7 +17,7 @@ const TestController = {
       companyA: 1, // intercompany
       companyB: 2, // feup
       //companyB: 3, // ritaNorinho
-      processID: 2,
+      processID: 1,
       step: 1
     });
     

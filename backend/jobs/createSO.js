@@ -1,6 +1,7 @@
   import { createMinSalesOrder } from "../services/jasmin";
   import { addProcessed } from "../services/db";
   import { RETURN_TYPES } from "./index";
+import { addCorrespondence } from "../services/db/order";
 
   const options = {};
 
@@ -24,7 +25,7 @@
 
         //get document type -> TODO create aux function
 
-        let { documentType} = purchaseOrder;
+        let { documentType } = purchaseOrder;
         
         const arrs = documentType.split("_");
 
@@ -45,7 +46,8 @@
         console.log("SO CREATION STATUS\t", status);
         if (status === 201) {
           await addProcessed({ userID, fileID });
-          console.log("SUCCESS");
+          await addCorrespondence({purchaseOrder: fileID, salesOrder: res.data});
+          console.log("SUCCESS 3");
           done(null, {
             value: RETURN_TYPES.END_SUCCESS,
             userID,

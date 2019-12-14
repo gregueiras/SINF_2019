@@ -51,6 +51,7 @@ export default {
     let series;
     try {
       series = (await getJasminSeries({ companyID: companyA, processID })).data;
+     
     } catch (error) {
       console.log("ERROR SERIES");
       console.error(error.response.data);
@@ -58,6 +59,7 @@ export default {
 
     const serieKey = await getProcessSeries({ processID });
     const serie = series.find(({ serieKey: sK }) => sK === serieKey);
+    console.log("SERIE "+ serie +" "+serieKey);
 
     if (serie === undefined) {
       console.log(`ERROR: NO SERIES ${serieKey}`);
