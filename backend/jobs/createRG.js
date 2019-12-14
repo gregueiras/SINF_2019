@@ -1,51 +1,45 @@
-import { addProcessed, nextTurn, setFailedStep } from "../services/db";
+import { addProcessed } from "../services/db";
 import { RETURN_TYPES } from "./index";
-import processOpenItems from "../services/jasmin/processOpenItems";
+import { createProcessOrder } from "../services/jasmin";
 
 const options = {};
 
 export default {
-  key: "create_SR",
+  key: "create_RG",
   options,
   async handle({ data }, done) {
-    console.log("CREATE SR");
+      console.log("handle ");
+
     try {
       const {
         companyID,
-        sourceDoc,
-        discount,
-        settled,
-        companyKey,
+        sourceDocKey,
+        sourceDocLineNumber,
+        quantity,
         userID,
-        purchasesInvoice,
         processID,
+        shippingDelivery, 
+        companyKey,
       } = data;
+      console.log("handle 2 "+data);
 
-      let { documentType} = purchasesInvoice;
-        
-      const arrs = documentType.substring(4);
-
-      documentType = "REC_IC_" + arrs;
-
-      console.log("DOCUMENT TYPE: " + documentType);
-
-      const fileID = purchasesInvoice.id;
-      const res = await processOpenItems({
+      const fileID = shippingDelivery.id;
+      console.log("file id "+fileID);
+      
+      const res = await createProcessOrder({
         companyID,
-        sourceDoc,
-        discount,
-        settled,
-        companyKey,
-        userID,
-        processID,
+        sourceDocKey,
+        sourceDocLineNumber,
+        quantity, 
+        companyKey
       });
+      console.log("res " +res);
 
       const { status } = res;
-      console.log("SR CREATION STATUS\t", status);
+      console.log("RG CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
-        await nextTurn({ processID });
-        console.log("SUCCESS!");
+        console.log("SUCCESS");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           userID,
@@ -53,7 +47,6 @@ export default {
           options
         });
       } else {
-        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           status,
@@ -65,7 +58,6 @@ export default {
     } catch (e) {
       if (e.response) {
         console.error(e.response.data);
-        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           data: e.response.data,
@@ -73,7 +65,6 @@ export default {
         });
       } else {
         console.error(e);
-        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           data: e,

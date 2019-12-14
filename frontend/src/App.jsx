@@ -32,7 +32,7 @@ const App = () => (
           <Route path="/logs" exact>
             <Logs />
           </Route>
-          <Route path="/view-process" exact>
+          <Route path="/view-process/:id" exact>
             <ViewProcess />
           </Route>
           <Route path="/new-process" exact>

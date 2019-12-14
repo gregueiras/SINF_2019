@@ -21,7 +21,7 @@ Route.get('/test/create/:id?', 'TestController.index');
 Route.get("/test/reset", "TestController.reset");
 Route.get("/test/salesInvoices", "TestController.getSalesInvoicesTest");
 Route.get("/test/purchasesInvoices", "TestController.getPurchasesInvoicesTest");
-
+Route.get("/test/shippingDeliveries", "TestController.getShippingDeliveries");
 
 Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
@@ -67,11 +67,18 @@ Route.get("/company/:id", "CompanyController.get");
 Route.get("/company/:id/token", "CompanyController.getToken");
 Route.post("/company/token", "CompanyController.setToken");
 
+Route.post("/order/addCorrespondence", "OrderCorrespondenceController.addCorrespondence");
+Route.get("/order/getCorrespondence/:salesOrder", "OrderCorrespondenceController.getCorrespondence");
+
 Route.get("/process", "ProcessController.get");
 Route.get("/process/series/:id", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");
 Route.post("/process/steps/current", "ProcessController.canRun");
 Route.post("/process/steps/next", "ProcessController.nextStep");
+Route.put("/process/logs", "ProcessController.updateProcessLogStep");
+
+Route.get("/processLog/:companyA/:companyB", "ProcessLogController.index");
+Route.get("/processLog/:id", "ProcessLogController.getLog");
 
 
 Route.get('/log', 'LogController.index');
@@ -80,8 +87,8 @@ Route.get('/log/byState/:state', 'LogController.getByState');
 Route.get('/log/byProcId/:process_id', 'LogController.getByProcId');
 Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
 Route.post('/log', 'LogController.createLog');
-Route.post('/log/update', 'LogController.updateState');
 Route.get("/log/:companyA/:companyB", "LogController.getProcesses");
+Route.post('/log/updateState', 'LogController.updateLogState');
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");
@@ -99,6 +106,7 @@ Route.get('/trigger/getById/:id', 'TriggerController.getById');
 Route.get('/action', 'ActionController.index');
 Route.get('/action/getId/:description', 'ActionController.getIdByDescription');
 Route.get('/action/getById/:id', 'ActionController.getById');
+Route.get('/action/getByTriggerId/:id', 'ActionController.getByTriggerId');
 
 
 Route.get("/entity", "EntityController.index");

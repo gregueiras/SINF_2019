@@ -1,39 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import ReactTable from 'react-table';
+import PropTypes from 'prop-types';
 import {
   Container, Row, Col, Form,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import setIcon from '../../Utilities/SetIcon';
+import ProcessLogService from '../../services/ProcessLogService';
 
-function ViewProcess() {
-  const [data] = useState([
-    {
-      step: 1,
-      trigger: 'Create Purchase Order',
-      action: 'Create Sales Order',
-      flow: 'A->B',
-      state: 'Completed',
-    },
-    {
-      step: 2,
-      trigger: 'Create Purchase Order',
-      action: 'Create Sales Order',
-      flow: 'A->B',
-      state: 'Completed',
-    },
-    {
-      step: 3,
-      trigger: 'Create Purchase Order',
-      action: 'Create Sales Order',
-      flow: 'A->B',
-      state: 'Failed',
-    },
-  ]);
 
-  const [typeOfProcess] = useState('Purchase');
-  const [companyA] = useState('MetroCarpetFactory');
-  const [companyB] = useState('MetroCarpetDistributor');
+function compareSteps( a, b ) {
+  if ( a.step_no < b.step_no ){
+    return -1;
+  }
+  if ( a.step_no > b.step_no ){
+    return 1;
+  }
+  return 0;
+}
+
+
+function ViewProcess(props) {
+
+  const { match } = props;
+  const { params } = match;
+  const { id } = params;
+
+  const [data, setData] = useState([]);
+
+  const [typeOfProcess, setTypeOfProcess] = useState('Purchase');
+  const [companyA, setCompanyA] = useState('MetroCarpetFactory');
+  const [companyB, setCompanyB] = useState('MetroCarpetDistributor');
+  const [processLogService] = useState(new ProcessLogService());
+
+  useEffect(() => {
+   processLogService.getViewProcessLog(id, (response) => {
+      if(response.status === 200){
+        const { data } = response;
+        setData(data.steps.sort(compareSteps));
+        setTypeOfProcess(data.process_type_name);
+        setCompanyA(data.company_a_name);
+        setCompanyB(data.company_b_name);
+      }
+   })
+  }, [processLogService, id])
+
 
 
   return (
@@ -73,15 +84,15 @@ function ViewProcess() {
           columns={[
             {
               Header: 'Step#',
-              accessor: 'step',
+              accessor: 'step_no',
             },
             {
               Header: 'Trigger',
-              accessor: 'trigger',
+              accessor: 'trigger_description',
             },
             {
               Header: 'Action',
-              accessor: 'action',
+              accessor: 'action_description',
             },
             {
               Header: 'Flow',
@@ -106,4 +117,12 @@ function ViewProcess() {
   );
 }
 
-export default ViewProcess;
+ViewProcess.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired
+};
+
+export default withRouter(ViewProcess);

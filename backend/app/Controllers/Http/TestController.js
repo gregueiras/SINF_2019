@@ -1,6 +1,7 @@
 import {
   getPurchasesOrders,
-  getPurchasesInvoices
+  getPurchasesInvoices,
+  getProcessOrder
 } from "../../../services/jasmin";
 import getSalesInvoices from "../../../services/jasmin/getSalesInvoices";
 
@@ -16,7 +17,7 @@ const TestController = {
       companyA: 1, // intercompany
       companyB: 2, // feup
       //companyB: 3, // ritaNorinho
-      processID: 2,
+      processID: 1,
       step: 1
     });
     
@@ -73,6 +74,22 @@ const TestController = {
 
     const si = await getPurchasesInvoices({ companyID: 1 });
     return si.data;
+  },
+
+  async getShippingDeliveries() {
+    await Queue.add("SG_RG", {
+      companyA: 1, // intercompany -> companyA: customer
+      companyB: 2 // feup -> companyB: supplier
+      //companyB: 3, // ritaNorinho
+    });
+   const data =  (await getProcessOrder({
+    companyID: 2,
+    companyKey: "FEUP",
+    pageIndex: 1,
+    pageSize: 500
+  })).data;
+   return data;
+
   }
 };
 

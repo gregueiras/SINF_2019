@@ -19,6 +19,7 @@ export default {
   queues,
   add(name, data, jobName) {
     const queue = this.queues.find(q => q.name === name);
+    
 
     if (jobName)
       return queue.bull.add(jobName, data, queue.options);

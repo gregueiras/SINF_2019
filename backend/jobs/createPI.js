@@ -1,4 +1,4 @@
-import { addProcessed } from "../services/db";
+import { addProcessed, nextTurn, setFailedStep } from "../services/db";
 import { RETURN_TYPES } from "./index";
 import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
 
@@ -12,15 +12,23 @@ export default {
     try {
       const {
         companyID,
-        documentType,
         company,
         sellerSupplierParty,
         documentLines,
         salesInvoice,
         userID,
+        processID,
       } = data;
 
       const fileID = salesInvoice.id;
+
+      let { documentType} = salesInvoice;
+        
+      const arrs = documentType.substring(4);
+
+      documentType = "PI_IC_" + arrs;
+
+      console.log("DOCUMENT TYPE: " + documentType);
       
       const res = await createMinPurchaseInvoice({
         companyID,
@@ -28,12 +36,14 @@ export default {
         company: company,
         sellerSupplierParty,
         documentLines,
+        processID,
       });
 
       const { status } = res;
       console.log("SI CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
+        await nextTurn({ processID });
         console.log("SUCCESS");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
@@ -42,6 +52,7 @@ export default {
           options
         });
       } else {
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           status,
@@ -53,12 +64,14 @@ export default {
     } catch (e) {
       if (e.response) {
         console.error(e.response.data);
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           data: e.response.data,
           options
         });
       } else {
+        await setFailedStep({ processID });
         console.error(e);
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,

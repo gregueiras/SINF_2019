@@ -1,6 +1,13 @@
 import axios from "axios";
 import FormData from "form-data";
-import { fetchToken, storeToken, getCompany } from "../db";
+import {
+  fetchToken,
+  storeToken,
+  getCompany,
+  storeLog,
+  updateStateLog
+} from "../db";
+import { getProcessTypeName } from "../db/process";
 
 export const constants = {
   url: "https://my.jasminsoftware.com",
@@ -41,10 +48,14 @@ export const endPoints = {
   receivebleOpenItems: "accountsReceivable/processOpenItems",
   salesInvoiceTypes: "salesCore/invoiceTypes",
   purchasesInvoiceTypes: "purchasesCore/invoiceTypes",
+  goodsReceipt: "goodsReceipt/processOrders",
+  shippingProcessOrder: "shipping/processOrders",
+  getShippingDeliveries: "shipping/deliveries",
 };
 
 const makeUrl = (endPoint, query, company) => {
   let url = `${constants.url}/api/${company.tenant}/${company.organization}/${endPoint}?`;
+  //console.log("URL "+url);
 
   if (query) {
     Object.keys(query).forEach(key => {
@@ -92,15 +103,23 @@ const getToken = async companyID => {
   return db;
 };
 
-const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
+const makeRequest = async ({
+  endPoint,
+  method,
+  data,
+  query,
+  companyID,
+  processID,
+  description
+}) => {
   const company = await getCompany(companyID);
 
   const token = await getToken(companyID);
 
-  console.log(data)
+  console.log(" data constant " +data);
 
   const url = makeUrl(endPoint, query, company);
-  return axios({
+ const res = await axios({
     method,
     url,
     data,
@@ -109,6 +128,20 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
       "Content-Type": "application/json"
     }
   });
+
+  if (processID !== undefined && description !== undefined) {
+    let state = "Failed";
+    if (res.status === 200 || res.status === 201 || res.status === 204) {
+      state = "Completed";
+    }
+    await storeLog({
+      state,
+      description,
+      process_id: processID
+    });
+  }
+
+  return res;
 };
 
 export default makeRequest;

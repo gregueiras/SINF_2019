@@ -1,6 +1,7 @@
   import { createMinSalesOrder } from "../services/jasmin";
-  import { addProcessed } from "../services/db";
+  import { addProcessed, nextTurn,  setFailedStep } from "../services/db";
   import { RETURN_TYPES } from "./index";
+import { addCorrespondence } from "../services/db/order";
 
   const options = {};
 
@@ -17,13 +18,14 @@
           purchaseOrder,
           userID,
           companyID,
+          processID,
         } = data;
 
         const fileID = purchaseOrder.id;
 
         //get document type -> TODO create aux function
 
-        let { documentType} = purchaseOrder;
+        let { documentType } = purchaseOrder;
         
         const arrs = documentType.split("_");
 
@@ -37,13 +39,16 @@
           documentLines,
           companyID,
           documentType,
+          processID,
         });
 
         const { status } = res;
         console.log("SO CREATION STATUS\t", status);
         if (status === 201) {
           await addProcessed({ userID, fileID });
-          console.log("SUCCESS");
+          await addCorrespondence({purchaseOrder: fileID, salesOrder: res.data});
+          await nextTurn({ processID });
+          console.log("SUCCESS SO CREATION");
           done(null, {
             value: RETURN_TYPES.END_SUCCESS,
             userID,
@@ -51,6 +56,7 @@
             options
           });
         } else {
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             status,
@@ -62,6 +68,7 @@
       } catch (e) {
         if (e.response) {
           console.error(e.response.data);
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             data: e.response.data,
@@ -69,6 +76,7 @@
           });
         } else {
           console.error(e);
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             data: e,

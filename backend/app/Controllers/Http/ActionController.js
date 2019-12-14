@@ -21,6 +21,18 @@ class ActionController {
     }
 
 
+
+    async getByTriggerId(request){
+        const { params } = request;
+        let { id } = params;
+
+        return await Database
+            .select('*')
+            .from('actions')
+            .where('id', id).orWhere('description', 'Wait');
+      
+    }
+
     async getIdByDescription(request) {
         const { params } = request;
         const { description } = params;

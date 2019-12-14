@@ -144,7 +144,7 @@ class NewProcess extends Component {
   addNewProcess() {
 
     this.ProcessService.addProcess({
-      companyA: this.state.companyA, companyB: this.state.companyB, processType: this.state.processType
+      companyB: this.state.companyA, companyA: this.state.companyB, processType: this.state.processType
     }, (response) => {
       if (response.status === 200) {
         console.log(response.data);
