@@ -157,7 +157,7 @@ class ProcessController {
       .getCount();
 
       console.log("PR: " + processExist);
-    if (true) {
+    if (processExist == 0) {
       //adiciona um novo log ja com os steps
       const processLog = new ProcessLog();
       processLog.user = 1;
