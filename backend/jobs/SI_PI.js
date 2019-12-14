@@ -17,9 +17,9 @@ import getSalesInvoices from "../services/jasmin/getSalesInvoices";
 import Queue from "../lib/Queue";
 
 const options = {
-  /*repeat: {
+  repeat: {
     every: 60 * 1000
-  }*/
+  }
 };
 
 export default {

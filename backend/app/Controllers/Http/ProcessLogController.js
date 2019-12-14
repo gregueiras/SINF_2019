@@ -10,27 +10,6 @@ const Company = use("App/Models/Company");
 
 
 class ProcessLogController {
-  /*async index() {
-    const logs = await Log.all();
-    const processes = await Process.all();
-    const types = await ProcType.all();
-    if (logs !== undefined) {
-      logs.rows.map((log) => {
-        let { process_id } = log;
-        processes.rows.map((process) => {
-          if (process.id == process_id) {
-            log.descriptionProcess = process.description;
-            types.rows.map((type) => {
-              if(type.id == process.process_type){
-                log.processType = type.type;
-              }
-            })
-          }
-        });
-      });
-    }
-    return logs;
-  }*/
 
   async index({ request }) {
     const { params } = request;
@@ -41,7 +20,8 @@ class ProcessLogController {
     let logs;
     if (processLogs !== undefined) {
       logs = processLogs.rows.filter(
-        log => log.company_a === companyA && log.company_b === companyB
+        log => (log.company_a === companyA && log.company_b === companyB) ||
+        (log.company_a === companyB && log.company_b === companyA)
       );
       for (const log of logs) {
         let logSteps;

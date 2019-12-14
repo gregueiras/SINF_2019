@@ -49,7 +49,7 @@ class Overview extends Component {
     this.ProcessLogService.getOverviewProcessLogs(companyA, companyB, (response) => {
       if(response.status === 200){
         this.setState({
-          data: response.data,
+          data: response.data.reverse(),
         })
       }
     })

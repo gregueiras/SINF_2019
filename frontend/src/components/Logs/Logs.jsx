@@ -17,20 +17,23 @@ class Logs extends Component {
 
  componentDidMount() {
   this.LogService.getLogs((response) => {
-    console.log(response);
-    const reverse = response.data.slice().reverse();
-    const logs = reverse.map((data) => (
-      {
-        process: data.descriptionProcess,
-        state: data.state,
-        description: data.description,
-        timestamp: data.date,
-        processType: data.processType + "-" + data.process_id,
-      }
-
-    ));
-    const newState = { data: logs };
-    this.setState(newState);
+    if(response.status === 200){
+      const reverse = response.data.slice().reverse();
+  
+      console.log(reverse);
+      const logs = reverse.map((data) => (
+        {
+          process: data.descriptionProcess,
+          state: data.state,
+          description: data.description,
+          timestamp: data.created_at,
+          processType: data.processType + "-" + data.current_log,
+        }
+  
+      ));
+      const newState = { data: logs };
+      this.setState(newState);
+    }
   });
 }
  render(){

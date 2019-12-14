@@ -22,9 +22,9 @@ import {
 import getSalesInvoices from "../services/jasmin/getSalesInvoices";
 
 const options = {
-  /*repeat: {
+  repeat: {
     every: 60 * 1000
-  }*/
+  }
 };
 
 export default {
