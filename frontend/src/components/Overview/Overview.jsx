@@ -129,6 +129,10 @@ class Overview extends Component {
               {
                 Header: 'Process',
                 accessor: 'overview_process',
+                Cell: (value) => {
+                  return (
+                  <Link to={`/view-process/${value.original.id}`}>{value.original.overview_process}</Link>)
+                }
               },
               {
                 Header: 'State',

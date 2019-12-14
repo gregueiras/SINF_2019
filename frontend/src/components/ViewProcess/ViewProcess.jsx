@@ -8,9 +8,6 @@ import { Link, withRouter } from 'react-router-dom';
 import setIcon from '../../Utilities/SetIcon';
 import ProcessLogService from '../../services/ProcessLogService';
 
-//vai receber um id de um process log
-
-//
 
 function compareSteps( a, b ) {
   if ( a.step_no < b.step_no ){
@@ -44,11 +41,9 @@ function ViewProcess(props) {
         setTypeOfProcess(data.process_type_name);
         setCompanyA(data.company_a_name);
         setCompanyB(data.company_b_name);
-
       }
    })
-
-  }, [processLogService])
+  }, [processLogService, id])
 
 
 
