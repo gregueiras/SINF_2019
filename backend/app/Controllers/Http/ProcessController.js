@@ -104,21 +104,23 @@ class ProcessController {
 
 
    if (nextStep > steps.length) {
+     console.log("next step");
       nextStep = 1;
       const newProcessLog = new ProcessLog();
-      newProcessLog.user = process.user;
-      newProcessLog.process_type = process.process_type;
-      newProcessLog.company_a = process.company_a;
-      newProcessLog.company_b = process.company_b;
+      newProcessLog.user = processLog.user;
+      newProcessLog.process_type = processLog.process_type;
+      newProcessLog.company_a = processLog.company_a;
+      newProcessLog.company_b = processLog.company_b;
       await newProcessLog.save();
-      const newProcessLogID = processLog.toJSON().id;
+      const newProcessLogID = newProcessLog.toJSON().id;
+
       process.current_log = newProcessLogID;
       for (const step of steps) {
         const processLogStep = new ProcessLogStep();
         processLogStep.step_no = step.step_no;
         processLogStep.process_log_id = newProcessLogID;
         processLogStep.state = "Pending";
-        processLogStep.save();
+        await processLogStep.save();
       }
     }
 
@@ -235,6 +237,46 @@ class ProcessController {
     const updatedProcessLogStep= await ProcessLogStep.find(logStepID);
     updatedProcessLogStep.state = state;
     await updatedProcessLogStep.save();    
+
+    if(state == "Failed"){
+
+      console.log("failed");
+      const type = await ProcessType.find(process.process_type);
+      let steps;
+
+      try {
+        steps = (
+          await Step.query()
+            .where({
+              process_type_id: type.id
+            })
+            .fetch()
+        ).toJSON();
+
+        const newProcessLog = new ProcessLog();
+        newProcessLog.user = processLog.user;
+        newProcessLog.process_type = processLog.process_type;
+        newProcessLog.company_a = processLog.company_a;
+        newProcessLog.company_b = processLog.company_b;
+        await newProcessLog.save();
+
+        const newProcessLogID = newProcessLog.toJSON().id;
+        process.current_log = newProcessLogID;
+        await process.save();
+        for (const step of steps) {
+          const processLogStep = new ProcessLogStep();
+          processLogStep.step_no = step.step_no;
+          processLogStep.process_log_id = newProcessLogID;
+          processLogStep.state = "Pending";
+          await processLogStep.save();
+        }
+
+      } catch (e) {
+        console.log(e);
+      }
+
+
+    }
 
     return logStepID;
   }

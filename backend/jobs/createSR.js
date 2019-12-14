@@ -1,4 +1,4 @@
-import { addProcessed, nextTurn } from "../services/db";
+import { addProcessed, nextTurn, setFailedStep } from "../services/db";
 import { RETURN_TYPES } from "./index";
 import processOpenItems from "../services/jasmin/processOpenItems";
 
@@ -53,6 +53,7 @@ export default {
           options
         });
       } else {
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           status,
@@ -64,6 +65,7 @@ export default {
     } catch (e) {
       if (e.response) {
         console.error(e.response.data);
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           data: e.response.data,
@@ -71,6 +73,7 @@ export default {
         });
       } else {
         console.error(e);
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_ACTION_FAIL,
           data: e,

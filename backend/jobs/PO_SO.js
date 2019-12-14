@@ -13,18 +13,14 @@ import {
   getSellerParty,
   getSeries as getProcessSeries,
   isMyTurn,
-  setCompletedStep, 
   setFailedStep
-
 } from "../services/db";
 import Queue from "../lib/Queue";
 
 const options = {
-  /*
-  repeat: {
+  /*repeat: {
     every: 60 * 1000
-  }
-  */
+  }*/
 };
 
 export default {
@@ -45,7 +41,6 @@ export default {
     const active = await isMyTurn({ processID, step });
 
     if (!active) {
-      await setFailedStep({ processID });
       done(null, {
         value: RETURN_TYPES.END_INVALID_STEP,
         msg: `Invalid step ${step}`,
@@ -219,7 +214,6 @@ export default {
           options
         });
       } else {
-        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           ...info,

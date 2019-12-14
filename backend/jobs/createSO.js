@@ -1,5 +1,5 @@
   import { createMinSalesOrder } from "../services/jasmin";
-  import { addProcessed, nextTurn } from "../services/db";
+  import { addProcessed, nextTurn,  setFailedStep } from "../services/db";
   import { RETURN_TYPES } from "./index";
 import { addCorrespondence } from "../services/db/order";
 
@@ -48,7 +48,7 @@ import { addCorrespondence } from "../services/db/order";
           await addProcessed({ userID, fileID });
           await addCorrespondence({purchaseOrder: fileID, salesOrder: res.data});
           await nextTurn({ processID });
-          console.log("SUCCESS 3");
+          console.log("SUCCESS SO CREATION");
           done(null, {
             value: RETURN_TYPES.END_SUCCESS,
             userID,
@@ -56,6 +56,7 @@ import { addCorrespondence } from "../services/db/order";
             options
           });
         } else {
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             status,
@@ -67,6 +68,7 @@ import { addCorrespondence } from "../services/db/order";
       } catch (e) {
         if (e.response) {
           console.error(e.response.data);
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             data: e.response.data,
@@ -74,6 +76,7 @@ import { addCorrespondence } from "../services/db/order";
           });
         } else {
           console.error(e);
+          await setFailedStep({ processID });
           done(null, {
             value: RETURN_TYPES.END_ACTION_FAIL,
             data: e,

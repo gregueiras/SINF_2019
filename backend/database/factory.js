@@ -32,6 +32,16 @@ Factory.blueprint("App/Models/Product", (faker, i, data) => {
   };
 });
 
+
+Factory.blueprint("App/Models/Entity", (faker, i, data) => {
+  return {
+    id_company_a: data.idCompanyA,
+    id_company_b: data.idCompanyB,
+    company_a: data.companyA,
+    company_b: data.companyB
+  };
+});
+
 Factory.blueprint("App/Models/ProcessType", (faker, i, { type, descriptionA, descriptionB }) => {
   return {
     user: "1",
