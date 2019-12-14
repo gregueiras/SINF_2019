@@ -106,6 +106,10 @@ class ProcessController {
    if (nextStep > steps.length) {
       nextStep = 1;
       const newProcessLog = new ProcessLog();
+      newProcessLog.user = process.user;
+      newProcessLog.process_type = process.process_type;
+      newProcessLog.company_a = process.company_a;
+      newProcessLog.company_b = process.company_b;
       await newProcessLog.save();
       const newProcessLogID = processLog.toJSON().id;
       process.current_log = newProcessLogID;
@@ -153,8 +157,11 @@ class ProcessController {
       console.log("PR: " + processExist);
     if (true) {
       //adiciona um novo log ja com os steps
-      console.log("here1");
       const processLog = new ProcessLog();
+      processLog.user = 1;
+      processLog.process_type = processType;
+      processLog.company_a = companyA;
+      processLog.company_b = companyB;
       await processLog.save();
       const processLogID = processLog.toJSON().id;
 
@@ -200,6 +207,36 @@ class ProcessController {
 
       return true;
     } else return false;
+  }
+
+  async updateProcessLogStep({request}){
+    const body = request.post();
+    const { state, processID } = body;
+    const process = await Process.find(processID);
+    const processLog = await ProcessLog.find(process.current_log);
+    const processLogID = processLog.id;
+    const activeStep = process.active_step;
+    let logStep;
+
+    try {
+      logStep = (
+        await ProcessLogStep.query()
+          .where({
+            process_log_id: processLogID,
+            step_no: activeStep,
+          })
+          .fetch()
+      ).toJSON()[0];
+    } catch (e) {
+      console.log(e);
+    }
+
+    const logStepID = logStep.id;
+    const updatedProcessLogStep= await ProcessLogStep.find(logStepID);
+    updatedProcessLogStep.state = state;
+    await updatedProcessLogStep.save();    
+
+    return logStepID;
   }
 }
 

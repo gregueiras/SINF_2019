@@ -75,7 +75,9 @@ Route.get("/process/series/:id", "ProcessController.getSeries");
 Route.post("/process", "ProcessController.store");
 Route.post("/process/steps/current", "ProcessController.canRun");
 Route.post("/process/steps/next", "ProcessController.nextStep");
+Route.put("/process/logs", "ProcessController.updateProcessLogStep");
 
+Route.get("/processLog/:companyA/:companyB", "ProcessLogController.index");
 
 Route.get('/log', 'LogController.index');
 Route.get('/log/byId/:id', 'LogController.getById');
@@ -85,8 +87,6 @@ Route.get('/log/byDate/:begin_date/:end_date', 'LogController.getByDate');
 Route.post('/log', 'LogController.createLog');
 Route.get("/log/:companyA/:companyB", "LogController.getProcesses");
 Route.post('/log/updateState', 'LogController.updateLogState');
-
-
 
 Route.get("/log/get", "LogController.get");
 Route.post("/log/store", "LogController.store");

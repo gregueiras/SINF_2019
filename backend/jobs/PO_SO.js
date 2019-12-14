@@ -12,7 +12,10 @@ import {
   getCustomerParty,
   getSellerParty,
   getSeries as getProcessSeries,
-  isMyTurn
+  isMyTurn,
+  setCompletedStep, 
+  setFailedStep
+
 } from "../services/db";
 import Queue from "../lib/Queue";
 
@@ -42,6 +45,7 @@ export default {
     const active = await isMyTurn({ processID, step });
 
     if (!active) {
+      await setFailedStep({ processID });
       done(null, {
         value: RETURN_TYPES.END_INVALID_STEP,
         msg: `Invalid step ${step}`,
@@ -75,7 +79,7 @@ export default {
       if (serie === undefined) {
         console.log(`ERROR: NO SERIES ${serieKey}`);
         //console.error(e.response.data);
-
+        await setFailedStep({ processID });
         done(null, { msg: `ERROR: NO SERIES ${serieKey}` });
         return;
       }
@@ -99,6 +103,7 @@ export default {
       );
 
       if (!purchaseOrders) {
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_TRIGGER_FAIL,
           msg: `No purchases orders found with series ${serieKey}. Please check if you have defined it correctly.`,
@@ -185,6 +190,7 @@ export default {
           } catch (e) {
             if (e.response) {
               console.error(e.response.data);
+              await setFailedStep({ processID });
               done(null, {
                 value: RETURN_TYPES.END_ACTION_FAIL,
                 data: e.response.data,
@@ -193,6 +199,7 @@ export default {
               });
             } else {
               console.error(e);
+              await setFailedStep({ processID });
               done(null, {
                 value: RETURN_TYPES.END_ACTION_FAIL,
                 ...info,
@@ -204,13 +211,15 @@ export default {
         }
       }
       if (!areNewDocuments) {
-        console.log("NO NEW RES 1");
+        console.log("NO NEW RES PO_SO");
+        await setFailedStep({ processID });
         done(null, {
           result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
           ...info,
           options
         });
       } else {
+        await setFailedStep({ processID });
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           ...info,

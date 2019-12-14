@@ -11,22 +11,25 @@ import {
 import './Overview.css';
 import setIcon from '../../Utilities/SetIcon';
 import CompanyService from '../../services/CompanyService';
-import LogService from '../../services/LogService';
+import ProcessLogService from '../../services/ProcessLogService';
 class Overview extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-        companyAOptions: [],
-        companyBOptions: [],
-        companyA: '',
-        companyB:''
+      companyAOptions: [],
+      companyBOptions: [],
+      companyA: '',
+      companyB:''
     }
     this.CompanyService = new CompanyService();
-    this.LogService = new LogService();
+    this.ProcessLogService = new ProcessLogService();
 
   }
+
+  // vou buscar todos os logs dos processos entre as 2 empresas
+  //mostro os estado do ultimo log
 
 
   componentDidMount(){
@@ -37,26 +40,34 @@ class Overview extends Component {
         companyBOptions: reverse,
         companyA: response.data[0].id,
         companyB: reverse[0].id
-      }, this.getLogs);
+      });
+      this.getData(response.data[0].id, reverse[0].id);
     });
   }
 
-  getLogs(){
-    this.LogService.getLogsBetween2Companies(this.state.companyA,
-      this.state.companyB, (response)=>{
-        console.log(response);
+  getData(companyA, companyB){
+    this.ProcessLogService.getOverviewProcessLogs(companyA, companyB, (response) => {
+      if(response.status === 200){
         this.setState({
-          data: response.data
+          data: response.data,
         })
-      })
-    }
+      }
+    })
+  }
+
+
   onChangeCompanyA = (event) => {
     event.preventDefault();
-    this.setState({companyA: event.target.value },this.getLogs)
+    const { companyB} = this.state;
+    this.setState({companyA: event.target.value });
+    this.getData(event.target.value, companyB);
+
   }
   onChangeCompanyB = (event) => {
     event.preventDefault();
-    this.setState({companyB: event.target.value}, this.getLogs);
+    const { companyA} = this.state;
+    this.setState({companyB: event.target.value});
+    this.getData(companyA, event.target.value);
   }
 
 
@@ -117,7 +128,7 @@ class Overview extends Component {
             columns={[
               {
                 Header: 'Process',
-                accessor: 'description',
+                accessor: 'overview_process',
               },
               {
                 Header: 'State',
@@ -127,7 +138,7 @@ class Overview extends Component {
               },
               {
                 Header: 'Timestamp',
-                accessor: 'date',
+                accessor: 'created_at',
               },
             ]}
             defaultPageSize={10}
