@@ -1,5 +1,5 @@
   import { createMinSalesOrder } from "../services/jasmin";
-  import { addProcessed } from "../services/db";
+  import { addProcessed, nextTurn } from "../services/db";
   import { RETURN_TYPES } from "./index";
 import { addCorrespondence } from "../services/db/order";
 
@@ -47,6 +47,7 @@ import { addCorrespondence } from "../services/db/order";
         if (status === 201) {
           await addProcessed({ userID, fileID });
           await addCorrespondence({purchaseOrder: fileID, salesOrder: res.data});
+          await nextTurn({ processID });
           console.log("SUCCESS 3");
           done(null, {
             value: RETURN_TYPES.END_SUCCESS,

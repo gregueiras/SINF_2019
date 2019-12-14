@@ -13,6 +13,7 @@ export const RETURN_TYPES = {
   END_ACTION_FAIL: 'END_ACTION_FAIL',
   END_TRIGGER_FAIL: 'END_TRIGGER_FAIL',
   END_NO_NEW_DOCUMENTS: 'END_NO_NEW_DOCUMENTS',
+  END_INVALID_STEP: 'END_INVALID_STEP',
 };
 
 export default { Test, PO_SO, createSO, SI_PI, createPI, PP_SR, createSR, createSO, createRG, SG_RG };

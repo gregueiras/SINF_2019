@@ -1,4 +1,4 @@
-import { addProcessed } from "../services/db";
+import { addProcessed, nextTurn } from "../services/db";
 import { RETURN_TYPES } from "./index";
 import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
 
@@ -43,6 +43,7 @@ export default {
       console.log("SI CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
+        await nextTurn({ processID });
         console.log("SUCCESS");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
