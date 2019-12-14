@@ -78,6 +78,8 @@ Route.post("/process/steps/next", "ProcessController.nextStep");
 Route.put("/process/logs", "ProcessController.updateProcessLogStep");
 
 Route.get("/processLog/:companyA/:companyB", "ProcessLogController.index");
+Route.get("/processLog/:id", "ProcessLogController.getLog");
+
 
 Route.get('/log', 'LogController.index');
 Route.get('/log/byId/:id', 'LogController.getById');

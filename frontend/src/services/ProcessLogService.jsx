@@ -16,4 +16,15 @@ export default class ProcessLogService {
       });
   }
 
+  getViewProcessLog(id, callback) {
+    console.log("ggggg")
+    axios
+    .get(`${this.processLogBasePath}/${id}`)
+    .then((response) => {
+      callback(response);
+    })
+    .catch((error) => {
+      callback(error);
+    });
+  }
 }
