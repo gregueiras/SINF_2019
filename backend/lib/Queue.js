@@ -13,6 +13,8 @@ const queues = Object.values(jobs).map(job => ({
   options: job.options
 }));
 
+queues.forEach(({ bull }) => bull.setMaxListeners(400));
+
 export default {
   queues,
   add(name, data, jobName) {
@@ -23,11 +25,11 @@ export default {
     else
       return queue.bull.add(data, queue.options);
   },
-  process() {
+  process() {   
     return this.queues.forEach(queue => {
       queue.bull.process("__default__", 100, queue.handle);
       queue.bull.process(queue.name, 100, queue.handle);
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 5; i++) {
         queue.bull.process(`${queue.name}_${i}`, 100, queue.handle);
 
       }

@@ -38,7 +38,9 @@ export const endPoints = {
   billingInvoices: "billing/invoices",
   payableOpenItems: "accountsPayable/processOpenItems", //intercompany
   receipts: "accountsReceivable/receipts", //feup
-  receivebleOpenItems: "accountsReceivable/processOpenItems"
+  receivebleOpenItems: "accountsReceivable/processOpenItems",
+  salesInvoiceTypes: "salesCore/invoiceTypes",
+  purchasesInvoiceTypes: "purchasesCore/invoiceTypes",
 };
 
 const makeUrl = (endPoint, query, company) => {
@@ -59,7 +61,7 @@ const getTokenFromJasmin = async company => {
   formData.append("client_id", company.clientId);
   formData.append("client_secret", company.clientSecret);
   formData.append("scope", constants.scope);
-  
+
   const { data } = await axios.post(
     "https://identity.primaverabss.com/connect/token",
     formData,
@@ -68,9 +70,9 @@ const getTokenFromJasmin = async company => {
         ...formData.getHeaders()
       }
     }
-    );
-    const { access_token, expires_in } = data;
-    
+  );
+  const { access_token, expires_in } = data;
+
   return { token: access_token, expires: expires_in };
 };
 
@@ -78,9 +80,8 @@ const getToken = async companyID => {
   const db = await fetchToken(companyID);
 
   if (db.id) {
-
     const { token, expires } = await getTokenFromJasmin(db);
-    
+
     const newExpire = Date.now() + expires;
 
     await storeToken({ companyID, token, expires: newExpire });
@@ -96,7 +97,7 @@ const makeRequest = async ({ endPoint, method, data, query, companyID }) => {
 
   const token = await getToken(companyID);
 
-  console.log(data);
+  console.log(data)
 
   const url = makeUrl(endPoint, query, company);
   return axios({

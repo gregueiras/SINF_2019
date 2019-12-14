@@ -5,6 +5,7 @@ import PP_SR from './PP_SR';
 import createSO from './createSO';
 import createPI from './createPI';
 import createSR from './createSR';
+import setup from './setup';
 
 export const RETURN_TYPES = {
   END_SUCCESS: 'END_SUCCESS',
@@ -13,4 +14,13 @@ export const RETURN_TYPES = {
   END_NO_NEW_DOCUMENTS: 'END_NO_NEW_DOCUMENTS',
 };
 
-export default { Test, PO_SO, createSO, SI_PI, createPI, PP_SR, createSR };
+export default {
+  Test,
+  PO_SO,
+  createSO,
+  SI_PI,
+  createPI,
+  PP_SR,
+  createSR,
+  setup
+};

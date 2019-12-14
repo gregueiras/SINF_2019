@@ -9,3 +9,5 @@ export { default as createMinSalesOrder } from './createMinSalesOrdes';
 export { default as createSellerParty } from './createSellerParty';
 export { default as createSalesOrder } from './createSalesOrder';
 export { default as getPurchasesInvoices } from './getPurchasesInvoices';
+export { default as createSalesInvoiceType } from './types/salesInvoice'
+export { default as createPurchasesInvoiceType } from './types/purchasesInvoice'
