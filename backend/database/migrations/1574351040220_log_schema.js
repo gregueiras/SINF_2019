@@ -12,6 +12,9 @@ class LogSchema extends Schema {
       table.date('date').notNullable()
       table.bigInteger('process_id').notNullable()
       table.foreign('process_id').references('id').inTable('processes').onDelete('CASCADE')
+      table.bigInteger('process_log_id').notNullable()
+      //table.foreign('process_log_id').references('id').inTable('process_logs').onDelete('CASCADE')
+    
       table.timestamps()
     })
   }

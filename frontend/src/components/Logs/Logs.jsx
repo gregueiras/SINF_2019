@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import { Container } from 'react-bootstrap';
 import setIcon from '../../Utilities/SetIcon';
-import { withRouter } from 'react-router-dom';
+import {Link, withRouter } from 'react-router-dom';
 
 import LogService from '../../services/LogService';
 
@@ -27,7 +27,8 @@ class Logs extends Component {
           state: data.state,
           description: data.description,
           timestamp: data.created_at,
-          processType: data.processType + "-" + data.current_log,
+          process_log_id: data.process_log_id,
+          processType: data.processType + "-" + data.process_log_id,
         }
   
       ));
@@ -47,6 +48,10 @@ class Logs extends Component {
             {
               Header: 'Process',
               accessor: 'processType',
+              Cell: (value) => {
+                return (
+                <Link to={`/view-process/${value.original.process_log_id}`}>{value.original.processType}</Link>)
+              }
             },
             {
               Header: 'State',
