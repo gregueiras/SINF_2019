@@ -74,6 +74,62 @@ class ProcessedFileSeeder {
       created_at: "2019-12-15 11:39:00",
       updated_at: "2019-12-15 11:39:00"
     });
+
+    const p10 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 10,
+      user_id: 1,
+      file_id: "0d7487f7-db57-4ece-9fde-9ed1fd2d975a",
+      created_at: "2019-12-15 16:12:23",
+      updated_at: "2019-12-15 16:12:23"
+    });
+
+    const p11 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 11,
+      user_id: 1,
+      file_id: "f7d6fd56-12e6-485b-98d2-add7da0c9084",
+      created_at: "2019-12-15 16:12:23",
+      updated_at: "2019-12-15 16:12:23"
+    });
+
+    const p12 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 12,
+      user_id: 1,
+      file_id: "b6d27501-be99-42c8-8662-cc71b96dc130",
+      created_at: "2019-12-15 16:12:24",
+      updated_at: "2019-12-15 16:12:24"
+    });
+
+    const p13 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 13,
+      user_id: 1,
+      file_id: "aec6f98d-b297-4631-adfa-dca661f23973",
+      created_at: "2019-12-15 16:12:24",
+      updated_at: "2019-12-15 16:12:24"
+    });
+
+    const p14 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 14,
+      user_id: 1,
+      file_id: "a38ef783-0589-4652-8465-e071254ec028",
+      created_at: "2019-12-15 16:12:25",
+      updated_at: "2019-12-15 16:12:25"
+    });
+
+    const p15 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 15,
+      user_id: 1,
+      file_id: "a6b9c958-d948-44f3-aaa7-e55056553248",
+      created_at: "2019-12-15 16:12:25",
+      updated_at: "2019-12-15 16:12:25"
+    });
+
+    const p16 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 16,
+      user_id: 1,
+      file_id: "f7012840-24b5-4d9f-98e0-2014f8cc5d27",
+      created_at: "2019-12-15 16:13:11",
+      updated_at: "2019-12-15 16:13:11"
+    });
   }
 }
 

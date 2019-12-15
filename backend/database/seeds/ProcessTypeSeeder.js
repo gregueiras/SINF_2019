@@ -91,7 +91,22 @@ class ProcessTypeSeeder {
       flow: "A"
     });
 
-    
+    // step 
+    const s31 = await Factory.model("App/Models/Step").make({
+      step_no: 3,
+      action_id: a6.id,
+      trigger_id: t6.id,
+      flow: "B->A"
+    });
+
+    // step
+
+    const s41 = await Factory.model("App/Models/Step").make({
+      step_no: 4,
+      action_id: a3.id,
+      trigger_id: t3.id,
+      flow: "A->B"
+    });
 
     const pt1 = await Factory.model("App/Models/ProcessType").create({
       type: "Rent",
@@ -109,9 +124,10 @@ class ProcessTypeSeeder {
       descriptionA: "Supplier",
       descriptionB: "Client"
     });
-    pt1.steps().save(s1);
-    pt1.steps().save(s2);
-    pt1.steps().save(s3);
+    pt2.steps().save(s1);
+    pt2.steps().save(s2);
+    pt2.steps().save(s31);
+    pt2.steps().save(s41);
     
   }
 }

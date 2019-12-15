@@ -142,7 +142,7 @@ export default {
         }
         let areNewDocuments = false;
         let sourceDocKey, quantity, sourceDocLineNumber;
-
+        let allUnrep = true;
         for (const shippingDelivery of shippingDeliveries) {
           const replicated = await isProcessed({
             userID,
@@ -161,6 +161,7 @@ export default {
                 salesOrder: salesOrder.id
               });
               if (purchaseOrderId !== undefined) {
+                allUnrep = false;
                 for (const purchaseOrder of purchaseOrders) {
                   if (purchaseOrder.id === purchaseOrderId) {
                     sourceDocKey = purchaseOrder.naturalKey;
@@ -187,7 +188,7 @@ export default {
             }
           }
         }
-        if (!areNewDocuments) {
+        if (!areNewDocuments || allUnrep) {
           console.log("NO NEW RES SG_RG");
           await setFailedStep({ processID });
           done(null, {
