@@ -63,33 +63,14 @@ class NewProcess extends Component {
 
 
   changeSteps(index){
-    axios.get(`http://localhost:3335/step/getByProcType/${this.state.processTypes[index -1].id}`).then((response) => {
-      response.data.forEach(element => {
-        const { step_no, trigger_id, action_id, flow } = element;
 
-        axios.get(`http://localhost:3335/trigger/getById/${trigger_id}`).then((response) => {
-          const { data } = response;
-          const { description: trigger_description } = data;
-          {
-            axios.get(`http://localhost:3335/action/getById/${action_id}`).then((response) => {
-              const { data } = response;
-              const { description: action_description } = data;
-              {
-                const newStep = {
-                  step: step_no,
-                  trigger: trigger_description,
-                  action: action_description,
-                  flow: flow,
-                };
-                this.setState({ tableData: [...this.state.tableData, newStep] });
-              }
-            });
-          }
-        })
-        console.log(this.state.tableData);
-      })
+    this.ProcessTypeService.getProcessTypeSteps(index, response => {
+      if(response.status === 200){
+        const {data} = response;
+        this.setState({tableData: data.steps.sort(compareSteps)})
+      }
+    })
 
-    });
   }
 
 
@@ -259,15 +240,15 @@ class NewProcess extends Component {
             columns={[
               {
                 Header: 'Step#',
-                accessor: 'step',
+                accessor: 'step_no',
               },
               {
                 Header: 'Trigger',
-                accessor: 'trigger',
+                accessor: 'trigger_description',
               },
               {
                 Header: 'Action',
-                accessor: 'action',
+                accessor: 'action_description',
               },
               {
                 Header: 'Flow',

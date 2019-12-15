@@ -32,6 +32,8 @@ Route.post('/new-process',"ProcessController.addProcess");
 Route.get('/proc-type/:name', 'ProcTypeController.getByName');
 Route.get('/proc-type', 'ProcTypeController.index');
 Route.post('/proc-type', 'ProcTypeController.createProcType');
+Route.get('/proc-type/:id/steps', 'ProcTypeController.getSteps');
+
 
 Route.get('/step', 'StepController.index');
 Route.get('/step/getByProcType/:process_type_id', 'StepController.getAllFromProcessType')

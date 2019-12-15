@@ -28,11 +28,11 @@ class OrderCorrespondenceSeeder {
     });
 
     const p4 = await Factory.model("App/Models/OrderCorrespondence").create({
-      id: 3,
-      purchase_order: "87ef65f6-0a3a-414a-926c-27407a9cb734",
-      sales_order: "dab93290-591f-ea11-8454-0003ff246138",
-      created_at: "2019-12-15 16:40:21",
-      updated_at: "2019-12-15 16:40:21"
+      id: 4,
+      purchase_order: "049b5d59-b794-4865-8027-5e5dcc574355",
+      sales_order: "596677a0-591f-ea11-8454-0003ff246138",
+      created_at: "2019-12-15 16:40:43",
+      updated_at: "2019-12-15 16:40:43"
     });
 
     const p5 = await Factory.model("App/Models/OrderCorrespondence").create({
