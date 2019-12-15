@@ -21,7 +21,7 @@ function NavBar() {
           </Col>
           <Col md={4} xs={4} id="navbarLogout">
             <Navbar.Brand>
-              <Link to="#logout" className="logoutLink">
+              <Link to="/login" className="logoutLink">
                       Logout
               </Link>
             </Navbar.Brand>
