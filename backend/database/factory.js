@@ -71,6 +71,16 @@ Factory.blueprint("App/Models/ProcessedFile", (faker, i, data) => {
   };
 });
 
+Factory.blueprint("App/Models/OrderCorrespondence", (faker, i, data) => {
+  return {
+    id: data.id,
+    purchase_order: data.purchase_order,
+    sales_order: data-sales_order,
+    created_at: data.created_at,
+    updated_at: data.updated_at
+  };
+});
+
 Factory.blueprint("App/Models/Trigger", (faker, i, {description,type}) => {
   return {
     description,

@@ -7,7 +7,7 @@ class OrderCorrespondenceController {
     }
 
     async getAll() {
-      const oc = OrderCorrespondence.all();
+      const oc = await OrderCorrespondence.all();
       return oc.rows;
     }
 

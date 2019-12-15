@@ -71,6 +71,7 @@ Route.post("/company/token", "CompanyController.setToken");
 Route.post("/order/addCorrespondence", "OrderCorrespondenceController.addCorrespondence");
 Route.get("/order/getCorrespondence/purchaseOrder/:salesOrder", "OrderCorrespondenceController.getPurchaseOrderCorrespondence");
 Route.get("/order/getCorrespondence/salesOrder/:purchaseOrder", "OrderCorrespondenceController.getSalesOrderCorrespondence");
+Route.get("/order/all", "OrderCorrespondenceController.getAll");
 
 
 Route.get("/process", "ProcessController.get");

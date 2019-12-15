@@ -137,12 +137,10 @@ function ViewProcess() {
   const [processName, setProcessName] = useState('');
 
   const [validProcName, setValidProcName] = useState(true);
-  const [validDescriptionA, setValidDescriptionA] = useState(true);
-  const [validDescriptionB, setValidDescriptionB] = useState(true);
 
-  const [companyAType, setCompanyAType] = useState('');
+  const [companyAType] = useState('Company B');
 
-  const [companyBType, setCompanyBType] = useState('');
+  const [companyBType] = useState('Company A');
 
 
 
@@ -180,19 +178,6 @@ function ViewProcess() {
     }
     setValidProcName(true);
 
-
-    if (!descriptionA.match(/[A-Za-z]+/g)) {
-      setValidDescriptionA(false);
-      return;
-    }
-    setValidDescriptionA(true);
-
-
-    if (!descriptionB.match(/[A-Za-z]+/g)) {
-      setValidDescriptionB(false);
-      return;
-    }
-    setValidDescriptionB(true);
 
 
 
@@ -245,30 +230,7 @@ function ViewProcess() {
             />
           </Form.Group>
         </Col>
-        <Col>
-          <Form.Group>
-            <Form.Label className="gray-label">
-              Company A description
-            </Form.Label>
-            <Form.Control
-              style = {validDescriptionA ? {}: { borderColor: 'red'}}
-              onChange={(e) => setCompanyAType(e.target.value)}
-              placeholder="required"
-            />
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group>
-            <Form.Label className="gray-label">
-              Company B description
-            </Form.Label>
-            <Form.Control
-              style = {validDescriptionB ? {}: { borderColor: 'red'}}
-              onChange={(e) => setCompanyBType(e.target.value)}
-              placeholder="required"
-            />
-          </Form.Group>
-        </Col>
+
       </Row>
       <Row>
         <Col md={4} className="mb-4">
