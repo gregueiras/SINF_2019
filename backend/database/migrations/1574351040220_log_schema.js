@@ -7,7 +7,7 @@ class LogSchema extends Schema {
   up () {
     this.create('logs', (table) => {
       table.increments()
-      table.enu('state',['Completed','Pending','In Progress','Failed'])
+      table.enu('state',['Completed','Pending','In Progress','Failed','Stopped'])
       table.string('description',256).notNullable()
       table.date('date').notNullable()
       table.bigInteger('process_id').notNullable()

@@ -14,7 +14,8 @@ import {
   getSeries as getProcessSeries,
   isMyTurn,
   nextTurn,
-  setFailedStep
+  setFailedStep,
+  setStoppedStep
 } from "../services/db";
 import Queue from "../lib/Queue";
 
@@ -208,7 +209,7 @@ export default {
       }
       if (!areNewDocuments) {
         console.log("NO NEW RES PO_SO");
-        await setFailedStep({ processID });
+        await setStoppedStep({ processID });
         done(null, {
           result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
           ...info,

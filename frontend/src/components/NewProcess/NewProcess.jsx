@@ -6,9 +6,6 @@ import {
   Container, Form, Row, Col, Button
 } from 'react-bootstrap';
 import ReactTable from 'react-table';
-import axios from 'axios';
-
-
 import { Link, Redirect } from 'react-router-dom';
 import CompanyService from '../../services/CompanyService';
 import ProcessTypeService from '../../services/ProcessTypeService';

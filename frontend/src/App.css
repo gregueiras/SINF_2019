@@ -171,6 +171,10 @@ color: #828282;
   color: red;
 }
 
+.stoppedIcon {
+  color: blue;
+}
+
 .inProgressIcon {
   color: grey;
   -webkit-animation:spin 4s linear infinite;

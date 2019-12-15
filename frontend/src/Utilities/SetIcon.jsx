@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCheckCircle, faTimesCircle, faPauseCircle,
+  faCheckCircle, faTimesCircle, faPauseCircle, faStopCircle
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faSpinner,
@@ -58,6 +58,19 @@ function setIcon(value, iconOnly) {
           </Col>
         ) }
         <Col><FontAwesomeIcon icon={faSpinner} className="inProgressIcon" /></Col>
+      </Row>
+    );
+  }
+  if (value.original.state === 'Stopped') {
+    return (
+      <Row>
+        {iconOnly ? null : (
+          <Col md={4}>
+            {' '}
+            {value.original.state}
+          </Col>
+        ) }
+        <Col><FontAwesomeIcon icon={faStopCircle} className="stoppedIcon" /></Col>
       </Row>
     );
   }

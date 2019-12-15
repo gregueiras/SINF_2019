@@ -65,6 +65,13 @@ class ProcessTypeSeeder {
     });
 
 
+    const s22 = await Factory.model("App/Models/Step").make({
+      step_no: 2,
+      action_id: a2.id,
+      trigger_id: t2.id,
+      flow: "B->A"
+    });
+
     //step3
 
     const t3 = await Factory.model("App/Models/Trigger").create({
@@ -123,7 +130,7 @@ class ProcessTypeSeeder {
     });
     
     pt1.steps().save(s11);
-    pt1.steps().save(s2);
+    pt1.steps().save(s22);
     pt1.steps().save(s3);
 
     const pt2 = await Factory.model("App/Models/ProcessType").create({

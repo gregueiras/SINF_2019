@@ -37,6 +37,15 @@ export const setFailedStep = async ({ processID }) => {
   return data;
 }
 
+export const setStoppedStep = async ({ processID }) => {
+  const req = await axios.put(`http://0.0.0.0:3335/process/logs`, {
+    processID,
+    state:"Stopped",
+  });
+  const { data } = req;
+  return data;
+}
+
 export const setCompletedStep = async ({ processID }) => {
   const req = await axios.post(`http://0.0.0.0:3335/process/logs`, {
     processID,

@@ -42,11 +42,16 @@ class ProcessLogController {
 
           const pending = logSteps.some(el => el.state === "Pending");
           const failed = logSteps.some(el => el.state === "Failed");
+          const stopped = logSteps.some(el => el.state === "Stopped");
 
           if (failed) log.state = "Failed";
           else {
-            if (pending) log.state = "Pending";
-            else log.state = "Completed";
+            if(stopped) {
+              log.state = "Stopped";
+            } else {
+              if (pending) log.state = "Pending";
+              else log.state = "Completed";
+            }
           }
         } catch (e) {
           console.log(e);

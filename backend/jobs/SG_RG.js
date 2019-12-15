@@ -19,7 +19,8 @@ import {
   getPurchaseOrderCorrespondence,
   isMyTurn,
   nextTurn,
-  setFailedStep
+  setFailedStep,
+  setStoppedStep,
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
@@ -190,7 +191,7 @@ export default {
         }
         if (!areNewDocuments || allUnrep) {
           console.log("NO NEW RES SG_RG");
-          await setFailedStep({ processID });
+          await setStoppedStep({ processID });
           done(null, {
             result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
             ...info,

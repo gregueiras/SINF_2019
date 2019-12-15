@@ -13,7 +13,8 @@ import {
   isMyTurn,
   nextTurn,
   setFailedStep,
-  getSalesOrderCorrespondence
+  getSalesOrderCorrespondence,
+  setStoppedStep,
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
@@ -261,7 +262,7 @@ export default {
       }
       if (!areNewDocuments || allUnrep) {
         console.log("NO NEW RES PP_SR");
-        await setFailedStep({ processID });
+        await setStoppedStep({ processID });
         done(null, {
           result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
           ...info,
