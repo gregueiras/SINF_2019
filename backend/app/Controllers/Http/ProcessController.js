@@ -56,11 +56,12 @@ class ProcessController {
   }
 
   async nextStep({ request }) {
+
+    console.log("ENTERED IN NEXTSTEP FUNCTION -> ONLY TO ENTER WHEN STEP IS COMPLETED")
     const body = request.post();
     const { processID } = body;
 
     const process = await Process.find(processID);
-    const type = await ProcessType.find(process.process_type);
     const processLog = await ProcessLog.find(process.current_log);
     const processLogID = processLog.id;
 
@@ -92,7 +93,7 @@ class ProcessController {
         steps = (
           await Step.query()
             .where({
-              process_type_id: type.id
+              process_type_id: process.process_type,
             })
             .fetch()
         ).toJSON();
@@ -102,6 +103,9 @@ class ProcessController {
 
     let nextStep = activeStep + 1;
 
+    console.log("NR OF STEPS: " + steps.length);
+    console.log("ACTIVE STEP: " + activeStep);
+    console.log("NEXT STEP: " + nextStep);
 
    if (nextStep > steps.length) {
      console.log("next step");

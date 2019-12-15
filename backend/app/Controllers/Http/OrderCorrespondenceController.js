@@ -13,7 +13,7 @@ class OrderCorrespondenceController {
         return response.json({message:'Success'})
 
     }
-    async getCorrespondence(request) {
+    async getPurchaseOrderCorrespondence(request) {
         
         const { params } = request;
         const { salesOrder } = params;
@@ -21,6 +21,24 @@ class OrderCorrespondenceController {
         const correspondence = (
           await OrderCorrespondence.query()
             .where({ sales_order: salesOrder })
+            .fetch()
+        ).toJSON();
+        console.log("correspondence "+JSON.stringify(correspondence[0])+" "+correspondence.length);
+        if (correspondence.length > 0){
+            console.log("correspondence maior que 0");
+            return correspondence[0];
+        }
+        else return null;
+      }
+
+      async getSalesOrderCorrespondence(request) {
+        
+        const { params } = request;
+        const { purchaseOrder } = params;
+        console.log("purchase order "+purchaseOrder);
+        const correspondence = (
+          await OrderCorrespondence.query()
+            .where({ purchase_order: purchaseOrder })
             .fetch()
         ).toJSON();
         console.log("correspondence "+JSON.stringify(correspondence[0])+" "+correspondence.length);

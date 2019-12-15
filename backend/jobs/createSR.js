@@ -1,4 +1,4 @@
-import { addProcessed, nextTurn, setFailedStep } from "../services/db";
+import { addProcessed, setFailedStep } from "../services/db";
 import { RETURN_TYPES } from "./index";
 import processOpenItems from "../services/jasmin/processOpenItems";
 
@@ -44,7 +44,6 @@ export default {
       console.log("SR CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
-        await nextTurn({ processID });
         console.log("SUCCESS!");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,

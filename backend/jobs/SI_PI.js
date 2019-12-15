@@ -10,6 +10,7 @@ import {
   getSellerParty,
   getSeries as getProcessSeries,
   isMyTurn,
+  nextTurn,
   setFailedStep
 } from "../services/db";
 import getSalesInvoices from "../services/jasmin/getSalesInvoices";
@@ -192,6 +193,7 @@ export default {
           options
         });
       } else {
+        await nextTurn({ processID });
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           ...info,

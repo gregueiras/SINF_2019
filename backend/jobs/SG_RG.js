@@ -14,10 +14,10 @@ import {
   getCustomerParty,
   getSellerParty,
   getCorrespondenceB,
+  getPurchaseOrderCorrespondence
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
-import { getPurchaseOrderCorrespondence } from "../services/db/order";
 
 const options = {
   /*

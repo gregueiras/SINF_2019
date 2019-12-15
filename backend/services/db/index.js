@@ -5,3 +5,4 @@ export { isProcessed, addProcessed } from './processedFile';
 export { getSellerParty, getCustomerParty } from './party';
 export { isMyTurn, nextTurn, getSeries, setCompletedStep, setFailedStep } from './process';
 export { storeLog, updateStateLog } from './log';
+export { addCorrespondence, getPurchaseOrderCorrespondence, getSalesOrderCorrespondence } from './order';

@@ -11,7 +11,9 @@ import {
   getSellerParty,
   getSeries as getProcessSeries,
   isMyTurn,
-  setFailedStep
+  nextTurn,
+  setFailedStep,
+  getSalesOrderCorrespondence
 } from "../services/db";
 import Queue from "../lib/Queue";
 import getPurchasesInvoices from "../services/jasmin/getPurchasesInvoices";
@@ -179,69 +181,19 @@ export default {
           });
           if (!replicated) {
             console.log("NEW PP");
+            console.log("natural key: " + naturalKey);
 
+            const foundMatchingSIID = await getSalesOrderCorrespondence({
+              purchaseOrder: purchasesInvoice.id
+            });
+            let abort;
+            console.log("foundMatchingSIID: " + foundMatchingSIID );
             let foundMatchingSI;
-
-            for (const si of salesInvoices) {
-              console.log(si.naturalKey);
-
-              if (
-                si.isActive &&
-                !si.isDeleted &&
-                si.buyerCustomerParty === customerParty &&
-                si.taxTotal.amount === purchasesInvoice.taxTotal.amount &&
-                si.taxTotal.baseAmount ===
-                  purchasesInvoice.taxTotal.baseAmount &&
-                si.taxTotal.reportingAmount ===
-                  purchasesInvoice.taxTotal.reportingAmount &&
-                si.totalLiability.amount ===
-                  purchasesInvoice.totalLiability.amount &&
-                si.totalLiability.baseAmount ===
-                  purchasesInvoice.totalLiability.baseAmount &&
-                si.totalLiability.reportingAmount ===
-                  purchasesInvoice.totalLiability.reportingAmount
-              ) {
-                let equal = true;
-                for (const line of si.documentLines) {
-                  const found = purchasesInvoice.documentLines.some(
-                    async el =>
-                      el.grossValue.reportingAmount ===
-                        line.grossValue.reportingAmount &&
-                      el.grossValue.amount === line.grossValue.amount &&
-                      el.grossValue.baseAmount === line.grossValue.baseAmount &&
-                      el.taxExclusiveAmount.reportingAmount ===
-                        line.taxExclusiveAmount.reportingAmount &&
-                      el.taxExclusiveAmount.amount ===
-                        line.taxExclusiveAmount.amount &&
-                      el.taxExclusiveAmount.baseAmount ===
-                        line.taxExclusiveAmount.baseAmount &&
-                      el.unitPrice.reportingAmount ===
-                        line.unitPrice.reportingAmount &&
-                      el.unitPrice.amount === line.unitPrice.amount &&
-                      el.unitPrice.baseAmount === line.unitPrice.baseAmount &&
-                      el.quantity === line.quantity &&
-                      el.lineExtensionAmount.reportingAmount ===
-                        line.lineExtensionAmount.reportingAmount &&
-                      el.lineExtensionAmount.amount ===
-                        line.lineExtensionAmount.amount &&
-                      el.lineExtensionAmount.baseAmount ===
-                        line.lineExtensionAmount.baseAmount &&
-                      el.purchasesItem ===
-                        (await getCorrespondence({
-                          companyA,
-                          companyB,
-                          product: line.salesItem
-                        }))
-                  );
-
-                  equal &= found;
-                }
-                if (equal) {
-                  foundMatchingSI = si;
-                  break;
-                }
-              }
-            }
+            if (foundMatchingSIID !== undefined) {
+              foundMatchingSI = salesInvoices.find(
+                el => el.id == foundMatchingSIID
+              );
+            } else abort = true;
 
             areNewDocuments = true;
 
@@ -249,7 +201,7 @@ export default {
             let amount;
             let sourceDoc;
             try {
-              let abort = true;
+              abort = true;
 
               if (foundMatchingSI !== undefined) {
                 console.log(
@@ -313,6 +265,7 @@ export default {
           options
         });
       } else {
+        await nextTurn({ processID });
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
           ...info,

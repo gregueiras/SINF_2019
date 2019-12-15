@@ -1,4 +1,4 @@
-import { addProcessed, nextTurn, setFailedStep } from "../services/db";
+import { addProcessed, setFailedStep , addCorrespondence} from "../services/db";
 import { RETURN_TYPES } from "./index";
 import createMinPurchaseInvoice from "../services/jasmin/createMinPurchaseInvoice";
 
@@ -43,7 +43,7 @@ export default {
       console.log("SI CREATION STATUS\t", status);
       if (status === 201) {
         await addProcessed({ userID, fileID });
-        await nextTurn({ processID });
+        await addCorrespondence({purchaseOrder: res.data, salesOrder: fileID});
         console.log("SUCCESS");
         done(null, {
           value: RETURN_TYPES.END_SUCCESS,
