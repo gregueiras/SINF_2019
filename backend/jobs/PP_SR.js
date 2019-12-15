@@ -168,6 +168,7 @@ export default {
         });
       }
       let areNewDocuments = false;
+      let allUnrep = true;
       for (const purchasesInvoice of purchasesInvoices) {
         const { naturalKey } = purchasesInvoice;
 
@@ -193,6 +194,7 @@ export default {
               foundMatchingSI = salesInvoices.find(
                 el => el.id == foundMatchingSIID
               );
+              allUnrep = false;
             } else abort = true;
 
             areNewDocuments = true;
@@ -229,7 +231,8 @@ export default {
                   sourceDoc,
                   settled: amount,
                   purchasesInvoice,
-                  processID
+                  processID,
+                  userID,
                 });
               }
             } catch (e) {
@@ -256,7 +259,7 @@ export default {
           }
         }
       }
-      if (!areNewDocuments) {
+      if (!areNewDocuments || allUnrep) {
         console.log("NO NEW RES");
         await setFailedStep({ processID });
         done(null, {

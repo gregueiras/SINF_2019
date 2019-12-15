@@ -185,7 +185,7 @@ export default {
         }
       }
       if (!areNewDocuments) {
-        console.log("NO NEW RES");
+        console.log("NO NEW RES SI_PI");
         await setFailedStep({ processID });
         done(null, {
           result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,
