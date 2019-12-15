@@ -46,7 +46,7 @@ class ProcessLogController {
           if (failed) log.state = "Failed";
           else {
             if (pending) log.state = "Pending";
-            else log.state = "Complete";
+            else log.state = "Completed";
           }
         } catch (e) {
           console.log(e);

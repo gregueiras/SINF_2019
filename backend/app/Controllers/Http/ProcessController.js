@@ -263,11 +263,16 @@ class ProcessController {
         const newProcessLogID = newProcessLog.toJSON().id;
         process.current_log = newProcessLogID;
         await process.save();
+
         for (const step of steps) {
           const processLogStep = new ProcessLogStep();
           processLogStep.step_no = step.step_no;
           processLogStep.process_log_id = newProcessLogID;
-          processLogStep.state = "Pending";
+          if(step.step_no < activeStep){
+            processLogStep.state = "Completed";
+          }else {
+            processLogStep.state = "Pending";
+          }
           await processLogStep.save();
         }
 
