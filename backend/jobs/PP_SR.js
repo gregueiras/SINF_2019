@@ -260,7 +260,7 @@ export default {
         }
       }
       if (!areNewDocuments || allUnrep) {
-        console.log("NO NEW RES");
+        console.log("NO NEW RES PP_SR");
         await setFailedStep({ processID });
         done(null, {
           result: RETURN_TYPES.END_NO_NEW_DOCUMENTS,

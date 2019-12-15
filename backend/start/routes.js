@@ -46,6 +46,7 @@ Route.get("/user/:id", "UserController.get");
 
 Route.get("/processedFile", "ProcessedFileController.get");
 Route.post("/processedFile", "ProcessedFileController.store");
+Route.get("/processedFile/all", "ProcessedFileController.getAll");
   
 Route.get("/product", "ProductController.index");
 Route.put("/product", "ProductController.updateCorrespondence");

@@ -19,6 +19,18 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import './NewProcess.css';
 
 
+function compareSteps( a, b ) {
+  if ( a.step_no < b.step_no ){
+    return -1;
+  }
+  if ( a.step_no > b.step_no ){
+    return 1;
+  }
+  return 0;
+}
+
+
+
 class NewProcess extends Component {
 
   constructor(props) {
@@ -95,30 +107,32 @@ class NewProcess extends Component {
       })
     });
     this.ProcessTypeService.getProcessTypes((response) => {
-      const reverse = response.data.slice().reverse();
-      console.log("process type " + JSON.stringify(reverse));
-
-      let compAdesc = [], compBdesc = [];
-
-      response.data.forEach(element => {
-        compAdesc.push(element.descriptionA);
-        compBdesc.push(element.descriptionB);
-      });
-
-      this.setState({
-        processTypes: response.data,
-        processType: response.data[0].id,
-        companyAdescription: compAdesc,
-        companyBdescription: compBdesc,
-        companyAdescIndex: 0,
-        companyBdescIndex: 0,
-
-      })
-
-      console.log(response.data[0].id)
-      
-      this.changeSteps(1);
-
+      if(response.status === 200){
+        const reverse = response.data.slice().reverse();
+        console.log("process type " + JSON.stringify(reverse));
+  
+        let compAdesc = [], compBdesc = [];
+  
+        response.data.forEach(element => {
+          compAdesc.push(element.descriptionA);
+          compBdesc.push(element.descriptionB);
+        });
+  
+        this.setState({
+          processTypes: response.data,
+          processType: response.data[0].id,
+          companyAdescription: compAdesc,
+          companyBdescription: compBdesc,
+          companyAdescIndex: 0,
+          companyBdescIndex: 0,
+  
+        })
+  
+        console.log(response.data[0].id)
+        
+        this.changeSteps(1);
+      }
+  
     });
   }
   onChangeCompanyA = (event) => {

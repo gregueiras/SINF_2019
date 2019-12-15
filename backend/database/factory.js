@@ -61,6 +61,16 @@ Factory.blueprint("App/Models/Process", (faker, i, data) => {
   };
 });
 
+Factory.blueprint("App/Models/ProcessedFile", (faker, i, data) => {
+  return {
+    id: data.id,
+    user_id: data.user_id,
+    file_id: data.file_id,
+    created_at: data.created_at,
+    updated_at: data.updated_at,
+  };
+});
+
 Factory.blueprint("App/Models/Trigger", (faker, i, {description,type}) => {
   return {
     description,

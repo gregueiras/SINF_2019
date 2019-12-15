@@ -5,6 +5,12 @@ class OrderCorrespondenceController {
     static boot() {
         super.boot();
     }
+
+    async getAll() {
+      const oc = OrderCorrespondence.all();
+      return oc.rows;
+    }
+
     async addCorrespondence({ request, response }) {
         console.log("inside add correspondence");
         let body = request.post();

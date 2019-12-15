@@ -25,11 +25,11 @@ import Queue from "../lib/Queue";
 import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
 
 const options = {
-  /*
+  
   repeat: {
     every: 60 * 1000
   }
-  */
+
 };
 
 export default {

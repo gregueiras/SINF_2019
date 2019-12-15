@@ -1,7 +1,15 @@
 "use strict";
 const User = use("App/Models/User");
+const ProcessedFile = use("App/Models/ProcessedFile");
 
 class ProcessedFileController {
+
+
+  async getAll(){
+    const processedFile = await ProcessedFile.all();
+    return processedFile.rows;
+  }
+
   async store({ request }) {
     const body = request.post();
     const { fileID, userID } = body;

@@ -5,6 +5,18 @@ const Database = use("Database");
 class ProcessTypeSeeder {
   async run() {
 
+
+    const t6 = await Factory.model("App/Models/Trigger").create({
+      description: "Wait for Delivery Order",
+      type: "SG"
+    });
+
+    const a6 = await Factory.model("App/Models/Action").create({
+      description: "Create Goods Receipt",
+      type: "RG",
+      trigger_id: 1
+    });
+
     //step1
 
     const t1 = await Factory.model("App/Models/Trigger").create({
