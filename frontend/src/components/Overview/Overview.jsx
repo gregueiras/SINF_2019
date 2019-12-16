@@ -93,7 +93,7 @@ class Overview extends Component {
                 onChange={this.onChangeCompanyA}
               >
                 {this.state.companyAOptions.map((e, key) => {
-                  if (e.id != companyB)
+                  if (e.id !== companyB)
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
@@ -112,7 +112,7 @@ class Overview extends Component {
                 onChange={this.onChangeCompanyB}
               >
                 {this.state.companyBOptions.map((e, key) => {
-                  if (e.id != companyA)
+                  if (e.id !== companyA)
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
