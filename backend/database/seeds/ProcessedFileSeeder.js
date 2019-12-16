@@ -132,7 +132,7 @@ class ProcessedFileSeeder {
     });
 
 
-    //more
+    //purchases orders
 
     const p17 = await Factory.model("App/Models/ProcessedFile").create({
       id: 17,
@@ -284,6 +284,21 @@ class ProcessedFileSeeder {
       id: 40,
       user_id: 1,
       file_id:  "17b33da9-0ee1-4d5e-84c6-e6d146188047",
+    });
+
+
+    // sales invoices
+
+    const p41 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 41,
+      user_id: 1,
+      file_id:  "66ad6fe6-3238-409c-b3da-0bbff6002c55",
+    });
+
+    const p42 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 42,
+      user_id: 1,
+      file_id:  "362efdb2-1489-46e6-9a90-6c567246febb",
     });
 
   }
