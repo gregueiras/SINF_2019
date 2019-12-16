@@ -30,7 +30,7 @@ export default {
     return this.queues.forEach(queue => {
       queue.bull.process("__default__", 100, queue.handle);
       queue.bull.process(queue.name, 100, queue.handle);
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 150; i++) {
         queue.bull.process(`${queue.name}_${i}`, 100, queue.handle);
 
       }

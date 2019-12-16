@@ -74,6 +74,38 @@ class OrderCorrespondenceSeeder {
       created_at: "2019-12-15 16:41:05",
       updated_at: "2019-12-15 16:41:05"
     });
+
+    const p10 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 10,
+      purchase_order: "13d351cd-a15a-4e24-a303-8a85591a8b58",
+      sales_order: "c904693e-2220-ea11-8454-0003ff249b63",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p11 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 11,
+      purchase_order: "0852a630-cf24-46f7-87d0-12c008c0b1f7",
+      sales_order: "d86ba373-2920-ea11-8454-0003ff24768f",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p12 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 12,
+      purchase_order: "da9b12d6-2920-ea11-8454-0003ff24768f",
+      sales_order: "81e4a458-ada2-42a4-9e5c-221d5e9dee87",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p13 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 13,
+      purchase_order: "af098dcb-5111-4db6-a291-e8365aee40c9",
+      sales_order: "50161f4a-2e20-ea11-8454-0003ff24768f",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
   }
 }
 
