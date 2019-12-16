@@ -77,24 +77,22 @@ class MasterData extends Component {
   }
 
   onFetchDataCompanyAItems(page, callback, value = null) {
-    const { company_a, pageSize } = this.state;
+    const { company_a } = this.state;
     let cA = company_a;
     if (value !== null && value !== company_a) { cA = value; }
     this.ProductService.getAllItems( cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log(data)
         const dataCompanyA = data.map((item) => (
           { id: item.itemKey, description: item.description }
         ));
-        console.log(dataCompanyA);
         callback(dataCompanyA);
       }
     });
   }
 
   onFetchDataCompanyBItems(page, callback, value = null) {
-    const { company_b, pageSize } = this.state;
+    const { company_b } = this.state;
     let cB = company_b;
     if (value !== null && value !== company_b) { cB = value; }
     this.ProductService.getAllItems( cB, (response) => {

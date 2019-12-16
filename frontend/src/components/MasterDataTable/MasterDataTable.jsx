@@ -60,7 +60,7 @@ class MasterDataTable extends Component {
       companyBlabel,
       columnName,
 
-      pagination,
+      pagination
     };
     this.CompanyService = new CompanyService();
 
@@ -421,14 +421,15 @@ class MasterDataTable extends Component {
                 });
               }}
             >
-              {companyAoptions.map((e, key) => {
-                if (e.id != company_b)
+              {companyAoptions
+                .filter(e => e.id !== Number(company_b))
+                .map((e, key) => {
                   return (
                     <option key={key} value={e.id}>
                       {e.name}
                     </option>
                   );
-              })}
+                })}
             </select>
           </Col>
           <Col md={{ span: 4, offset: 4 }}>
@@ -454,14 +455,15 @@ class MasterDataTable extends Component {
                 });
               }}
             >
-              {companyBoptions.map((e, key) => {
-                if (e.id != company_a)
+              {companyBoptions
+                .filter(e => e.id !== Number(company_a))
+                .map((e, key) => {
                   return (
                     <option key={key} value={e.id}>
                       {e.name}
                     </option>
                   );
-              })}
+                })}
             </select>
           </Col>
         </Row>
