@@ -66,8 +66,6 @@ Factory.blueprint("App/Models/ProcessedFile", (faker, i, data) => {
     id: data.id,
     user_id: data.user_id,
     file_id: data.file_id,
-    created_at: data.created_at,
-    updated_at: data.updated_at,
   };
 });
 
@@ -76,8 +74,6 @@ Factory.blueprint("App/Models/OrderCorrespondence", (faker, i, data) => {
     id: data.id,
     purchase_order: data.purchase_order,
     sales_order: data.sales_order,
-    created_at: data.created_at,
-    updated_at: data.updated_at
   };
 });
 

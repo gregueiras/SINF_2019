@@ -101,7 +101,8 @@ export default {
       try {
         shippingDeliveriesData = (
           await getShippingDeliveries({
-            companyID: companyB
+            companyID: companyB,
+            processID,
           })
         ).data;
         let purchasesOrdersData, salesOrdersData;

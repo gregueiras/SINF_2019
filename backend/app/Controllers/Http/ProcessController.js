@@ -242,7 +242,7 @@ class ProcessController {
     updatedProcessLogStep.state = state;
     await updatedProcessLogStep.save();    
 
-    if(state == "Failed"){
+    if(state == "Failed" || state == "Stopped"){
 
       console.log("failed");
       const type = await ProcessType.find(process.process_type);

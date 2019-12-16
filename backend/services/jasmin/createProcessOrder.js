@@ -1,10 +1,12 @@
 import makeRequest, { endPoints } from './constants';
 
-const createProcessOrder =  ({ companyID,sourceDocKey,sourceDocLineNumber, quantity, companyKey}) => 
+const createProcessOrder =  ({ companyID,sourceDocKey,sourceDocLineNumber, quantity, companyKey, processID}) => 
    makeRequest({
     method: 'POST',
     endPoint: endPoints.goodsReceipt+"/"+companyKey,
     companyID,
+    description: "Create Goods Receipt",
+    processID,
     data: [
       {
       SourceDocKey: sourceDocKey,

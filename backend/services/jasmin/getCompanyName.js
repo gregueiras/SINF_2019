@@ -22,7 +22,7 @@ export const getCompanyKey = async ({ companyID, processID }) => {
     endPoint: endPoints.companies,
     companyID,
     processID,
-    description:"Get Company Name",
+    description:"Get Company Key",
   });
 
   const comp = res.data.find(
