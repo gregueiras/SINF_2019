@@ -63,7 +63,7 @@ Factory.blueprint("App/Models/Process", (faker, i, data) => {
 
 Factory.blueprint("App/Models/ProcessedFile", (faker, i, data) => {
   return {
-    id: data.id,
+    //id: data.id,
     user_id: data.user_id,
     file_id: data.file_id,
   };
@@ -71,7 +71,7 @@ Factory.blueprint("App/Models/ProcessedFile", (faker, i, data) => {
 
 Factory.blueprint("App/Models/OrderCorrespondence", (faker, i, data) => {
   return {
-    id: data.id,
+    //id: data.id,
     purchase_order: data.purchase_order,
     sales_order: data.sales_order,
   };
