@@ -37,8 +37,8 @@ function ViewProcess() {
 
       setCompanyAOptions(options);
       setCompanyBOptions(options);
-      setTriggerCompanyOptions(options);
-      setActionCompanyOptions(options);
+      setTriggerCompanyOptions(options.slice(0, 2));
+      setActionCompanyOptions(options.slice(0, 2));
     }
 
     getCompanyOptions()
