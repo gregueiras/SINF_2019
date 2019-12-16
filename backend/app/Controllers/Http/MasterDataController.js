@@ -18,12 +18,10 @@ const MasterDataController = {
 
 
   async getAllItemsFull({ request }) {
-    console.log("hhh")
     const { params } = request;
     const items = await getAllItems(
       params.companyId
     );
-    console.log(items.data);
     return items.data;
   },
 
