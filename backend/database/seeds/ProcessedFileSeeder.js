@@ -301,6 +301,44 @@ class ProcessedFileSeeder {
       file_id:  "362efdb2-1489-46e6-9a90-6c567246febb",
     });
 
+    //shipping deliveries
+
+    const p43 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 43,
+      user_id: 1,
+      file_id:  "41bec459-5d67-4ab6-8d60-32eb5fd9027b",
+    });
+
+    const p44 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 44,
+      user_id: 1,
+      file_id:  "a25ec6f5-6ecb-4fab-aa08-369dbbef92fb",
+    });
+
+    const p45 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 45,
+      user_id: 1,
+      file_id:  "b8458665-1e1c-4b84-925a-4e770f8a0a31",
+    });
+
+    const p46 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 46,
+      user_id: 1,
+      file_id:  "fd159494-357a-41dd-b4e0-d199171c893a",
+    });
+
+    const p47 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 47,
+      user_id: 1,
+      file_id:  "68db7850-e37c-439c-ba16-d591b430a749",
+    });
+
+    const p48 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 48,
+      user_id: 1,
+      file_id:  "9f5d4b8a-33d2-4922-a520-fee3daaab5df",
+    });
+
   }
 }
 
