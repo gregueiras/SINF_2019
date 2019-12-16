@@ -80,12 +80,14 @@ class MasterData extends Component {
     const { company_a, pageSize } = this.state;
     let cA = company_a;
     if (value !== null && value !== company_a) { cA = value; }
-    this.ProductService.getItems(page, pageSize, cA, (response) => {
+    this.ProductService.getAllItems( cA, (response) => {
       if (response.status === 200) {
         const { data } = response;
-        const dataCompanyA = data.data.map((item) => (
+        console.log(data)
+        const dataCompanyA = data.map((item) => (
           { id: item.itemKey, description: item.description }
         ));
+        console.log(dataCompanyA);
         callback(dataCompanyA);
       }
     });
@@ -95,10 +97,10 @@ class MasterData extends Component {
     const { company_b, pageSize } = this.state;
     let cB = company_b;
     if (value !== null && value !== company_b) { cB = value; }
-    this.ProductService.getItems(page, pageSize, cB, (response) => {
+    this.ProductService.getAllItems( cB, (response) => {
       if (response.status === 200) {
         const { data } = response;
-        const dataCompanyB = data.data.map((item) => (
+        const dataCompanyB = data.map((item) => (
           { id: item.itemKey, description: item.description }
         ));
         callback(dataCompanyB);
@@ -189,7 +191,7 @@ class MasterData extends Component {
             onFetchDataCorrespondance={this.onFetchDataCorrespondanceItems}
             onFetchDataCompanyB={this.onFetchDataCompanyBItems}
             updateCorrespondence={this.updateCorrespondenceItems}
-            pagination
+            pagination={false}
             companyAlabel="Products"
             companyBlabel="Products"
             columnName="Description"

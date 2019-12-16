@@ -60,7 +60,7 @@ class MasterDataTable extends Component {
       companyBlabel,
       columnName,
 
-      pagination
+      pagination,
     };
     this.CompanyService = new CompanyService();
 
@@ -481,7 +481,6 @@ class MasterDataTable extends Component {
                     company_a
                   );
                 }}
-                pages={20} // TODO CHECK NR OF PAGES
                 manual={pagination}
                 columns={[
                   {
@@ -573,7 +572,6 @@ class MasterDataTable extends Component {
                     company_b
                   );
                 }}
-                pages={20} // TODO CHECK NR OF PAGES
                 manual={pagination}
                 columns={[
                   {

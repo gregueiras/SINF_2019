@@ -1,6 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import ReactTable from 'react-table';
+import { Redirect } from "react-router-dom";
+
 import {
   Container, Row, Col, Button, Form,
 } from 'react-bootstrap';
@@ -142,6 +144,7 @@ function ViewProcess() {
 
   const [companyBType] = useState('Company A');
 
+  const [redirect, setRedirect] = useState(false);
 
 
   function setCompanyOptions(cA, cB) {
@@ -214,6 +217,10 @@ function ViewProcess() {
   }
 
   console.log(triggerOptions);
+
+  if(redirect)
+  return <Redirect to="/new-process" />;
+
   return (
     <Container>
       <Row>
@@ -417,7 +424,12 @@ function ViewProcess() {
         <br />
       </div>
       <div className="pos-rt mb-5">
-        <Button type="cancel" className="gray-button border-0 rel-text-blue mr-5" size="sm">
+        <Button type="cancel" className="gray-button border-0 rel-text-blue mr-5" size="sm"
+        onClick={(e) => {
+          e.preventDefault();
+          setRedirect(true)}
+        }
+        >
           <FontAwesomeIcon icon={faTimes} className="iconCheck mt-2" />
           Cancel
       </Button>

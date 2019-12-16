@@ -23,7 +23,8 @@ Route.get("/test/salesInvoices", "TestController.getSalesInvoicesTest");
 Route.get("/test/purchasesInvoices", "TestController.getPurchasesInvoicesTest");
 Route.get("/test/shippingDeliveries", "TestController.getShippingDeliveries");
 
-Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItems');
+Route.get('/master-data/:companyId', 'MasterDataController.getAllItemsFull');
+Route.get('/master-data/:companyId/:page/:pageSize', 'MasterDataController.getAllItemsPage');
 Route.get('/master-data/:companyId/sellerParties', 'MasterDataController.getAllSellerParties');
 Route.get('/master-data/:companyId/purchaserParties', 'MasterDataController.getAllPurchaserParties');
 Route.get('/new-process',"ProcTypeController.index");

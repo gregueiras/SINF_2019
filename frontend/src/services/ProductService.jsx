@@ -18,6 +18,17 @@ export default class ProductService {
       });
   }
 
+  getAllItems(companyId, callback) {
+    axios
+      .get(`${this.masterDataBasePath}/${companyId}`)
+      .then((response) => {
+        callback(response);
+      })
+      .catch((error) => {
+        callback(error);
+      });
+  }
+
   getCorrespondence(companyA, companyB, callback) {
     axios
       .get(`${this.productBasePath}/${companyA}/${companyB}`)

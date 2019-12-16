@@ -148,9 +148,7 @@ class NewProcess extends Component {
   };
 
   onChangeRedirect = () => {
-    console.log("here, ", this.state.redirect);
     this.setState({ redirect: true });
-    console.log("after, ", this.state.redirect);
     this.renderRedirect();
   };
 
@@ -205,7 +203,7 @@ class NewProcess extends Component {
           <Col md={4}>
             <Form.Group>
               <Form.Label className="gray-label">
-                {this.state.companyAdescription[this.state.companyAdescIndex]}
+                {"Supplier"}
               </Form.Label>
               <select
                 className="selector company-selector pos-lt rel-text-white"
@@ -226,7 +224,7 @@ class NewProcess extends Component {
           <Col md={{ span: 4, offset: 4 }}>
             <Form.Group>
               <Form.Label className="gray-label">
-                {this.state.companyBdescription[this.state.companyBdescIndex]}
+              {"Customer"}
               </Form.Label>
               <select
                 className="selector company-selector pos-rt rel-text-white"
@@ -273,9 +271,9 @@ class NewProcess extends Component {
           <br />
         </div>
 
-        <div className="submitButtons mt-5 mb-5">
+        <div className="pos-rt mb-5">
           <Button
-            className="gray-button gen-button rel-text-blue mr-5 w-20"
+            className="gray-button gen-button rel-text-blue mr-5"
             size="sm"
             onClick={this.onChangeRedirect}
           >
@@ -283,7 +281,7 @@ class NewProcess extends Component {
             Cancel
           </Button>
           <Button
-            className="blue-button gen-button rel-text-white w-20"
+            className="blue-button gen-button rel-text-white"
             size="sm"
             type="submit"
             onClick={this.addNewProcess}

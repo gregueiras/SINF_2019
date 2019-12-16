@@ -1,17 +1,29 @@
 import getItems from "../../../services/jasmin/getItems";
 import { getSellerParties } from "../../../services/jasmin/getSellerPartyKey";
 import { getPurchaserParties } from "../../../services/jasmin/getPurchaserParties";
+import getAllItems from "../../../services/jasmin/getAllItems";
 
 import { constants } from "../../../services/jasmin/constants";
 
 const MasterDataController = {
-  async getAllItems({ request }) {
+  async getAllItemsPage({ request }) {
     const { params } = request;
     const items = await getItems(
       params.page,
       params.pageSize,
       params.companyId
     );
+    return items.data;
+  },
+
+
+  async getAllItemsFull({ request }) {
+    console.log("hhh")
+    const { params } = request;
+    const items = await getAllItems(
+      params.companyId
+    );
+    console.log(items.data);
     return items.data;
   },
 
