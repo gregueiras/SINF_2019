@@ -11,7 +11,7 @@ import { faCheck, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 
-
+import "./procType.css"
 
 function ViewProcess() {
   const [data, setData] = useState([]);
@@ -377,9 +377,8 @@ function ViewProcess() {
           </Form.Group>
         </Col>
         <Col className="d-flex align-items-center" sm={1} xs={1}>
-
           <Button
-            className="blue-button rel-text-white pos-rt w-75 mt-2"
+            className="blue-button rel-text-white pos-rt w-75 plusButton"
             onClick={() => {
               const newStep = {
                 step: stepNr,
