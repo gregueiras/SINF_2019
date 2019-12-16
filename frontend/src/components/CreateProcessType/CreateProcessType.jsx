@@ -441,6 +441,7 @@ function ViewProcess() {
             descriptionB: companyBType,
           };
           submitForm(formData);
+          setTimeout(() => setRedirect(true), 500);
         }} type="submit" size="sm" className="blue-button rel-text-white">
           <FontAwesomeIcon icon={faCheck} className="iconCheck mt-2" />
           Confirm
