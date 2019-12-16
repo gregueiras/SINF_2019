@@ -247,11 +247,17 @@ function ViewProcess() {
               }}
               value={companyA}
             >
-              {companyAOptions && companyAOptions.map((e, key) => (
-                <option key={key} value={e.value}>
-                  {e.name}
-                </option>
-              ))}
+               {companyAOptions && companyAOptions.map((e, key) => 
+                {
+                  if(e.value != companyB)
+                  return (
+                  
+                    <option key={key} value={e.value} >
+                      {e.name}
+                    </option>
+                  )
+                }
+                )}
             </select>
           </Form.Group>
         </Col>
@@ -270,11 +276,18 @@ function ViewProcess() {
               }}
               value={companyB}
             >
-              {companyBOptions.map((e, key) => (
-                <option key={key} value={e.value}>
-                  {e.name}
-                </option>
-              ))}
+                {companyBOptions.map((e, key) => 
+                {
+                  if(e.value != companyA)
+                  return (
+                  
+                    <option key={key} value={e.value} >
+                      {e.name}
+                    </option>
+                  )
+                }
+                )}
+               
             </select>
           </Form.Group>
         </Col>
