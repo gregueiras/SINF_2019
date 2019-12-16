@@ -5,7 +5,7 @@ import Register from '../components/Register/Register';
 function App() {
   return (
     <div className="App">
-        <NavBar />
+        <NavBar disableLogout='true'/>
       <Register />
     </div>
   );

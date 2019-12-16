@@ -5,7 +5,7 @@ import Login from '../components/Login/Login';
 function App() {
   return (
     <div className="App">
-        <NavBar />
+        <NavBar disableLogout='true'/>
       <Login />
     </div>
   );
