@@ -132,9 +132,9 @@ onAddOrganization = () => {
     console.log("delete company")
     let company;
 
-    this.state.organizations.map((organization, sidx) => {
+    this.state.organizations.forEach((organization, sidx) => {
       if (idx === sidx)
-      company = organization;
+        company = organization;
     })
    
     this.CompanyService.deleteCompany(company, (response) => {
@@ -173,9 +173,9 @@ onAddOrganization = () => {
 
   onUpdateCompany = idx => () => {
     let company;
-    this.state.organizations.map((organization, sidx) => {
+    this.state.organizations.forEach((organization, sidx) => {
       if (idx === sidx)
-      company = organization;
+        company = organization;
     })
   
     if(company.id === undefined){

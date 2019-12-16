@@ -92,14 +92,15 @@ class Overview extends Component {
                 name="companyA"
                 onChange={this.onChangeCompanyA}
               >
-                {this.state.companyAOptions.map((e, key) => {
-                  if (e.id !== companyB)
+                {this.state.companyAOptions
+                  .filter(e => e.id !== Number(companyB))
+                  .map((e, key) => {
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
                       </option>
                     );
-                })}
+                  })}
               </select>
             </Form.Group>
           </Col>
@@ -111,14 +112,15 @@ class Overview extends Component {
                 name="companyB"
                 onChange={this.onChangeCompanyB}
               >
-                {this.state.companyBOptions.map((e, key) => {
-                  if (e.id !== companyA)
+                {this.state.companyBOptions
+                  .filter(e => e.id !== Number(companyA))
+                  .map((e, key) => {
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
                       </option>
                     );
-                })}
+                  })}
               </select>
             </Form.Group>
           </Col>

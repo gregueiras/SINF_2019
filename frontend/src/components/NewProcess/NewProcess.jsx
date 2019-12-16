@@ -75,8 +75,6 @@ class NewProcess extends Component {
     });
     this.ProcessTypeService.getProcessTypes(response => {
       if (response.status === 200) {
-        const reverse = response.data.slice().reverse();
-        console.log("process type " + JSON.stringify(reverse));
 
         let compAdesc = [],
           compBdesc = [];
@@ -94,8 +92,6 @@ class NewProcess extends Component {
           companyAdescIndex: 0,
           companyBdescIndex: 0
         });
-
-        console.log(response.data[0].id);
 
         this.changeSteps(1);
       }
@@ -202,43 +198,41 @@ class NewProcess extends Component {
         <Row>
           <Col md={4}>
             <Form.Group>
-              <Form.Label className="gray-label">
-                {"Supplier"}
-              </Form.Label>
+              <Form.Label className="gray-label">{"Supplier"}</Form.Label>
               <select
                 className="selector company-selector pos-lt rel-text-white"
                 name="companyA"
                 onChange={this.onChangeCompanyA}
               >
-                {this.state.companyAoptions.map((e, key) => {
-                  if (e.id != companyB)
+                {this.state.companyAoptions
+                  .filter(e => e.id !== companyB)
+                  .map((e, key) => {
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
                       </option>
                     );
-                })}
+                  })}
               </select>
             </Form.Group>
           </Col>
           <Col md={{ span: 4, offset: 4 }}>
             <Form.Group>
-              <Form.Label className="gray-label">
-              {"Customer"}
-              </Form.Label>
+              <Form.Label className="gray-label">{"Customer"}</Form.Label>
               <select
                 className="selector company-selector pos-rt rel-text-white"
                 name="companyB"
                 onChange={this.onChangeCompanyB}
               >
-                {this.state.companyBoptions.map((e, key) => {
-                  if (e.id != companyA)
+                {this.state.companyBoptions
+                  .filter(e => e.id !== companyA)
+                  .map((e, key) => {
                     return (
                       <option key={key} value={e.id}>
                         {e.name}
                       </option>
                     );
-                })}
+                  })}
               </select>
             </Form.Group>
           </Col>
