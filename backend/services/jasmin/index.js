@@ -14,3 +14,4 @@ export { default as createPurchasesInvoiceType } from './types/purchasesInvoice'
 export { default as createProcessOrder } from './createProcessOrder';
 export { default as getProcessOrder } from './getProcessOrder';
 export { default as getShippingDeliveries } from './getShippingDeliveries';
+export { getReceipts } from './getReceipts';

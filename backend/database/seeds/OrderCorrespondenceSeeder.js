@@ -106,6 +106,46 @@ class OrderCorrespondenceSeeder {
       created_at: "2019-12-15 16:41:05",
       updated_at: "2019-12-15 16:41:05"
     });
+
+    const p14 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 14,
+      purchase_order: "54338a70-4792-4a43-83f1-d71d232e2949",
+      sales_order: "e189be28-3b20-ea11-8454-0003ff2470a5",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p15 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 15,
+      purchase_order: "7ddb80b6-3b20-ea11-8454-0003ff249b63",
+      sales_order: "06c9eab1-453a-44db-9843-3679179f11a6",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p16 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 16,
+      purchase_order: "3a222cfd-b943-4375-826c-6ba69334379b",
+      sales_order: "229a71da-3c20-ea11-8454-0003ff249b63",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p17 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 17,
+      purchase_order: "3a222cfd-b943-4375-826c-6ba69334379b",
+      sales_order: "977d41de-3c20-ea11-8454-0003ff24802c",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
+
+    const p18 = await Factory.model("App/Models/OrderCorrespondence").create({
+      id: 18,
+      purchase_order: "53c3dc37-bd72-4698-9068-112710e1af21",
+      sales_order: "cd20bbc6-3e20-ea11-8454-0003ff249b63",
+      created_at: "2019-12-15 16:41:05",
+      updated_at: "2019-12-15 16:41:05"
+    });
   }
 }
 

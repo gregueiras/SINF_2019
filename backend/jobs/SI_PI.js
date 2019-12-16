@@ -20,7 +20,7 @@ import Queue from "../lib/Queue";
 
 const options = {
   repeat: {
-    every: 30 * 1000
+    every: 60 * 1000
   }
 };
 

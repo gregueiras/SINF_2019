@@ -7,6 +7,7 @@ const createProcessOrder =  ({ companyID,sourceDocKey,sourceDocLineNumber, quant
     companyID,
     description: "Create Goods Receipt",
     processID,
+    doc: "RG",
     data: [
       {
       SourceDocKey: sourceDocKey,

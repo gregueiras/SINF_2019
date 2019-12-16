@@ -458,6 +458,38 @@ class ProcessedFileSeeder {
       user_id: 1,
       file_id: "af098dcb-5111-4db6-a291-e8365aee40c9"
     });
+
+    // new
+
+    const p70 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 70,
+      user_id: 1,
+      file_id: "54338a70-4792-4a43-83f1-d71d232e2949"
+    });
+
+    const p71 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 71,
+      user_id: 1,
+      file_id: "06c9eab1-453a-44db-9843-3679179f11a6"
+    });
+
+    const p72 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 72,
+      user_id: 1,
+      file_id: "7ddb80b6-3b20-ea11-8454-0003ff249b63"
+    });
+
+    const p73 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 73,
+      user_id: 1,
+      file_id: "3a222cfd-b943-4375-826c-6ba69334379b"
+    });
+
+    const p74 = await Factory.model("App/Models/ProcessedFile").create({
+      id: 74,
+      user_id: 1,
+      file_id: "53c3dc37-bd72-4698-9068-112710e1af21"
+    });
   }
 }
 

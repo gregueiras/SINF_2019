@@ -21,6 +21,7 @@ const createMinSalesOrder = ({
   companyID,
   description: "Create Sales Order",
   processID,
+  doc:"SO",
 });
 
 export default createMinSalesOrder;

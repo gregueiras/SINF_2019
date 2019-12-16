@@ -8,6 +8,9 @@ import {
   updateStateLog
 } from "../db";
 import { getProcessTypeName } from "../db/process";
+import getSalesOrders from "./getSalesOrders";
+import { getPurchasesInvoices } from ".";
+import getReceipts from "./getReceipts";
 
 export const constants = {
   url: "https://my.jasminsoftware.com",
@@ -50,7 +53,7 @@ export const endPoints = {
   purchasesInvoiceTypes: "purchasesCore/invoiceTypes",
   goodsReceipt: "goodsReceipt/processOrders",
   shippingProcessOrder: "shipping/processOrders",
-  getShippingDeliveries: "shipping/deliveries",
+  getShippingDeliveries: "shipping/deliveries"
 };
 
 const makeUrl = (endPoint, query, company) => {
@@ -103,6 +106,36 @@ const getToken = async companyID => {
   return db;
 };
 
+const getDocNaturalKey = async ({ doc, companyID, id }) => {
+  console.log("COMPANYID: " + companyID);
+  console.log("DOC: " + doc);
+  console.log("ID: " + id);
+
+  try {
+    if (doc === "SO") {
+      const salesOrdersData = (await getSalesOrders({ companyID })).data;
+      const salesOrder = salesOrdersData.find(el => el.id == id);
+      return salesOrder.naturalKey;
+    }
+    if (doc === "PI") {
+      const purchasesIvoiceData = (await getPurchasesInvoices({ companyID }))
+        .data;
+      const purchasesIvoice = purchasesIvoiceData.find(el => el.id == id);
+      return purchasesIvoice.naturalKey;
+    }
+    if (doc === "SR") {
+      const salesReceiptsData = (await getReceipts({ companyID })).data;
+      const salesReceipt = salesReceiptsData.find(el => el.id == id);
+      return salesReceipt.naturalKey;
+    }
+  } catch (e) {
+    console.error(e);
+    return "none";
+  }
+
+  return "none";
+};
+
 const makeRequest = async ({
   endPoint,
   method,
@@ -110,16 +143,17 @@ const makeRequest = async ({
   query,
   companyID,
   processID,
-  description
+  description,
+  doc
 }) => {
   const company = await getCompany(companyID);
 
   const token = await getToken(companyID);
 
-  console.log(" data constant " +data);
+  console.log(" data constant " + data);
 
   const url = makeUrl(endPoint, query, company);
- const res = await axios({
+  const res = await axios({
     method,
     url,
     data,
@@ -129,7 +163,13 @@ const makeRequest = async ({
     }
   });
 
+  console.log(url);
+
   if (processID !== undefined && description !== undefined) {
+    let createdDoc = "none";
+    if (doc !== undefined)
+      createdDoc = await getDocNaturalKey({ doc, companyID, id: res.data });
+
     let state = "Failed";
     if (res.status === 200 || res.status === 201 || res.status === 204) {
       state = "Completed";
@@ -137,7 +177,8 @@ const makeRequest = async ({
     await storeLog({
       state,
       description,
-      process_id: processID
+      process_id: processID,
+      createdDoc
     });
   }
 

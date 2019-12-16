@@ -6,7 +6,7 @@ const createMinPurchaseInvoice = ({
   company,
   sellerSupplierParty,
   documentLines,
-  processID
+  processID,
 }) => makeRequest({
   method: 'POST',
   endPoint: endPoints.invoiceReceipt,
@@ -19,6 +19,7 @@ const createMinPurchaseInvoice = ({
   companyID,
   description: "Create Purchase Invoice",
   processID,
+  doc: "PI",
 });
 
 export default createMinPurchaseInvoice;

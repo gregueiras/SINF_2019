@@ -80,7 +80,7 @@ class LogController {
   /*One of these is redundant either use createLog or store*/
   async createLog({ request }) {
     const body = request.post();
-    const { state, description, process_id } = body;
+    const { state, description, process_id, createdDoc } = body;
     const processes = await Process.all();
     const process = processes.rows.find(el => el.id == process_id);
     const log = new Log();
@@ -89,6 +89,7 @@ class LogController {
     log.date = Database.fn.now();
     log.process_id = process_id;
     log.process_log_id = process.current_log;
+    log.doc = createdDoc;
     await log.save();
     return log.toJSON().id;
   }

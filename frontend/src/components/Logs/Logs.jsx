@@ -25,7 +25,7 @@ class Logs extends Component {
         {
           process: data.descriptionProcess,
           state: data.state,
-          description: data.description,
+          description: data.description + (data.doc === "none" ? "" : "-" + data.doc),
           timestamp: data.created_at,
           process_log_id: data.process_log_id,
           processType: data.processType + "-" + data.process_log_id,

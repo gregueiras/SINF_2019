@@ -22,6 +22,7 @@ const processOpenItems = ({
   companyID,
   description: "Process Open Items",
   processID,
+  doc:"SR",
 });
 
 export default processOpenItems;

@@ -28,7 +28,7 @@ import getShippingDeliveries from "../services/jasmin/getShippingDeliveries";
 const options = {
   
   repeat: {
-    every: 30 * 1000
+    every: 60 * 1000
   }
 
 };

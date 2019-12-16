@@ -14,7 +14,7 @@ class LogSchema extends Schema {
       table.foreign('process_id').references('id').inTable('processes').onDelete('CASCADE')
       table.bigInteger('process_log_id').notNullable()
       //table.foreign('process_log_id').references('id').inTable('process_logs').onDelete('CASCADE')
-    
+      table.string('doc',256).defaultTo("");
       table.timestamps()
     })
   }
