@@ -286,13 +286,6 @@ class ProcessedFileSeeder {
       file_id:  "17b33da9-0ee1-4d5e-84c6-e6d146188047",
     });
 
-
-    const p41 = await Factory.model("App/Models/ProcessedFile").create({
-      id: 41,
-      user_id: 1,
-      file_id:  "17b33da9-0ee1-4d5e-84c6-e6d146188047",
-    });
-
   }
 }
 
