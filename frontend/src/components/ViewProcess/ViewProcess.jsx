@@ -64,7 +64,7 @@ function ViewProcess(props) {
         <Col md={4}>
           <Form.Group>
             <Form.Label className="gray-label">
-              Company A
+              Customer (A)
             </Form.Label>
             <span className="text-box company-selector pos-lt">{companyA}</span>
           </Form.Group>
@@ -72,7 +72,7 @@ function ViewProcess(props) {
         <Col md={{ span: 4, offset: 4 }}>
           <Form.Group>
             <Form.Label className="gray-label">
-              Company B
+              Supplier (B)
             </Form.Label>
             <span className="text-box company-selector pos-rt">{companyB}</span>
           </Form.Group>

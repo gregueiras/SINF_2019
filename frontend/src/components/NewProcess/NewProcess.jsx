@@ -198,7 +198,7 @@ class NewProcess extends Component {
         <Row>
           <Col md={4}>
             <Form.Group>
-              <Form.Label className="gray-label">{"Supplier"}</Form.Label>
+              <Form.Label className="gray-label">{"Supplier (B)"}</Form.Label>
               <select
                 className="selector company-selector pos-lt rel-text-white"
                 name="companyA"
@@ -218,7 +218,7 @@ class NewProcess extends Component {
           </Col>
           <Col md={{ span: 4, offset: 4 }}>
             <Form.Group>
-              <Form.Label className="gray-label">{"Customer"}</Form.Label>
+              <Form.Label className="gray-label">{"Customer (A)"}</Form.Label>
               <select
                 className="selector company-selector pos-rt rel-text-white"
                 name="companyB"
